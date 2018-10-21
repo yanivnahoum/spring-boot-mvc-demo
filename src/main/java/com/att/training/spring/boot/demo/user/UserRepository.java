@@ -1,16 +1,15 @@
-package com.att.training.spring.boot.demo.core;
+package com.att.training.spring.boot.demo.user;
 
-import static java.util.stream.Collectors.toMap;
+import com.att.training.spring.boot.demo.api.User;
+import com.google.common.collect.ImmutableList;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.springframework.stereotype.Repository;
-
-import com.att.training.spring.boot.demo.api.User;
-import com.google.common.collect.ImmutableList;
+import static java.util.stream.Collectors.toMap;
 
 @Repository
 public class UserRepository {
@@ -23,23 +22,23 @@ public class UserRepository {
             .collect(toMap(User::getId, Function.identity()));
     }
 
-    public User add(User user) {
-        return users.put(user.getId(), user);
+    public void save(User user) {
+        users.put(user.getId(), user);
     }
     
-    public User remove(long id) {
+    public User delete(long id) {
         return users.remove(id);
     }
     
     public Optional<User> find(long id) {
-        User user = users.get(id);
+        var user = users.get(id);
         return Optional.ofNullable(user);
     }
     
     /**
      * @return an immutable list of all users.
      */
-    public List<User> getAll() {
+    public List<User> findAll() {
         return ImmutableList.copyOf(users.values());
     }
 }
