@@ -44,8 +44,8 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     @ResponseStatus(INTERNAL_SERVER_ERROR)
-    public ErrorDto handleConstraintViolationException(Exception ex) {
-        log.error("#handleConstraintViolationException - ", ex);
+    public ErrorDto handleGenericException(Exception ex) {
+        log.error("#handleGenericException - ", ex);
         return new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
     }
 

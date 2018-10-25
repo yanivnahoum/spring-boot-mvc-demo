@@ -9,15 +9,18 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
+import static org.springframework.test.annotation.DirtiesContext.MethodMode.AFTER_METHOD;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -39,7 +42,7 @@ class UserControllerTest {
     class GetSingleUser {
 
         @Test
-        void givenId1_shouldReturn200_withMichaelAsJson() throws Exception {
+        void givenId1_shouldReturn200OK_withMichaelAsJson() throws Exception {
             mockMvc.perform(get("/users/{id}", 1))
                    .andDo(print())
                    .andExpect(status().isOk())
@@ -64,6 +67,7 @@ class UserControllerTest {
             int id = 4;
             String expectedJson = String.format("{ code: 5001, message = 'User not found: %d' }", id);
             mockMvc.perform(get("/users/{id}", id))
+                   .andDo(print())
                    .andExpect(status().isNotFound())
                    .andExpect(content().json(expectedJson));
         }
@@ -92,11 +96,19 @@ class UserControllerTest {
     class GetAllUsers {
 
         @Test
-        void shouldReturn200_withAllUsers() throws Exception {
+        void shouldReturn200OK_withAllUsers() throws Exception {
             mockMvc.perform(get("/users"))
                    .andDo(print())
                    .andExpect(status().isOk())
                    .andExpect(jsonPath("$", hasSize(userConfiguration.getUsers().size())));
         }
+    }
+
+    @Test
+    @DirtiesContext(methodMode = AFTER_METHOD)
+    void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
+        mockMvc.perform(delete("/users/1"))
+               .andDo(print())
+               .andExpect(status().isOk());
     }
 }
