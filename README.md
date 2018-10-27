@@ -9,8 +9,8 @@ This project demonstrates the following features:
 * Serialization / deserialization of immutable POJOs
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
+* spring-aop (see @RandomDelay)
 * Integration tests MockMvc using Junit Jupiter 
-* spring-aop (see @UnitOfWork)
 * Customizing Jackson
 
 ### Running the application:

@@ -2,6 +2,7 @@ package com.att.training.spring.boot.demo;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
@@ -9,6 +10,7 @@ import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterrup
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static lombok.AccessLevel.PACKAGE;
 
+@Component
 @RequiredArgsConstructor(access = PACKAGE)
 @Slf4j
 class Sleeper {

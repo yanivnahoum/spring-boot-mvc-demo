@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.M4</version>
+        <version>2.1.0.RC1</version>
     </parent>
 
     <properties>
@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
         <maven.compiler.release>${java.version}</maven.compiler.release>
-        <guava.version>26.0-jre</guava.version>
+        <guava.version>27.0-jre</guava.version>
     </properties>
 
     <dependencies>
