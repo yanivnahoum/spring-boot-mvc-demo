@@ -15,13 +15,13 @@ public @interface RandomDelay {
 
     /**
      * Must be equal to or greater than zero.
-     * @return the minimum delay
+     * @return the minimum delay in milliseconds
      */
     int min() default 0;
 
     /**
      * Must be greater than {@link #min()}
-     * @return the minimum delay
+     * @return the maximum delay in milliseconds
      */
     int max() default 1000;
 }
