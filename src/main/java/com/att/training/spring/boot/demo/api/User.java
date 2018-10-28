@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,9 +14,9 @@ public @Data class User {
 
     @Min(1)
     private long id;
-    @NotBlank
+    @NotEmpty
     private String firstName;
-    @NotBlank
+    @NotEmpty
     private String lastName;
     @Range(min = 18, max = 120)
     private int age;

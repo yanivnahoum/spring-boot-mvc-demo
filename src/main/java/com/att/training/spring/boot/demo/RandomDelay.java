@@ -8,6 +8,10 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Adds a random delay of x ms (between {@link #min()} and {@link #max()}
+ * to the execution of the annotated method or to all methods of the annotated class.
+ */
 @Target({METHOD, TYPE})
 @Retention(RUNTIME)
 @Documented
