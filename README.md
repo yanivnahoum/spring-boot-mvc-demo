@@ -4,8 +4,8 @@ This project demonstrates the following features:
 * Spring DI
 * HTTP endpoints (Controllers)
 * Exception handlers
-* Binding POJOs to configuration 
 * Bean Validation 2.0
+* Binding POJOs to configuration 
 * Serialization / deserialization of immutable POJOs
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
