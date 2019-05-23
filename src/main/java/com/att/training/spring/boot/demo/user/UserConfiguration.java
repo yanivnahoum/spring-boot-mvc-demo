@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Component
-@ConfigurationProperties
+@ConfigurationProperties("app")
 @Validated
 public @Data class UserConfiguration {
     
