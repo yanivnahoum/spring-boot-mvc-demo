@@ -1,16 +1,15 @@
 package com.att.training.spring.boot.demo.user;
 
-import com.att.training.spring.boot.demo.RandomDelay;
-import com.att.training.spring.boot.demo.api.User;
 import com.att.training.spring.boot.demo.errors.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 @Service
 @RequiredArgsConstructor
-@RandomDelay
 public class UserService {
 
     private final UserRepository userRepository;
@@ -19,9 +18,8 @@ public class UserService {
         return findUser(id);
     }
 
-    @RandomDelay(min = 200, max = 400)
     public List<User> fetchAll() {
-        return userRepository.findAll();
+        return newArrayList(userRepository.findAll());
     }
 
     public void update(User user) {
@@ -30,12 +28,11 @@ public class UserService {
     }
 
     public void delete(long id) {
-        findUser(id);
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 
     private User findUser(long id) {
-        return userRepository.find(id)
+        return userRepository.findById(id)
                              .orElseThrow(() -> new UserNotFoundException(Long.toString(id)));
     }
 }

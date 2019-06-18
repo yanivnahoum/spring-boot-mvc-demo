@@ -16,10 +16,7 @@ public class UserHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         log.info("#health - starting now");
-//        log.info("#health - CRLF\r\n2019-03-04 15:28:37,558 INFO  [main] c.a.t.s.b.d.u.UserHealthIndicator #health - ended");
-//        log.info("#health - LF only\n2019-03-04 15:28:37,558 INFO  [main] c.a.t.s.b.d.u.UserHealthIndicator #health - ended");
-//        log.error("An error occurred: ", new IllegalArgumentException("Oops!"));
-        int userCount = userRepository.findAll().size();
+        long userCount = userRepository.count();
         if (isEven(userCount)) {
             return Health.down()
                          .withDetail("User count", userCount)
@@ -28,7 +25,7 @@ public class UserHealthIndicator implements HealthIndicator {
         return Health.up().build();
     }
 
-    private static boolean isEven(int userCount) {
+    private static boolean isEven(long userCount) {
         return userCount % 2 == 0;
     }
 }

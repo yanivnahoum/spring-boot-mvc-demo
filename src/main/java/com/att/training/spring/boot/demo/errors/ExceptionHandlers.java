@@ -30,7 +30,7 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     @ResponseStatus(NOT_FOUND)
     public ErrorDto handleUserNotFound(UserNotFoundException ex) {
         log.error("#handleUserNotFound - ", ex);
-        String message = "User not found: " + ex.getMessage();
+        String message = "UserDto not found: " + ex.getMessage();
         return new ErrorDto(ErrorCode.NOT_FOUND, message);
     }
 

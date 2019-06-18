@@ -10,7 +10,8 @@ import javax.validation.constraints.NotEmpty;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public @Data class User {
+public @Data
+class UserDto {
 
     @Min(1)
     private long id;

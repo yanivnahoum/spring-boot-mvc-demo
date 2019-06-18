@@ -1,6 +1,7 @@
 package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,9 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserConfiguration userConfiguration;
+    private UserRepository userRepository;
+    @Autowired
+    private ObjectMapper mapper;
 
     @Nested
     @DisplayName("When calling GET /users/{id}")
@@ -62,7 +65,7 @@ class UserControllerTest {
         @Test
         void givenMissingId_shouldReturn404NotFound() throws Exception {
             int id = 4;
-            String expectedJson = String.format("{ code: 5001, message = 'User not found: %d' }", id);
+            String expectedJson = String.format("{ code: 5001, message = 'UserDto not found: %d' }", id);
             mockMvc.perform(get("/users/{id}", id))
                    .andDo(print())
                    .andExpect(status().isNotFound())
@@ -72,7 +75,7 @@ class UserControllerTest {
         @Test
         void whenUserServiceThrowsGenericException_shouldReturn500InternalServerError() throws Exception {
             UserService userService = mock(UserService.class);
-            mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService))
+            mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService, mapper))
                                      .setControllerAdvice(new ExceptionHandlers())
                                      .build();
 
@@ -97,7 +100,7 @@ class UserControllerTest {
             mockMvc.perform(get("/users"))
                    .andDo(print())
                    .andExpect(status().isOk())
-                   .andExpect(jsonPath("$", hasSize(userConfiguration.getUsers().size())));
+                   .andExpect(jsonPath("$", hasSize((int) userRepository.count())));
         }
     }
 
