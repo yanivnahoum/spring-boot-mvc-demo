@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,7 +18,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
-import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
 import static org.springframework.test.annotation.DirtiesContext.MethodMode.AFTER_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -41,6 +39,19 @@ class UserControllerTest {
     private ObjectMapper mapper;
 
     @Nested
+    @DisplayName("When calling GET /users")
+    class GetAllUsers {
+
+        @Test
+        void shouldReturn200OK_withAllUsers() throws Exception {
+            mockMvc.perform(get("/users"))
+                   .andDo(print())
+                   .andExpect(status().isOk())
+                   .andExpect(jsonPath("$", hasSize((int) userRepository.count())));
+        }
+    }
+
+    @Nested
     @DisplayName("When calling GET /users/{id}")
     class GetSingleUser {
 
@@ -51,18 +62,6 @@ class UserControllerTest {
                    .andExpect(status().isOk())
                    .andExpect(content().json("{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}"))
                    .andExpect(jsonPath("$.firstName", is("Michael")));
-        }
-
-        @Test
-        void givenId1_shouldReturnMichaelAsJson() throws Exception {
-            String json = mockMvc.perform(get("/users/{id}", 1))
-                                 .andDo(print())
-                                 .andExpect(status().isOk())
-                                 .andReturn()
-                                 .getResponse()
-                                 .getContentAsString();
-
-            JSONAssert.assertEquals(json, "{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}", LENIENT);
         }
 
         @Test
@@ -93,19 +92,6 @@ class UserControllerTest {
         }
     }
 
-    @Nested
-    @DisplayName("When calling GET /users")
-    class GetAllUsers {
-
-        @Test
-        void shouldReturn200OK_withAllUsers() throws Exception {
-            mockMvc.perform(get("/users"))
-                   .andDo(print())
-                   .andExpect(status().isOk())
-                   .andExpect(jsonPath("$", hasSize((int) userRepository.count())));
-        }
-    }
-
     @Test
     @DirtiesContext(methodMode = AFTER_METHOD)
     void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
@@ -114,3 +100,4 @@ class UserControllerTest {
                .andExpect(status().isOk());
     }
 }
+

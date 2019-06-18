@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
+@Import(UserService.class)
 class UserControllerWebMvcTest {
 
     private static final User johnDoe = new User(17L, "John", "Doe", 30);
@@ -26,13 +28,13 @@ class UserControllerWebMvcTest {
     private static final List<User> SINGLE_USER = List.of(johnDoe);
 
     @MockBean
-    private UserService userService;
+    private UserRepository userRepository;
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     void givenServiceReturnsMultipleUsers_shouldReturn200OK_withMultipleUsers() throws Exception {
-        when(userService.fetchAll()).thenReturn(USERS);
+        when(userRepository.findAll()).thenReturn(USERS);
         mockMvc.perform(get("/users"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.length()", is(equalTo(USERS.size()))));
@@ -40,7 +42,7 @@ class UserControllerWebMvcTest {
 
     @Test
     void givenServiceReturnsSingleUser_shouldReturn200OK_withSingleUser() throws Exception {
-        when(userService.fetchAll()).thenReturn(SINGLE_USER);
+        when(userRepository.findAll()).thenReturn(SINGLE_USER);
         mockMvc.perform(get("/users"))
                .andExpect(status().isOk())
                .andExpect(content().json(String.format("[{'id':%d,'firstName':'%s','lastName':'%s','age':%d}]",
@@ -51,7 +53,8 @@ class UserControllerWebMvcTest {
     void givenServiceReturnsEmptyList_shouldReturn200OK_withNoUsers() throws Exception {
         mockMvc.perform(get("/users"))
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.length()", is(equalTo(0))));
+               .andExpect(jsonPath("$.length()", is(equalTo(0))))
+               .andExpect(content().json("[]"));
     }
 
     // @MockBean doesn't get reset in @Nested classes: https://github.com/spring-projects/spring-boot/issues/12470
