@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +18,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
 import static org.springframework.test.annotation.DirtiesContext.MethodMode.AFTER_METHOD;
@@ -28,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 class UserControllerTest {
 
     @Autowired
@@ -73,8 +76,7 @@ class UserControllerTest {
         }
 
         @Test
-        void whenUserServiceThrowsGenericException_shouldReturn500InternalServerError() throws Exception {
-            UserService userService = mock(UserService.class);
+        void whenUserServiceThrowsGenericException_shouldReturn500InternalServerError(@Mock UserService userService) throws Exception {
             mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService, mapper))
                                      .setControllerAdvice(new ExceptionHandlers())
                                      .build();
