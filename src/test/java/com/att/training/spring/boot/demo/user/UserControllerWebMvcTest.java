@@ -1,5 +1,6 @@
 package com.att.training.spring.boot.demo.user;
 
+import com.att.training.spring.boot.demo.Slow;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slow
 @WebMvcTest(UserController.class)
 @Import(UserService.class)
 class UserControllerWebMvcTest {
