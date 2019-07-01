@@ -28,23 +28,22 @@ class UserServiceTest {
     }
 
     @Test
-    void givenNoUsersExists_returnEmptyOptional() {
+    void givenNoUsersExists_whenFetchUser_shouldThrowUserNotFoundException() {
         assertThatExceptionOfType(UserNotFoundException.class)
                 .isThrownBy(() -> userService.fetch(101L));
     }
 
     @Test
-    void givenUser101Exists_whenFindOneWithId101_returnUser101() {
+    void givenUser17Exists_whenFindById17_shouldReturnUser17() {
         when(userRepository.findById(johnDoe.getId())).thenReturn(Optional.of(johnDoe));
         User user = userService.fetch(johnDoe.getId());
         assertThat(user).isEqualTo(johnDoe);
     }
 
     @Test
-    void givenUser101Exists_whenFindOneWithId102_returnEmptyUser() {
+    void givenUser17Exists_whenFindById18_shouldThrowUserNotFoundException() {
         lenient().when(userRepository.findById(johnDoe.getId())).thenReturn(Optional.of(johnDoe));
         assertThatExceptionOfType(UserNotFoundException.class)
-                .isThrownBy(() -> userService.fetch(102L));
+                .isThrownBy(() -> userService.fetch(18L));
     }
-
 }
