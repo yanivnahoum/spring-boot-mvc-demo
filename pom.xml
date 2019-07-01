@@ -21,6 +21,7 @@
         <java.version>11</java.version>
         <guava.version>27.1-jre</guava.version>
         <testcontainers.version>1.11.3</testcontainers.version>
+        <junit-jupiter.version>5.4.2</junit-jupiter.version>
         <excludedTestTags>slow</excludedTestTags>
     </properties>
 

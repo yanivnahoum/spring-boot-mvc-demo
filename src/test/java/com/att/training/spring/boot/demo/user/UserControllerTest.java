@@ -2,6 +2,7 @@ package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -90,6 +91,7 @@ class UserControllerTest extends MySqlIntegrationTest {
         }
     }
 
+    @Disabled("to prevent reloading the context")
     @Test
     @DirtiesContext(methodMode = AFTER_METHOD)
     void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
