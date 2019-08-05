@@ -22,7 +22,7 @@
         <guava.version>27.1-jre</guava.version>
         <testcontainers.version>1.11.3</testcontainers.version>
         <junit-jupiter.version>5.4.2</junit-jupiter.version>
-        <excludedTestTags>slow</excludedTestTags>
+        <includedTestTags>!slow</includedTestTags>
     </properties>
 
     <dependencies>
@@ -115,7 +115,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <excludedGroups>${excludedTestTags}</excludedGroups>
+                    <groups>${includedTestTags}</groups>
                 </configuration>
             </plugin>
 
@@ -142,7 +142,13 @@
         <profile>
             <id>integ</id>
             <properties>
-                <excludedTestTags/>
+                <includedTestTags/>
+            </properties>
+        </profile>
+        <profile>
+            <id>integOnly</id>
+            <properties>
+                <includedTestTags>slow</includedTestTags>
             </properties>
         </profile>
     </profiles>

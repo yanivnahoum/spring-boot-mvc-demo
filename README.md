@@ -9,9 +9,10 @@ This project demonstrates the following features:
   
 ### Building the application:
 ```
-mvn clean install [-P integ]
+mvn clean install [-P integ|integOnly]
 ```
 Use the integ profile to run all tests (including the slower integration tests)
+Use the integOnly profile to run only the slower integration tests
 ### Running the application:
 ```
 mvn spring-boot:run
