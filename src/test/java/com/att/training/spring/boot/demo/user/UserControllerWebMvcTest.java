@@ -59,7 +59,7 @@ class UserControllerWebMvcTest {
                .andExpect(content().json("[]"));
     }
 
-    // @MockBean doesn't get reset in @Nested classes: https://github.com/spring-projects/spring-boot/issues/12470
+    // @MockBean doesn't get reset in @Nested classes: https://github.com/spring-projects/spring-boot/  issues/12470
     @Nested
     @DisplayName("When calling GET /users")
     class GetAllUsers {
