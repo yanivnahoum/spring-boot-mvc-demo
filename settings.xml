@@ -1,0 +1,37 @@
+<settings>
+    <proxies>
+        <proxy>
+            <id>one-proxy</id>
+            <active>true</active>
+            <protocol>http</protocol>
+            <host>one.proxy.att.com</host>
+            <port>8080</port>
+            <nonProxyHosts>mavencentral.it.att.com</nonProxyHosts>
+        </proxy>
+
+        <proxy>
+            <id>https-proxy</id>
+            <active>true</active>
+            <protocol>https</protocol>
+            <host>one.proxy.att.com</host>
+            <port>8080</port>
+            <nonProxyHosts>mavencentral.it.att.com</nonProxyHosts>
+        </proxy>
+    </proxies>
+
+    <mirrors>
+        <mirror>
+            <id>nexus</id>
+            <mirrorOf>*</mirrorOf>
+            <url>http://mavencentral.it.att.com:8081/nexus/content/groups/att-public-group</url>
+        </mirror>
+    </mirrors>
+
+    <servers>
+        <server>
+            <id>nexus</id>
+            <username>pMt5iezY</username>
+            <password>ugX2TehhT8Tiqz23BIfqTnBWLC9Uk_t92_9h3DzZplXw</password>
+        </server>
+    </servers>
+</settings>
