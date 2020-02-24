@@ -9,10 +9,11 @@ This project demonstrates the following features:
   
 ### Building the application:
 ```
-mvn clean install [-P integ|integOnly]
+./mvnw clean install [-P withITs|onlyITs]
+./gradlew build [-PwithITs]
 ```
-Use the integ profile to run all tests (including the slower integration tests)
-Use the integOnly profile to run only the slower integration tests
+Use the withITs profile to run all tests (including the slower integration tests)
+Use the onlyITs profile to run only the slower integration tests
 ### Running the application:
 ```
 mvn spring-boot:run

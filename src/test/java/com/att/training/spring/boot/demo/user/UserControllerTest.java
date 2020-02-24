@@ -2,7 +2,6 @@ package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,14 +10,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.annotation.DirtiesContext.MethodMode.AFTER_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -28,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
+@Transactional
 class UserControllerTest extends MySqlIntegrationTest {
 
     @Autowired
@@ -91,9 +90,9 @@ class UserControllerTest extends MySqlIntegrationTest {
         }
     }
 
-    @Disabled("to prevent reloading the context")
+//    @Disabled("to prevent reloading the context")
     @Test
-    @DirtiesContext(methodMode = AFTER_METHOD)
+//    @DirtiesContext(methodMode = AFTER_METHOD)
     void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
         mockMvc.perform(delete("/users/1"))
                .andDo(print())

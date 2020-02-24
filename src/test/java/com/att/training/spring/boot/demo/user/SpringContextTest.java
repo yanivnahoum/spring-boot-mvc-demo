@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-// The complete context requires an available mysql instance"
+// The complete context requires an available mysql instance
 @SpringBootTest
 @EnableAutoConfiguration(exclude = {
         DataSourceAutoConfiguration.class,

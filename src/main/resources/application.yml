@@ -15,13 +15,6 @@ management:
     health:
       show-details: always
 
-
-info:
-  app:
-    encoding: @project.build.sourceEncoding@
-    java:
-      source: @java.version@
-
 spring:
   datasource:
     url: jdbc:mysql://docker:3306/demo
