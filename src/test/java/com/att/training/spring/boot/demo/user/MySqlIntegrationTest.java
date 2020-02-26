@@ -8,12 +8,12 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Slow
 @SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:tc:mysql://host:3306/demo",
+        "spring.datasource.url=jdbc:tc:mysql:////demo",
         "spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver"
 })
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 abstract class MySqlIntegrationTest {
 
     @Container
-    private static final MySQLContainer mySqlContainer = new MySQLContainer();
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>();
 }
