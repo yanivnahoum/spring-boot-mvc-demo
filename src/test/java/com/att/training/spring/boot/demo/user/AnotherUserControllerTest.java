@@ -2,11 +2,9 @@ package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -27,10 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootMySqlTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 @Transactional
-class UserControllerTest extends MySqlIntegrationTest {
+class AnotherUserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
