@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.2.5.RELEASE"
+    id("org.springframework.boot") version "2.2.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("io.freefair.lombok") version "4.1.6"
 }
@@ -27,7 +27,9 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
 
     val testContainersVersion = "1.13.0"
     testImplementation("org.testcontainers:mysql:$testContainersVersion")
