@@ -7,7 +7,6 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -18,9 +17,16 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @Testcontainers(disabledWithoutDocker = true)
 abstract class MySqlIntegrationTest {
 
+    private static final String[] options = {
+            "--character-set-server=latin1",
+            "--collation-server=latin1_general_ci",
+            "--log-bin-trust-function-creators=true"
+    };
+
     @Container
-    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.15")
-            .withDatabaseName("demo");
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.19")
+            .withDatabaseName("demo")
+            .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 

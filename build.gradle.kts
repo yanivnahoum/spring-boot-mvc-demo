@@ -22,8 +22,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    implementation("com.google.guava:guava:28.2-jre")
-    implementation("org.jetbrains:annotations:19.0.0")
+    implementation("com.google.guava:guava:29.0-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
 
@@ -31,7 +30,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
 
-    val testContainersVersion = "1.13.0"
+    val testContainersVersion = "1.14.0"
     testImplementation("org.testcontainers:mysql:$testContainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 }
