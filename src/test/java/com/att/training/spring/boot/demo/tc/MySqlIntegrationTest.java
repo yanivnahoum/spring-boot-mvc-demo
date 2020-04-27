@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo.user;
+package com.att.training.spring.boot.demo.tc;
 
 import com.att.training.spring.boot.demo.Slow;
 import org.jetbrains.annotations.NotNull;
@@ -7,6 +7,7 @@ import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -15,7 +16,8 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 @SpringBootTest
 @ContextConfiguration(initializers = MySqlIntegrationTest.Initializer.class)
 @Testcontainers(disabledWithoutDocker = true)
-abstract class MySqlIntegrationTest {
+@Transactional
+public abstract class MySqlIntegrationTest {
 
     private static final String[] options = {
             "--character-set-server=latin1",

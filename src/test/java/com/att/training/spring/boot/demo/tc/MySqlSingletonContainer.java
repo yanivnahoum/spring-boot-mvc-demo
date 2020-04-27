@@ -1,0 +1,98 @@
+package com.att.training.spring.boot.demo.tc;
+
+import com.att.training.spring.boot.demo.Slow;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.extension.ConditionEvaluationResult;
+import org.junit.jupiter.api.extension.ExecutionCondition;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.DockerClientFactory;
+import org.testcontainers.containers.MySQLContainer;
+
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
+
+@Slow
+@SpringBootTest
+@ContextConfiguration(initializers = MySqlSingletonContainer.Initializer.class)
+@Transactional
+@DisableWithoutDocker
+public abstract class MySqlSingletonContainer {
+
+    private static final String[] options = {
+            "--character-set-server=latin1",
+            "--collation-server=latin1_general_ci",
+            "--log-bin-trust-function-creators=true"
+    };
+
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.19")
+            .withDatabaseName("demo")
+            .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
+
+    static  {
+        // At the end of the test suite the Ryuk container that is started by Testcontainers
+        // core will take care of stopping the singleton container.
+        mySqlContainer.start();
+    }
+
+    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+        @Override
+        public void initialize(@NotNull ConfigurableApplicationContext applicationContext) {
+            TestPropertyValues values = TestPropertyValues.of(
+                    "spring.datasource.url=" + mySqlContainer.getJdbcUrl(),
+                    "spring.datasource.username=" + mySqlContainer.getUsername(),
+                    "spring.datasource.password=" + mySqlContainer.getPassword()
+            );
+            values.applyTo(applicationContext);
+        }
+    }
+}
+
+@Target({TYPE, METHOD})
+@Retention(RUNTIME)
+@ExtendWith(DisableWithoutDockerCondition.class)
+@Inherited
+@interface DisableWithoutDocker {
+}
+
+class DisableWithoutDockerCondition implements ExecutionCondition {
+
+    private static final ConditionEvaluationResult ENABLED_BY_DEFAULT =
+            ConditionEvaluationResult.enabled("@DisableWithoutDocker is not present");
+
+    @Override
+    public ConditionEvaluationResult evaluateExecutionCondition(ExtensionContext context) {
+        return findAnnotation(context.getElement(), DisableWithoutDocker.class)
+                .map(__ -> evaluate())
+                .orElse(ENABLED_BY_DEFAULT);
+    }
+
+    private ConditionEvaluationResult evaluate() {
+        if (isDockerAvailable()) {
+            return ConditionEvaluationResult.enabled("Docker is available");
+        }
+        return ConditionEvaluationResult.disabled("disabledWithoutDocker is present and Docker is not available");
+    }
+
+    private boolean isDockerAvailable() {
+        try {
+            DockerClientFactory.instance().client();
+            return true;
+        } catch (Throwable ex) {
+            return false;
+        }
+    }
+}

@@ -1,7 +1,7 @@
 package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
-import com.att.training.spring.boot.demo.tc.MySqlIntegrationTest;
+import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest extends MySqlIntegrationTest {
+class YetAnotherUserControllerTest extends MySqlSingletonContainer {
 
     @Autowired
     private MockMvc mockMvc;

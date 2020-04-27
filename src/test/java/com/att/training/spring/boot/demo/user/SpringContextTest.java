@@ -1,7 +1,5 @@
 package com.att.training.spring.boot.demo.user;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -25,5 +23,3 @@ class SpringContextTest {
     void contextLoads() {
     }
 }
-
-

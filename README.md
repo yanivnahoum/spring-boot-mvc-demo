@@ -5,7 +5,10 @@ This project demonstrates the following features:
   * @SpringBootTest & MockMvc
   * @WebMvcTest & MockMvc
 * Integration tests using TestContainers
-  *  mySQL integration test
+  * mySQL integration test
+    * MySQL container launched [via JDBC URL scheme](src/test/java/com/att/training/spring/boot/demo/tc/SpringBootMySqlTest.java) (container per test class)
+    * MySQL container launched [via JUnit Jupiter extension](src/test/java/com/att/training/spring/boot/demo/tc/MySqlIntegrationTest.java) (container per test class)
+    * MySQL container launched [in singleton mode](src/test/java/com/att/training/spring/boot/demo/tc/MySqlSingletonContainer.java) (one container per entire test suite)
   
 ### Building the application:
 ```

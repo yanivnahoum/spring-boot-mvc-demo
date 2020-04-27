@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -57,8 +58,9 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+    @NonNull
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,@NonNull HttpHeaders headers,
+                                                                  @NonNull HttpStatus status, @NonNull WebRequest request) {
         log.error("#handleMethodArgumentNotValid - ", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
@@ -82,8 +84,9 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-                                                             HttpStatus status, WebRequest request) {
+    @NonNull
+    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body, @NonNull HttpHeaders headers,
+                                                             @NonNull HttpStatus status, @NonNull WebRequest request) {
         log.error("#handleExceptionInternal - ", ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
         return new ResponseEntity<>(errorDto, status);
