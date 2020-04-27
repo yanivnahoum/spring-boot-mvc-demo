@@ -30,7 +30,7 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
 
-    val testContainersVersion = "1.14.0"
+    val testContainersVersion = "1.14.1"
     testImplementation("org.testcontainers:mysql:$testContainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 }
