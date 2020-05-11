@@ -1,24 +1,20 @@
 package com.att.training.spring.boot.demo.api;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Value;
 import org.hibernate.validator.constraints.Range;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
-@NoArgsConstructor
-@AllArgsConstructor
-public @Data
-class UserDto {
+@Value
+public class UserDto {
 
     @Min(1)
-    private long id;
+    long id;
     @NotEmpty
-    private String firstName;
+    String firstName;
     @NotEmpty
-    private String lastName;
+    String lastName;
     @Range(min = 18, max = 120)
-    private int age;
+    int age;
 }
