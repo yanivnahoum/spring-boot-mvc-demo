@@ -26,7 +26,7 @@ public abstract class MySqlIntegrationTest {
     };
 
     @Container
-    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.19")
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.20")
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
 
