@@ -38,25 +38,25 @@ class UserControllerWebMvcTest {
     void givenServiceReturnsMultipleUsers_shouldReturn200OK_withMultipleUsers() throws Exception {
         when(userRepository.findAll()).thenReturn(USERS);
         mockMvc.perform(get("/users"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.length()", is(equalTo(USERS.size()))));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(equalTo(USERS.size()))));
     }
 
     @Test
     void givenServiceReturnsSingleUser_shouldReturn200OK_withSingleUser() throws Exception {
         when(userRepository.findAll()).thenReturn(SINGLE_USER);
         mockMvc.perform(get("/users"))
-               .andExpect(status().isOk())
-               .andExpect(content().json(String.format("[{'id':%d,'firstName':'%s','lastName':'%s','age':%d}]",
-                       johnDoe.getId(), johnDoe.getFirstName(), johnDoe.getLastName(), johnDoe.getAge())));
+                .andExpect(status().isOk())
+                .andExpect(content().json(String.format("[{'id':%d,'firstName':'%s','lastName':'%s','age':%d}]",
+                        johnDoe.getId(), johnDoe.getFirstName(), johnDoe.getLastName(), johnDoe.getAge())));
     }
 
     @Test
     void givenServiceReturnsEmptyList_shouldReturn200OK_withNoUsers() throws Exception {
         mockMvc.perform(get("/users"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.length()", is(equalTo(0))))
-               .andExpect(content().json("[]"));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(equalTo(0))))
+                .andExpect(content().json("[]"));
     }
 
     // @MockBean doesn't get reset in @Nested classes: https://github.com/spring-projects/spring-boot/  issues/12470
