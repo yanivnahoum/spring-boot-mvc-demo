@@ -22,6 +22,7 @@
         <guava.version>29.0-jre</guava.version>
         <testcontainers.version>1.14.1</testcontainers.version>
         <includedTestTags>!slow</includedTestTags>
+        <stub-runner.version>2.2.2.RELEASE</stub-runner.version>
     </properties>
 
     <dependencies>
@@ -86,6 +87,12 @@
             <artifactId>junit-jupiter</artifactId>
             <version>${testcontainers.version}</version>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
+            <version>${stub-runner.version}</version>
         </dependency>
 
         <dependency>
