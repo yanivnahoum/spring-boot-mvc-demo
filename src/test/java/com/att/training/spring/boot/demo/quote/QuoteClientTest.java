@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 
 import java.util.List;
@@ -17,6 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.hamcrest.Matchers.startsWith;
+import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.client.ExpectedCount.once;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
@@ -37,9 +37,9 @@ class QuoteClientTest {
     void givenCategoryFunny_whenGetQuoteOfTheDay_thenCorrectQuoteIsReceived() {
         String category = "funny";
         server.expect(once(), requestTo(startsWith("/qod")))
-                .andExpect(method(HttpMethod.GET))
+                .andExpect(method(GET))
                 .andExpect(queryParam("category", category))
-                .andRespond(withSuccess(new ClassPathResource("quotes/funny-qod.json"), APPLICATION_JSON));
+                .andRespond(withSuccess(new ClassPathResource("funny-qod.json", getClass()), APPLICATION_JSON));
 
         QuoteResponse funnyQuote = quoteClient.getQuoteOfTheDay(category);
 
@@ -49,15 +49,14 @@ class QuoteClientTest {
         assertThat(funnyQuote).isEqualTo(expectedQuote);
     }
 
-
     @Test
     void givenMissingCategory_whenGetQuoteOfTheDay_thenCorrectQuoteErrorIsReceived() {
         String missingCategory = "blabla";
-        server.expect(once(), requestTo(startsWith("/qod")))
-                .andExpect(method(HttpMethod.GET))
+        server.expect(requestTo(startsWith("/qod")))
+                .andExpect(method(GET))
                 .andExpect(queryParam("category", missingCategory))
                 .andRespond(withBadRequest()
-                        .body(new ClassPathResource("quotes/no-category.json"))
+                        .body(new ClassPathResource("no-category.json", getClass()))
                         .contentType(APPLICATION_JSON));
 
         QuoteError expectedError = new QuoteError(400, "Bad Request: QOD category not supported for this category and language combination");
@@ -66,4 +65,3 @@ class QuoteClientTest {
                 .matches(ex -> expectedError.equals(ex.getQuoteError()));
     }
 }
-

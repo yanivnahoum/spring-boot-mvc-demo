@@ -1,0 +1,32 @@
+{
+  "success": {
+    "total": 1
+  },
+  "contents": {
+    "quotes": [
+      {
+        "quote": "Give me golf clubs, fresh air and a beautiful partner, and you can keep the clubs and the fresh air.",
+        "length": "100",
+        "author": "Jack Benny",
+        "tags": {
+          "0": "funny",
+          "1": "golf",
+          "2": "sports",
+          "4": "tod"
+        },
+        "category": "funny",
+        "language": "en",
+        "date": "2020-05-17",
+        "permalink": "https://theysaidso.com/quote/jack-benny-give-me-golf-clubs-fresh-air-and-a-beautiful-partner-and-you-can-keep",
+        "id": "CzZGhQUP5nApJRq5BaqiggeF",
+        "background": "https://theysaidso.com/img/qod/qod-funny.jpg",
+        "title": "Funny Quote of the day"
+      }
+    ]
+  },
+  "baseurl": "https://theysaidso.com",
+  "copyright": {
+    "year": 2022,
+    "url": "https://theysaidso.com"
+  }
+}
