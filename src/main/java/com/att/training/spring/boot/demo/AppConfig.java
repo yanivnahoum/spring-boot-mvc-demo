@@ -8,7 +8,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.core.env.Environment;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableAspectJAutoProxy
 @Slf4j
 class AppConfig {

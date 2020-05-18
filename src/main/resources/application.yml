@@ -25,3 +25,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+#  jackson:
+#    serialization:
+#      wrap-root-value: true
+#    deserialization:
+#      unwrap-root-value: true
+#      fail-on-unknown-properties: false
