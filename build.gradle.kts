@@ -2,7 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "2.2.7.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("io.freefair.lombok") version "5.0.1"
+    id("io.freefair.lombok") version "5.1.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -11,6 +11,10 @@ version = "0.0.1-SNAPSHOT"
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
+}
+
+tasks.generateLombokConfig {
+    isEnabled = false
 }
 
 repositories {
