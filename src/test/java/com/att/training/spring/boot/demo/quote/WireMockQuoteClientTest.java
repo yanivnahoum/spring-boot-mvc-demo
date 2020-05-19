@@ -6,9 +6,9 @@ import com.att.training.spring.boot.demo.quote.api.QuoteDetails;
 import com.att.training.spring.boot.demo.quote.api.QuoteResponse;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureMockRestServiceServer;
+import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.boot.web.client.RootUriTemplateHandler;
@@ -16,22 +16,14 @@ import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.core.io.Resource;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.FileCopyUtils;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
 import java.util.List;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@ExtendWith(SpringExtension.class)
-@AutoConfigureWebClient
+@RestClientTest
+@AutoConfigureMockRestServiceServer(enabled = false)
 @AutoConfigureWireMock(port = 0)
 @Import({QuoteClient.class, QuoteClientResponseErrorHandler.class})
 class WireMockQuoteClientTest {
@@ -46,14 +38,6 @@ class WireMockQuoteClientTest {
                 new Contents(List.of(new QuoteDetails("Give me golf clubs, fresh air and a beautiful partner, and you can keep the clubs and the fresh air.", "Jack Benny"))),
                 new Copyright(2022, "https://theysaidso.com"));
         assertThat(funnyQuote).isEqualTo(expectedQuote);
-    }
-
-    private static String asString(Resource resource) {
-        try (var reader = new InputStreamReader(resource.getInputStream(), UTF_8)) {
-            return FileCopyUtils.copyToString(reader);
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
     }
 
     @TestConfiguration(proxyBeanMethods = false)
