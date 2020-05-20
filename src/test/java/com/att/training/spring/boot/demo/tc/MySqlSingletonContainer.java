@@ -81,18 +81,9 @@ class DisableWithoutDockerCondition implements ExecutionCondition {
     }
 
     private ConditionEvaluationResult evaluate() {
-        if (isDockerAvailable()) {
+        if (DockerClientFactory.instance().isDockerAvailable()) {
             return ConditionEvaluationResult.enabled("Docker is available");
         }
         return ConditionEvaluationResult.disabled("disabledWithoutDocker is present and Docker is not available");
-    }
-
-    private boolean isDockerAvailable() {
-        try {
-            DockerClientFactory.instance().client();
-            return true;
-        } catch (Throwable ex) {
-            return false;
-        }
     }
 }

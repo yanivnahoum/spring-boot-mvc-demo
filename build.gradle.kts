@@ -35,7 +35,7 @@ dependencies {
     }
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.2.RELEASE")
 
-    val testContainersVersion = "1.14.1"
+    val testContainersVersion = "1.14.2"
     testImplementation("org.testcontainers:mysql:$testContainersVersion")
     testImplementation("org.testcontainers:junit-jupiter:$testContainersVersion")
 }
