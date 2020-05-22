@@ -18,7 +18,7 @@ This project demonstrates the following features:
 ### Building the application:
 ```
 ./mvnw clean install [-P withITs|onlyITs]
-./gradlew build [-PwithITs]
+./gradlew build [-PwithITs|onlyITs]
 ```
 Use the withITs profile to run all tests (including the slower integration tests)
 Use the onlyITs profile to run only the slower integration tests

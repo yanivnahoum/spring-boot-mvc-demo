@@ -16,7 +16,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Slow
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:tc:mysql:8.0.20:////demo",
-        "spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver"
+        // Required for versions of Spring Boot < 2.3.0
+        //"spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver"
 })
 @Transactional
 public @interface SpringBootMySqlTest {

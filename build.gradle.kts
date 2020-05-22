@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.2.7.RELEASE"
+    id("org.springframework.boot") version "2.3.0.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("io.freefair.lombok") version "5.1.0"
 }
@@ -21,8 +21,11 @@ repositories {
     mavenCentral()
 }
 
+// Lock down mysql version
+extra["mysql.version"] = "8.0.20"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.squareup.okhttp3:okhttp")
