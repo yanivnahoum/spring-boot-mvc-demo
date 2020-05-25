@@ -21,8 +21,10 @@ repositories {
     mavenCentral()
 }
 
-// Lock down mysql version
+// Pin mysql version
 extra["mysql.version"] = "8.0.20"
+// Groovy 3+ plays nice with java 11
+extra["groovy.version"] = "3.0.4"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")

@@ -1,12 +1,9 @@
 package com.att.training.spring.boot.demo.tc;
 
 import com.att.training.spring.boot.demo.Slow;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -14,7 +11,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Slow
 @SpringBootTest
-@ContextConfiguration(initializers = MySqlIntegrationTest.Initializer.class)
 @Testcontainers(disabledWithoutDocker = true)
 @Transactional
 public abstract class MySqlIntegrationTest {
@@ -30,16 +26,17 @@ public abstract class MySqlIntegrationTest {
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
 
-    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    static {
+        // This is only needed because of spring-cloud-contract-wiremock's WireMockTestExecutionListener
+        // It causes the application context to load (and activates #mySqlProperties()) before the container is ready
+        // It's also needed in case you're using @TestContainers/@Container with junit-jupiter's @TestInstance(PER_CLASS)
+        mySqlContainer.start();
+    }
 
-        @Override
-        public void initialize(@NotNull ConfigurableApplicationContext applicationContext) {
-            TestPropertyValues values = TestPropertyValues.of(
-                    "spring.datasource.url=" + mySqlContainer.getJdbcUrl(),
-                    "spring.datasource.username=" + mySqlContainer.getUsername(),
-                    "spring.datasource.password=" + mySqlContainer.getPassword()
-            );
-            values.applyTo(applicationContext);
-        }
+    @DynamicPropertySource
+    static void mySqlProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySqlContainer::getUsername);
+        registry.add("spring.datasource.password", mySqlContainer::getPassword);
     }
 }
