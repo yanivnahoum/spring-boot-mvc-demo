@@ -20,7 +20,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
         <guava.version>29.0-jre</guava.version>
-        <testcontainers.version>1.14.2</testcontainers.version>
+        <testcontainers.version>1.14.3</testcontainers.version>
         <includedTestTags>!slow</includedTestTags>
         <stub-runner.version>2.2.2.RELEASE</stub-runner.version>
     </properties>

@@ -8,7 +8,8 @@ This project demonstrates the following features:
   * mySQL component test
     * MySQL container launched [via JDBC URL scheme](src/test/java/com/att/training/spring/boot/demo/tc/SpringBootMySqlTest.java) (container per test class)
     * MySQL container launched [via JUnit Jupiter extension](src/test/java/com/att/training/spring/boot/demo/tc/MySqlIntegrationTest.java) (container per test class)
-    * MySQL container launched [in singleton mode](src/test/java/com/att/training/spring/boot/demo/tc/MySqlSingletonContainer.java) (one container per entire test suite)
+    * MySQL container launched [in singleton mode using base class](src/test/java/com/att/training/spring/boot/demo/tc/MySqlSingletonContainer.java) (one container per entire test suite)
+    * MySQL container launched [in singleton mode using annotation](src/test/java/com/att/training/spring/boot/demo/tc/SpringBootMySqlSingletonTest.java) (one container per entire test suite)
   * [UserRepositoryTest](src/test/java/com/att/training/spring/boot/demo/tc/UserRepositoryTest.java) - demonstrates how @Transactional works in tests
 * Testing web clients
   * [Using Spring's `MockRestServiceServer`](src/test/java/com/att/training/spring/boot/demo/quote/QuoteClientTest.java)
