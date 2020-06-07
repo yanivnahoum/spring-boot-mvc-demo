@@ -41,8 +41,12 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.2.RELEASE")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.14.3"))
-    testImplementation("org.testcontainers:mysql")
-    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mysql") {
+        exclude(group = "junit", module = "junit")
+    }
+    testImplementation("org.testcontainers:junit-jupiter") {
+        exclude(group = "junit", module = "junit")
+    }
 }
 
 tasks.test {

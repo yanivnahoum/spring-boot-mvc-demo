@@ -1,7 +1,6 @@
 package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
-import com.att.training.spring.boot.demo.tc.MySqlIntegrationTest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,8 +10,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
@@ -24,9 +30,32 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@Testcontainers(disabledWithoutDocker = true)
+@Transactional
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest extends MySqlIntegrationTest {
+class UserControllerTest {
+
+    private static final String[] options = {
+            "--character-set-server=latin1",
+            "--collation-server=latin1_general_ci",
+            "--log-bin-trust-function-creators=true"
+    };
+
+    @Container
+    private static final MySQLContainer<?> mySqlContainer = createAndStart();
+
+    private static MySQLContainer<?> createAndStart() {
+        var container = new MySQLContainer<>("mysql:8.0.20")
+                .withDatabaseName("demo")
+                .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
+        // This is only needed because of spring-cloud-contract-wiremock's WireMockTestExecutionListener
+        // It causes the application context to load (and activates #mySqlProperties()) before the container is ready
+        // It's also needed in case you're using @TestContainers/@Container with junit-jupiter's @TestInstance(PER_CLASS)
+        container.start();
+        return container;
+    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,6 +63,13 @@ class UserControllerTest extends MySqlIntegrationTest {
     private UserRepository userRepository;
     @Autowired
     private ObjectMapper mapper;
+
+    @DynamicPropertySource
+    static void mySqlProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySqlContainer::getUsername);
+        registry.add("spring.datasource.password", mySqlContainer::getPassword);
+    }
 
     @Nested
     @DisplayName("When calling GET /users")
@@ -89,8 +125,6 @@ class UserControllerTest extends MySqlIntegrationTest {
         }
     }
 
-//    @DirtiesContext(methodMode = AFTER_METHOD)
-//    @Disabled("to prevent reloading the context")
     @Test
     void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
         mockMvc.perform(delete("/users/1"))
@@ -98,4 +132,3 @@ class UserControllerTest extends MySqlIntegrationTest {
                .andExpect(status().isOk());
     }
 }
-

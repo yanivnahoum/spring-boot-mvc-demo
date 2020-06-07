@@ -35,7 +35,9 @@ public abstract class MySqlSingletonContainer {
 
     private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.20")
             .withDatabaseName("demo")
-            .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
+            .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
+//            .withUrlParam("profileSQL", "true")
+            .withUrlParam("rewriteBatchedStatements", "true");
 
     static  {
         // At the end of the test suite the Ryuk container that is started by Testcontainers
