@@ -12,6 +12,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * This test demonstrates that @Transactional (on base class {@link MySqlSingletonContainer}
  * auto-rollbacks at the end of each test.
+ * {@link org.junit.jupiter.api.BeforeEach} and {@link org.junit.jupiter.api.AfterEach} participate in the transaction,
+ * whereas {@link org.junit.jupiter.api.BeforeAll} and {@link org.junit.jupiter.api.AfterAll} <b>do not</b>.
  */
 @TestMethodOrder(OrderAnnotation.class)
 class UserRepositoryTest extends MySqlSingletonContainer {

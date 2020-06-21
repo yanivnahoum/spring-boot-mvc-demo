@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.3.0.RELEASE"
+    id("org.springframework.boot") version "2.3.1.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("io.freefair.lombok") version "5.1.0"
 }
@@ -38,7 +38,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
-    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.2.RELEASE")
+    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.3.RELEASE")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.14.3"))
     testImplementation("org.testcontainers:mysql") {
