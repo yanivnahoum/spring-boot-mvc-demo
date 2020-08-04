@@ -1,5 +1,6 @@
 package com.att.training.spring.boot.demo.user;
 
+import com.att.training.spring.boot.demo.Slow;
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slow
 @SpringBootTest
 @Testcontainers(disabledWithoutDocker = true)
 @Transactional
@@ -47,7 +49,7 @@ class UserControllerTest {
     private static final MySQLContainer<?> mySqlContainer = createAndStart();
 
     private static MySQLContainer<?> createAndStart() {
-        var container = new MySQLContainer<>("mysql:8.0.20")
+        var container = new MySQLContainer<>("mysql:8.0.21")
                 .withDatabaseName("demo")
                 .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
         // This is only needed because of spring-cloud-contract-wiremock's WireMockTestExecutionListener
@@ -71,19 +73,23 @@ class UserControllerTest {
         registry.add("spring.datasource.password", mySqlContainer::getPassword);
     }
 
-    @Nested
-    @DisplayName("When calling GET /users")
-    class GetAllUsers {
-
-        @Test
-        void shouldReturn200OK_withAllUsers() throws Exception {
-            mockMvc.perform(get("/users"))
-                   .andDo(print())
-                   .andExpect(status().isOk())
-                   .andExpect(jsonPath("$", hasSize((int) userRepository.count())));
-        }
+    @Test
+    void whenGetUsers_shouldReturn200OK_withAllUsers() throws Exception {
+        mockMvc.perform(get("/users"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize((int) userRepository.count())));
     }
 
+    @Test
+    void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
+        mockMvc.perform(delete("/users/1"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    // Nssted classes do NOT inherit the full spring context, they are NOT transactional.
+    // They should probably be avoided in this context.
     @Nested
     @DisplayName("When calling GET /users/{id}")
     class GetSingleUser {
@@ -106,7 +112,6 @@ class UserControllerTest {
                    .andExpect(status().isNotFound())
                    .andExpect(content().json(expectedJson));
         }
-
         @Test
         void whenUserServiceThrowsGenericException_shouldReturn500InternalServerError(@Mock UserService userService) throws Exception {
             mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService, mapper))
@@ -123,12 +128,6 @@ class UserControllerTest {
                    .andExpect(status().isInternalServerError())
                    .andExpect(content().json(expectedJson));
         }
-    }
 
-    @Test
-    void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
-        mockMvc.perform(delete("/users/1"))
-               .andDo(print())
-               .andExpect(status().isOk());
     }
 }

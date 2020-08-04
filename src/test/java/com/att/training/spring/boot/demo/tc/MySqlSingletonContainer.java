@@ -1,10 +1,12 @@
 package com.att.training.spring.boot.demo.tc;
 
 import com.att.training.spring.boot.demo.Slow;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.extension.ConditionEvaluationResult;
 import org.junit.jupiter.api.extension.ExecutionCondition;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.DockerClientFactory;
 import org.testcontainers.containers.MySQLContainer;
 
+import javax.persistence.EntityManager;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -33,7 +36,7 @@ public abstract class MySqlSingletonContainer {
             "--log-bin-trust-function-creators=true"
     };
 
-    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.20")
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.21")
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
@@ -50,6 +53,13 @@ public abstract class MySqlSingletonContainer {
         registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl);
         registry.add("spring.datasource.username", mySqlContainer::getUsername);
         registry.add("spring.datasource.password", mySqlContainer::getPassword);
+    }
+
+    @AfterEach
+    void tearDown(@Autowired EntityManager entityManager) {
+        // This is done to avoid false positives: since the @Transactional tests are rolled back,
+        // without flushing the entityManager will never actually write the changes to the database.
+        entityManager.flush();
     }
 }
 

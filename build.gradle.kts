@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.3.1.RELEASE"
+    id("org.springframework.boot") version "2.3.2.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("io.freefair.lombok") version "5.1.0"
 }
@@ -22,11 +22,12 @@ repositories {
 }
 
 // Pin mysql version
-extra["mysql.version"] = "8.0.20"
+extra["mysql.version"] = "8.0.21"
 // Groovy 3+ plays nice with java 11
 extra["groovy.version"] = "3.0.4"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
@@ -41,12 +42,8 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.3.RELEASE")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.14.3"))
-    testImplementation("org.testcontainers:mysql") {
-        exclude(group = "junit", module = "junit")
-    }
-    testImplementation("org.testcontainers:junit-jupiter") {
-        exclude(group = "junit", module = "junit")
-    }
+    testImplementation("org.testcontainers:mysql")
+    testImplementation("org.testcontainers:junit-jupiter")
 }
 
 tasks.test {
@@ -58,7 +55,7 @@ tasks.test {
         }
     }
     testLogging {
-        events("passed", "skipped", "failed")
+        events("skipped", "failed")
         showStandardStreams = true
     }
 }
