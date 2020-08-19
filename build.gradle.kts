@@ -1,21 +1,12 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.3.2.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("io.freefair.lombok") version "5.1.0"
+    id("org.springframework.boot") version "2.3.3.RELEASE"
+    id("io.spring.dependency-management") version "1.0.10.RELEASE"
+    id("io.freefair.lombok") version "5.1.1"
 }
 
 group = "com.att.training.spring.boot"
 version = "0.0.1-SNAPSHOT"
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
-
-tasks.generateLombokConfig {
-    isEnabled = false
-}
 
 repositories {
     mavenCentral()
@@ -39,23 +30,33 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
-    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.3.RELEASE")
+    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.4.RELEASE")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.14.3"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
 
-tasks.test {
-    useJUnitPlatform {
-        if (project.hasProperty("onlyITs")) {
-            includeTags("slow")
-        } else if (!project.hasProperty("withITs")) {
-            excludeTags("slow")
-        }
+tasks {
+    withType<JavaCompile>().configureEach {
+        options.release.set(11)
     }
-    testLogging {
-        events("skipped", "failed")
-        showStandardStreams = true
+
+    generateLombokConfig {
+        isEnabled = false
+    }
+
+    test {
+        useJUnitPlatform {
+            if (project.hasProperty("onlyITs")) {
+                includeTags("slow")
+            } else if (!project.hasProperty("withITs")) {
+                excludeTags("slow")
+            }
+        }
+        testLogging {
+            events("skipped", "failed")
+            showStandardStreams = true
+        }
     }
 }
