@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.3.3.RELEASE"
+    id("org.springframework.boot") version "2.3.5.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
-    id("io.freefair.lombok") version "5.1.1"
+    id("io.freefair.lombok") version "5.3.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -12,10 +12,8 @@ repositories {
     mavenCentral()
 }
 
-// Pin mysql version
-extra["mysql.version"] = "8.0.21"
 // Groovy 3+ plays nice with java 11
-extra["groovy.version"] = "3.0.4"
+extra["groovy.version"] = "3.0.6"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -23,7 +21,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.google.guava:guava:29.0-jre")
+    implementation("com.google.guava:guava:30.0-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
 
@@ -32,7 +30,7 @@ dependencies {
     }
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:2.2.4.RELEASE")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.14.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.15.0-rc2"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }

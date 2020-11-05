@@ -5,7 +5,6 @@ import com.att.training.spring.boot.demo.quote.api.Copyright;
 import com.att.training.spring.boot.demo.quote.api.QuoteDetails;
 import com.att.training.spring.boot.demo.quote.api.QuoteResponse;
 import com.github.tomakehurst.wiremock.WireMockServer;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,7 +59,6 @@ class BasicWireMockQuoteClientTest {
         assertThat(funnyQuote).isEqualTo(expectedQuote);
     }
 
-    @NotNull
     private static WireMockServer createStarted() {
         WireMockServer wireMockServer = new WireMockServer(options().dynamicPort());
         // Start very early so that the baseUrl() could be fetched in the AdditionalConfig#customizer

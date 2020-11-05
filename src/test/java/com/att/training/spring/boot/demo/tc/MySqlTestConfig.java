@@ -1,10 +1,10 @@
 package com.att.training.spring.boot.demo.tc;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.lang.NonNull;
 import org.testcontainers.containers.MySQLContainer;
 
 @TestConfiguration
@@ -28,7 +28,7 @@ public class MySqlTestConfig {
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         @Override
-        public void initialize(@NotNull ConfigurableApplicationContext applicationContext) {
+        public void initialize(@NonNull ConfigurableApplicationContext applicationContext) {
             TestPropertyValues values = TestPropertyValues.of(
                     "spring.datasource.url=" + mySqlContainer.getJdbcUrl(),
                     "spring.datasource.username=" + mySqlContainer.getUsername(),
