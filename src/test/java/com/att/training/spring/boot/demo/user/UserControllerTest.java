@@ -3,6 +3,7 @@ package com.att.training.spring.boot.demo.user;
 import com.att.training.spring.boot.demo.Slow;
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.NestedTestConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.context.NestedTestConfiguration.EnclosingConfiguration.INHERIT;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Disabled("until Spring Framework 5.3.2 is released with support for @DynamicPropertySource in @Nested classes")
 @Slow
 @SpringBootTest
 @Testcontainers(disabledWithoutDocker = true)
@@ -49,7 +53,7 @@ class UserControllerTest {
     private static final MySQLContainer<?> mySqlContainer = createAndStart();
 
     private static MySQLContainer<?> createAndStart() {
-        var container = new MySQLContainer<>("mysql:8.0.21")
+        var container = new MySQLContainer<>("mysql:8.0.22")
                 .withDatabaseName("demo")
                 .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
         // This is only needed because of spring-cloud-contract-wiremock's WireMockTestExecutionListener
@@ -88,9 +92,10 @@ class UserControllerTest {
                 .andExpect(status().isOk());
     }
 
-    // Nssted classes do NOT inherit the full spring context, they are NOT transactional.
+    // Nested classes do NOT inherit the full spring context, they are NOT transactional.
     // They should probably be avoided in this context.
     @Nested
+    @NestedTestConfiguration(INHERIT)
     @DisplayName("When calling GET /users/{id}")
     class GetSingleUser {
 
