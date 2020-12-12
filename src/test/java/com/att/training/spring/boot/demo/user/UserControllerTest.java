@@ -3,7 +3,6 @@ package com.att.training.spring.boot.demo.user;
 import com.att.training.spring.boot.demo.Slow;
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Disabled("until Spring Framework 5.3.2 is released with support for @DynamicPropertySource in @Nested classes")
 @Slow
 @SpringBootTest
 @Testcontainers(disabledWithoutDocker = true)
