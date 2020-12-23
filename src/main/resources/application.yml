@@ -1,19 +1,6 @@
 server:
-  port: 8090
   servlet:
     context-path: /demo
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include:
-          - info
-          - health
-          - metrics
-  endpoint:
-    health:
-      show-details: always
 
 spring:
   datasource:
@@ -23,14 +10,17 @@ spring:
     initialization-mode: always
 
   jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate.jdbc.batch_size: 50
-      hibernate.order_inserts: true
-      hibernate.order_updates: true
     open-in-view: false
-
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 10
+          time_zone: UTC
+        order_inserts: true
+        order_updates: true
+        session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 25
 
 #  jackson:
 #    serialization:

@@ -1,6 +1,6 @@
-package com.att.training.spring.boot.demo.tc;
+package com.att.training.spring.boot.demo.user;
 
-import com.att.training.spring.boot.demo.user.UserRepository;
+import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;

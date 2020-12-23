@@ -5,11 +5,15 @@
         </encoder>
     </appender>
 
+    <logger name="org.testcontainers" level="info"/>
+    <logger name="com.github.dockerjava" level="warn"/>
+    <!-- use DEBUG to see SQL statements -->
+    <logger name="org.hibernate.SQL" level="debug"/>
+    <!-- use TRACE to see values of parameters -->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="trace"/>
+    <logger name="org.hibernate.SQL_SLOW" level="info"/>
+
     <root level="info">
         <appender-ref ref="STDOUT"/>
     </root>
-
-    <logger name="org.testcontainers" level="INFO"/>
-    <logger name="com.github.dockerjava" level="WARN"/>
-    <logger name="org.springframework.cloud.contract.wiremock" level="INFO"/>
 </configuration>

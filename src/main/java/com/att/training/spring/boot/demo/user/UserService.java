@@ -6,8 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.newArrayList;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -19,7 +17,7 @@ public class UserService {
     }
 
     public List<User> fetchAll() {
-        return newArrayList(userRepository.findAll());
+        return userRepository.findAll();
     }
 
     public void update(User user) {

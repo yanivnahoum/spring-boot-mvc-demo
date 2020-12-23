@@ -13,16 +13,11 @@
     <artifactId>spring-boot-mvc-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <description>Demo project for Spring Boot</description>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <guava.version>30.0-jre</guava.version>
         <testcontainers.version>1.15.1</testcontainers.version>
-        <includedTestTags>!slow</includedTestTags>
-        <stub-runner.version>2.2.4.RELEASE</stub-runner.version>
     </properties>
 
     <dependencies>
@@ -38,28 +33,12 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
         </dependency>
 
         <dependency>
@@ -89,12 +68,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-contract-stub-runner</artifactId>
-            <version>${stub-runner.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
@@ -106,9 +79,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <groups>${includedTestTags}</groups>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -129,19 +99,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>withITs</id>
-            <properties>
-                <includedTestTags/>
-            </properties>
-        </profile>
-        <profile>
-            <id>onlyITs</id>
-            <properties>
-                <includedTestTags>slow</includedTestTags>
-            </properties>
-        </profile>
-    </profiles>
 </project>

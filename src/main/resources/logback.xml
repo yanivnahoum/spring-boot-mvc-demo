@@ -26,8 +26,8 @@
 		</encoder>
 	</appender>
 
-	<logger name="com.att.training.spring.boot.demo" level="TRACE" />
-	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
+	<logger name="com.att.training.spring.boot.demo" level="trace" />
+	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="debug" />
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />

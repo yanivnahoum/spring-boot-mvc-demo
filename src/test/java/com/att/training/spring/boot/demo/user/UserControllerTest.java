@@ -1,6 +1,5 @@
 package com.att.training.spring.boot.demo.user;
 
-import com.att.training.spring.boot.demo.Slow;
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -33,7 +32,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Slow
 @SpringBootTest
 @Testcontainers(disabledWithoutDocker = true)
 @Transactional

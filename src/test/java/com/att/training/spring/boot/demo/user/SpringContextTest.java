@@ -15,9 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
         DataSourceTransactionManagerAutoConfiguration.class,
         HibernateJpaAutoConfiguration.class
 })
+@MockBean(UserRepository.class)
 class SpringContextTest {
-
-    @MockBean private UserRepository userRepository;
 
     @Test
     void contextLoads() {
