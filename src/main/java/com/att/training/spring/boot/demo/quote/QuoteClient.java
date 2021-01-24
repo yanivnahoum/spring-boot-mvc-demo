@@ -34,7 +34,7 @@ public class QuoteClient {
 
     private OkHttpClient newClient() {
         return new OkHttpClient.Builder()
-                .proxy(new Proxy(HTTP, new InetSocketAddress("pxyapp.proxy.att.com", 8080)))
+                .proxy(new Proxy(HTTP, new InetSocketAddress("emea-chain.proxy.att.com", 8080)))
                 .build();
     }
 }

@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RestClientTest
 @AutoConfigureMockRestServiceServer(enabled = false)
-@AutoConfigureWireMock(port = 0)
+@AutoConfigureWireMock
 @Import({QuoteClient.class, QuoteClientResponseErrorHandler.class})
 class WireMockQuoteClientTest {
 
