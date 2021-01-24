@@ -1,7 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.4.1"
-    id("io.spring.dependency-management") version "1.0.10.RELEASE"
+    id("org.springframework.boot") version "2.4.2"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "5.3.0"
 }
 
@@ -21,10 +21,12 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("net.ttddyy:datasource-proxy:1.7")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.15.1"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
+
 }
 
 tasks {

@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>INFO</level>
-		</filter>
-		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>%d %-5level [%thread] %logger{20} %msg%n</pattern>
-		</encoder>
-	</appender>
-	
-	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>logs/boot-demo.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<!-- daily rollover -->
-			<fileNamePattern>logs/boot-demo.%d{yyyy-MM-dd}.log</fileNamePattern>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>%d %-5level [%thread] %logger{20} %msg%n</pattern>
+        </encoder>
+    </appender>
 
-			<!-- keep 30 days' worth of history capped at 1GB total size -->
-			<maxHistory>30</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/boot-demo.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>logs/boot-demo.%d{yyyy-MM-dd}.log</fileNamePattern>
 
-		<encoder>
-			<pattern>%d %-5level [%thread] %X{node} %logger{20} %replace(%msg){'\r?\n','___'}%n</pattern>
-		</encoder>
-	</appender>
+            <!-- keep 30 days' worth of history capped at 1GB total size -->
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
 
-	<logger name="com.att.training.spring.boot.demo" level="trace" />
-	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="debug" />
+        <encoder>
+            <pattern>%d %-5level [%thread] %X{node} %logger{20} %replace(%msg){'\r?\n','___'}%n</pattern>
+        </encoder>
+    </appender>
 
-	<root level="INFO">
-		<appender-ref ref="STDOUT" />
-		<appender-ref ref="FILE" />
-	</root>
+    <logger name="com.att.training.spring.boot.demo" level="trace"/>
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="debug"/>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
 
 </configuration>

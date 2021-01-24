@@ -8,23 +8,19 @@ spring:
     username: dbuser
     password: Aa123456!
     initialization-mode: always
+    hikari:
+      maximum-pool-size: 2
 
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       hibernate:
         jdbc:
           batch_size: 10
-          time_zone: UTC
+        #time_zone: "Asia/Jerusalem"
         order_inserts: true
         order_updates: true
+        generate_statistics: false
         session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 25
-
-#  jackson:
-#    serialization:
-#      wrap-root-value: true
-#    deserialization:
-#      unwrap-root-value: true
-#      fail-on-unknown-properties: false
