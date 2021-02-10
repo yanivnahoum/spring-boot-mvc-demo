@@ -13,6 +13,8 @@ import net.ttddyy.dsproxy.support.ProxyDataSource;
 import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -87,6 +89,16 @@ class DbTest extends MySqlSingletonContainer {
             logPost(fetchedPost);
         }
 
+        @SuppressWarnings({"deprecation", "unchecked"})
+        @Test
+        void useProjection() {
+            List<PostDto> fetchedPosts = entityManager.createNativeQuery("SELECT p.title, pc.review FROM post p INNER JOIN post_comment pc ON p.id = pc.post_id")
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(PostDto.class))
+                    .getResultList();
+            fetchedPosts.forEach(this::logPost);
+        }
+
         @Test
         void findUsingRepoDefault() {
             QueryCountHolder.clear();
@@ -113,6 +125,10 @@ class DbTest extends MySqlSingletonContainer {
             List<PostComment> comments = fetchedPost.getComments();
             log.info("Post: {} has {} comments", fetchedPost.getId(), comments.size());
             log.info("Post comments: {}", comments);
+        }
+
+        private void logPost(PostDto fetchedPost) {
+            log.info("Post: {}, review: {}", fetchedPost.getTitle(), fetchedPost.getReview());
         }
     }
 
@@ -154,6 +170,14 @@ class DbTest extends MySqlSingletonContainer {
             Post post = postComment.getPost();
             log.info("Post: {} has status {}", post.getTitle(), post.getStatus());
         }
+    }
+
+    @Getter
+    @Setter
+    @ToString
+    public static class PostDto {
+        private String title;
+        private String review;
     }
 }
 
