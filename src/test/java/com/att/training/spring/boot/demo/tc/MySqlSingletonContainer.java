@@ -1,11 +1,14 @@
 package com.att.training.spring.boot.demo.tc;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 @SpringBootTest
+@Slf4j
 public abstract class MySqlSingletonContainer {
 
     private static final String[] options = {
@@ -18,6 +21,7 @@ public abstract class MySqlSingletonContainer {
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
+            .withLogConsumer(new Slf4jLogConsumer(log))
             .withReuse(true);
 //            .withUrlParam("rewriteBatchedStatements", "true");
 
