@@ -19,7 +19,7 @@ nextVersion.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-
+!maven-wrapper.jar
 # Eclipse IDE
 #------------------------------------------------------------
 .classpath
