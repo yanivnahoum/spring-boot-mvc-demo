@@ -2,12 +2,14 @@ package com.att.training.spring.boot.demo.tc;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 @SpringBootTest
+@Import(DatasourceProxyBeanPostProcessor.class)
 @Slf4j
 public abstract class MySqlSingletonContainer {
 
@@ -17,13 +19,13 @@ public abstract class MySqlSingletonContainer {
             "--log-bin-trust-function-creators=true"
     };
 
-    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.22")
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.23")
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
+            .withUrlParam("rewriteBatchedStatements", "true")
             .withLogConsumer(new Slf4jLogConsumer(log))
             .withReuse(true);
-//            .withUrlParam("rewriteBatchedStatements", "true");
 
     static {
         // At the end of the test suite the Ryuk container that is started by Testcontainers
@@ -38,3 +40,6 @@ public abstract class MySqlSingletonContainer {
         registry.add("spring.datasource.password", mySqlContainer::getPassword);
     }
 }
+
+
+

@@ -9,9 +9,9 @@
     <logger name="org.testcontainers" level="info"/>
     <logger name="com.github.dockerjava" level="warn"/>
     <!-- use DEBUG to see SQL statements -->
-    <logger name="org.hibernate.SQL" level="info"/>
+    <logger name="org.hibernate.SQL" level="debug"/>
     <!-- use TRACE to see values of parameters -->
-    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="info"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="trace"/>
     <!--    <logger name="org.hibernate.SQL_SLOW" level="info"/>-->
     <logger name="net.ttddyy.dsproxy.listener.logging.SLF4JQueryLoggingListener" level="debug"/>
 

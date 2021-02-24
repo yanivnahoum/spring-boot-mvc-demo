@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.nplusone;
 
 import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
 import lombok.AllArgsConstructor;
@@ -9,26 +9,17 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import net.ttddyy.dsproxy.QueryCount;
 import net.ttddyy.dsproxy.QueryCountHolder;
-import net.ttddyy.dsproxy.support.ProxyDataSource;
-import net.ttddyy.dsproxy.support.ProxyDataSourceBuilder;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
-import org.springframework.util.ReflectionUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -45,9 +36,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.sql.DataSource;
 import javax.transaction.Transactional;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -259,49 +248,6 @@ enum PostStatus {
     PENDING,
     APPROVED,
     SPAM
-}
-
-@Component
-class DatasourceProxyBeanPostProcessor implements BeanPostProcessor {
-
-    @Override
-    public Object postProcessAfterInitialization(@NonNull Object bean, @NonNull String beanName) {
-        if (bean instanceof DataSource && !(bean instanceof ProxyDataSource)) {
-            final ProxyFactory factory = new ProxyFactory(bean);
-            factory.setProxyTargetClass(true);
-            factory.addAdvice(new ProxyDataSourceInterceptor((DataSource) bean));
-            return factory.getProxy();
-        }
-        return bean;
-    }
-
-    @Override
-    public Object postProcessBeforeInitialization(@NonNull Object bean, @NonNull String beanName) {
-        return bean;
-    }
-
-    private static class ProxyDataSourceInterceptor implements MethodInterceptor {
-        private final DataSource dataSource;
-
-        public ProxyDataSourceInterceptor(final DataSource dataSource) {
-            this.dataSource = ProxyDataSourceBuilder
-                    .create(dataSource)
-                    .name("datasource-proxy")
-                    .logQueryBySlf4j()
-                    .countQuery()
-                    .build();
-        }
-
-        @Override
-        public Object invoke(final MethodInvocation invocation) throws Throwable {
-            final Method proxyMethod = ReflectionUtils.findMethod(this.dataSource.getClass(),
-                    invocation.getMethod().getName());
-            if (proxyMethod != null) {
-                return proxyMethod.invoke(this.dataSource, invocation.getArguments());
-            }
-            return invocation.proceed();
-        }
-    }
 }
 
 //@Entity
