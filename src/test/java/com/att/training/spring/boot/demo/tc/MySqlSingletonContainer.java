@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MySQLContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
 
 @SpringBootTest
 @Import(DatasourceProxyBeanPostProcessor.class)
@@ -23,8 +22,8 @@ public abstract class MySqlSingletonContainer {
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
-            .withUrlParam("rewriteBatchedStatements", "true")
-            .withLogConsumer(new Slf4jLogConsumer(log))
+//            .withUrlParam("rewriteBatchedStatements", "true")
+//            .withLogConsumer(new Slf4jLogConsumer(log))
             .withReuse(true);
 
     static {
