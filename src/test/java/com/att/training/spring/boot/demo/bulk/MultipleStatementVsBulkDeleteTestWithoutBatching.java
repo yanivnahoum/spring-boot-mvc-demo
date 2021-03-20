@@ -3,17 +3,15 @@ package com.att.training.spring.boot.demo.bulk;
 import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import net.ttddyy.dsproxy.asserts.ProxyTestDataSource;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,15 +20,10 @@ import java.util.List;
 
 import static net.ttddyy.dsproxy.asserts.assertj.DataSourceAssertAssertions.assertThat;
 
-//@Transactional
-class BulkTest extends MySqlSingletonContainer {
+class MultipleStatementVsBulkDeleteTestWithoutBatching extends MySqlSingletonContainer {
 
-    @Autowired
-    private EntityManager entityManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProxyTestDataSource testDataSource;
+    @Autowired private UserRepository userRepository;
+    @Autowired private ProxyTestDataSource testDataSource;
     private List<User> users;
 
     @BeforeEach
@@ -44,7 +37,7 @@ class BulkTest extends MySqlSingletonContainer {
     }
 
     @Test
-    void deleteAllEntities() {
+    void deleteAllSpecifiedEntities() {
         userRepository.deleteAll(users);
         assertThat(testDataSource).hasSelectCount(3)
                 .hasDeleteCount(3);
@@ -58,30 +51,45 @@ class BulkTest extends MySqlSingletonContainer {
     }
 
     @Test
-    void deleteAllInBatch() {
-        userRepository.deleteAllInBatch();
-        assertThat(testDataSource).hasDeleteCount(1);
-    }
-
-    @Test
     void deleteInBatch() {
         userRepository.deleteInBatch(users);
         assertThat(testDataSource).hasDeleteCount(1);
     }
 
-    @Nested
-    @TestPropertySource(properties = "spring.jpa.properties.hibernate.jdbc.batch=25")
-    class WithBatching {
+    @Test
+    void deleteAllInBatch() {
+        userRepository.deleteAllInBatch();
+        assertThat(testDataSource).hasDeleteCount(1);
+    }
+}
 
-        @Test
-        void deleteAll() {
-            userRepository.deleteAll();
-            assertThat(testDataSource).hasSelectCount(1)
-                    .hasBatchPreparedCount(1)
-                    .hasDeleteCount(3);
-        }
+class MultipleStatementVsBulkDeleteTestWithBatching extends MySqlSingletonContainer {
+
+    @Autowired private UserRepository userRepository;
+    @Autowired private ProxyTestDataSource testDataSource;
+
+    @DynamicPropertySource
+    static void hibernateProps(DynamicPropertyRegistry registry) {
+        registry.add("spring.jpa.properties.hibernate.jdbc.batch_size", () -> 25);
     }
 
+    @BeforeEach
+    void beforeEach() {
+        userRepository.saveAll(List.of(
+                new User("Alice", "Cooper"),
+                new User("Bob", "DeNiro"),
+                new User("Carl", "Zeiss")
+        ));
+        testDataSource.reset();
+    }
+
+    @Test
+    void deleteAll() {
+        userRepository.deleteAll();
+        assertThat(testDataSource).hasSelectCount(1)
+                .hasBatchPreparedCount(1)
+                .hasDeleteCount(1);
+    }
 }
 
 interface UserRepository extends JpaRepository<User, Long> {}
@@ -89,7 +97,6 @@ interface UserRepository extends JpaRepository<User, Long> {}
 @Entity
 @Table
 @Getter
-@Setter
 @NoArgsConstructor
 class User {
     @Id
