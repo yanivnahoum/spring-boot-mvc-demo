@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.time;
 
 import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
 import lombok.Getter;
