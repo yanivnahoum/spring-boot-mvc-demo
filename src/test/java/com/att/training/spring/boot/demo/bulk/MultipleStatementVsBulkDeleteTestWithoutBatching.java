@@ -8,8 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,6 +40,18 @@ class MultipleStatementVsBulkDeleteTestWithoutBatching extends MySqlSingletonCon
     }
 
     @Test
+    void findAllById() {
+        userRepository.findAllById(List.of(1L, 2L));
+        assertThat(testDataSource).hasSelectCount(1);
+    }
+
+    @Test
+    void findAllByFirstName() {
+        userRepository.findAllByFirstNameIn(List.of("Alice", "Bob"));
+        assertThat(testDataSource).hasSelectCount(1);
+    }
+
+    @Test
     void deleteAllSpecifiedEntities() {
         userRepository.deleteAll(users);
         assertThat(testDataSource).hasSelectCount(3)
@@ -53,13 +68,29 @@ class MultipleStatementVsBulkDeleteTestWithoutBatching extends MySqlSingletonCon
     @Test
     void deleteInBatch() {
         userRepository.deleteInBatch(users);
-        assertThat(testDataSource).hasDeleteCount(1);
+        assertThat(testDataSource).hasSelectCount(0)
+                .hasDeleteCount(1);
     }
 
     @Test
     void deleteAllInBatch() {
         userRepository.deleteAllInBatch();
-        assertThat(testDataSource).hasDeleteCount(1);
+        assertThat(testDataSource).hasSelectCount(0)
+                .hasDeleteCount(1);
+    }
+
+    @Test
+    void deleteByLastNameIsContaining() {
+        userRepository.deleteByLastNameIsContaining("e");
+        assertThat(testDataSource).hasSelectCount(1)
+                .hasDeleteCount(3);
+    }
+
+    @Test
+    void deleteInBulkByLastNameContaining() {
+        userRepository.deleteInBulkByLastNameContaining("e");
+        assertThat(testDataSource).hasSelectCount(0)
+                .hasDeleteCount(1);
     }
 }
 
@@ -92,13 +123,25 @@ class MultipleStatementVsBulkDeleteTestWithBatching extends MySqlSingletonContai
     }
 }
 
-interface UserRepository extends JpaRepository<User, Long> {}
+@Transactional
+interface UserRepository extends JpaRepository<User, Long> {
+    void deleteByLastNameIsContaining(String token);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("delete from User u where u.lastName like %:token%")
+    void deleteInBulkByLastNameContaining(String token);
+
+    @Transactional(readOnly = true)
+    List<User> findAllByFirstNameIn(List<String> names);
+}
 
 @Entity
+
 @Table
 @Getter
 @NoArgsConstructor
 class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
