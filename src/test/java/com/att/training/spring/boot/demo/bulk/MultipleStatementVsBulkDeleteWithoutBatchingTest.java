@@ -23,7 +23,7 @@ import java.util.List;
 
 import static net.ttddyy.dsproxy.asserts.assertj.DataSourceAssertAssertions.assertThat;
 
-class MultipleStatementVsBulkDeleteTestWithoutBatching extends MySqlSingletonContainer {
+class MultipleStatementVsBulkDeleteWithoutBatchingTest extends MySqlSingletonContainer {
 
     @Autowired private UserRepository userRepository;
     @Autowired private ProxyTestDataSource testDataSource;
@@ -37,18 +37,6 @@ class MultipleStatementVsBulkDeleteTestWithoutBatching extends MySqlSingletonCon
                 new User("Carl", "Zeiss")
         ));
         testDataSource.reset();
-    }
-
-    @Test
-    void findAllById() {
-        userRepository.findAllById(List.of(1L, 2L));
-        assertThat(testDataSource).hasSelectCount(1);
-    }
-
-    @Test
-    void findAllByFirstName() {
-        userRepository.findAllByFirstNameIn(List.of("Alice", "Bob"));
-        assertThat(testDataSource).hasSelectCount(1);
     }
 
     @Test
@@ -92,9 +80,24 @@ class MultipleStatementVsBulkDeleteTestWithoutBatching extends MySqlSingletonCon
         assertThat(testDataSource).hasSelectCount(0)
                 .hasDeleteCount(1);
     }
+
+    @Test
+    void deleteSingleEntity() {
+        userRepository.delete(users.get(0));
+        assertThat(testDataSource).hasSelectCount(1)
+                .hasDeleteCount(1);
+    }
+
+    @Test
+    void deleteSingleEntityById() {
+        var aliceId = users.get(0).getId();
+        userRepository.deleteById(aliceId);
+        assertThat(testDataSource).hasSelectCount(1)
+                .hasDeleteCount(1);
+    }
 }
 
-class MultipleStatementVsBulkDeleteTestWithBatching extends MySqlSingletonContainer {
+class MultipleStatementVsBulkDeleteWithBatchingTest extends MySqlSingletonContainer {
 
     @Autowired private UserRepository userRepository;
     @Autowired private ProxyTestDataSource testDataSource;
@@ -130,9 +133,6 @@ interface UserRepository extends JpaRepository<User, Long> {
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("delete from User u where u.lastName like %:token%")
     void deleteInBulkByLastNameContaining(String token);
-
-    @Transactional(readOnly = true)
-    List<User> findAllByFirstNameIn(List<String> names);
 }
 
 @Entity

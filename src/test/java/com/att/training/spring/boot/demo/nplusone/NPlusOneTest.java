@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @Slf4j
 @TestInstance(PER_CLASS)
 @Transactional
-class DbTest extends MySqlSingletonContainer {
+class NPlusOneTest extends MySqlSingletonContainer {
 
     @Autowired
     private EntityManager entityManager;
@@ -59,7 +59,7 @@ class DbTest extends MySqlSingletonContainer {
         transactionTemplate.execute(status -> {
             for (int i = 0; i < 4; ++i) {
                 Post post = new Post("post#" + i, PostStatus.APPROVED)
-                        .addComment(new PostComment("Great post!"));
+                        .addComment(new PostComment(String.format("[comment #%s] Great post!", i)));
                 entityManager.persist(post);
             }
             return null;
@@ -78,14 +78,25 @@ class DbTest extends MySqlSingletonContainer {
             logPost(fetchedPost);
         }
 
-        @SuppressWarnings({"deprecation", "unchecked"})
         @Test
         void useProjection() {
-            List<PostDto> fetchedPosts = entityManager.createNativeQuery("SELECT p.title, pc.review FROM post p INNER JOIN post_comment pc ON p.id = pc.post_id")
-                    .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(PostDto.class))
+            List<PostCommentDto> fetchedPostComments = entityManager.createQuery(
+                    "select new com.att.training.spring.boot.demo.nplusone.PostCommentDto(p.title, pc.review) " +
+                            "from PostComment pc join pc.post p", PostCommentDto.class)
                     .getResultList();
-            fetchedPosts.forEach(this::logPost);
+            log.info("PostCommentDtos: {}", fetchedPostComments);
+        }
+
+        @SuppressWarnings({"deprecation", "unchecked"})
+        @Test
+        void useProjectionWithNativeQuery() {
+            List<AnotherPostCommentDto> fetchedPostComments = entityManager.createNativeQuery(
+                    "SELECT p.title as postTitle, pc.review " +
+                    "FROM post_comment pc INNER JOIN post p ON pc.post_id = p.id")
+                    .unwrap(NativeQuery.class)
+                    .setResultTransformer(Transformers.aliasToBean(AnotherPostCommentDto.class))
+                    .getResultList();
+            log.info("AnotherPostCommentDtos: {}", fetchedPostComments);
         }
 
         @Test
@@ -114,10 +125,6 @@ class DbTest extends MySqlSingletonContainer {
             List<PostComment> comments = fetchedPost.getComments();
             log.info("Post: {} has {} comments", fetchedPost.getId(), comments.size());
             log.info("Post comments: {}", comments);
-        }
-
-        private void logPost(PostDto fetchedPost) {
-            log.info("Post: {}, review: {}", fetchedPost.getTitle(), fetchedPost.getReview());
         }
     }
 
@@ -168,11 +175,12 @@ class DbTest extends MySqlSingletonContainer {
         private String title;
         private String review;
     }
+
 }
 
 interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("SELECT p FROM Post p JOIN FETCH p.comments WHERE p.id = :id")
+    @Query("select p from Post p join fetch p.comments where p.id = :id")
     Post findByIdWithExplicitJoinFetch(Long id);
 
     @EntityGraph(attributePaths = "comments")
@@ -182,7 +190,7 @@ interface PostRepository extends JpaRepository<Post, Long> {
 
 interface PostCommentRepository extends JpaRepository<PostComment, Long> {
 
-    @Query("SELECT pc FROM PostComment pc JOIN FETCH pc.post WHERE pc.id = :id")
+    @Query("select pc from PostComment pc join fetch pc.post where pc.id = :id")
     PostComment findByIdWithExplicitJoinFetch(Long id);
 
     @EntityGraph(attributePaths = "post")
