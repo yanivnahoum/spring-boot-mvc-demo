@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.4.4"
+    id("org.springframework.boot") version "2.4.5"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "5.3.0"
+    id("io.freefair.lombok") version "5.3.3.3"
 }
 
 group = "com.att.training.spring.boot"
@@ -28,7 +28,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:3.0.2")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.15.2"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.15.3"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
