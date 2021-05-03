@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.4.4"
+    id("org.springframework.boot") version "2.4.5"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "5.3.0"
+    id("io.freefair.lombok") version "5.3.3.3"
 }
 
 group = "com.att.training.spring.boot"
@@ -27,7 +27,7 @@ dependencies {
     testImplementation("net.ttddyy:datasource-proxy:1.7")
     testImplementation("net.ttddyy:datasource-assert:1.0")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.15.2"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.15.3"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
@@ -47,5 +47,15 @@ tasks {
             events("skipped", "failed")
             showStandardStreams = true
         }
+        val hazelcastJvmArgs = listOf(
+                "--add-exports java.base/jdk.internal.ref=ALL-UNNAMED",
+                "--add-opens java.base/java.lang=ALL-UNNAMED",
+                "--add-opens java.base/java.nio=ALL-UNNAMED",
+                "--add-opens java.base/sun.nio.ch=ALL-UNNAMED",
+                "--add-opens java.management/sun.management=ALL-UNNAMED",
+                "--add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED"
+        ).flatMap { it.split(" ") }
+
+        jvmArgs(hazelcastJvmArgs)
     }
 }

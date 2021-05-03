@@ -17,6 +17,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
+        <hazelcast.version>4.2</hazelcast.version>
+        <hazelcast-hibernate.version>2.2.0</hazelcast-hibernate.version>
         <testcontainers.version>1.15.2</testcontainers.version>
         <datasource-proxy.version>1.7</datasource-proxy.version>
         <datasource-assert.version>1.0</datasource-assert.version>
@@ -53,6 +55,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast-hibernate53</artifactId>
+            <version>${hazelcast-hibernate.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hazelcast</groupId>
+            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast.version}</version>
         </dependency>
 
         <dependency>

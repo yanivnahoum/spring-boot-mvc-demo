@@ -1,13 +1,13 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.cache;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.hazelcast.HazelcastAutoConfiguration;
 
 @SpringBootApplication(exclude = HazelcastAutoConfiguration.class)
-public class SpringMvcBootApplication {
+public class SpringApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringMvcBootApplication.class, args);
+        SpringApplication.run(SpringApp.class);
     }
 }

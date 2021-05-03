@@ -7,11 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import net.ttddyy.dsproxy.QueryCount;
-import net.ttddyy.dsproxy.QueryCountHolder;
-import org.hibernate.query.NativeQuery;
-import org.hibernate.transform.Transformers;
+import net.ttddyy.dsproxy.asserts.ProxyTestDataSource;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -35,13 +34,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static net.ttddyy.dsproxy.asserts.assertj.DataSourceAssertAssertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @Slf4j
@@ -49,21 +47,86 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @Transactional
 class NPlusOneTest extends MySqlSingletonContainer {
 
+    private static final int POST_COUNT = 4;
     @Autowired
     private EntityManager entityManager;
+    @Autowired
+    private ProxyTestDataSource testDataSource;
     @Autowired
     private TransactionTemplate transactionTemplate;
 
     @BeforeAll
     void init() {
         transactionTemplate.execute(status -> {
-            for (int i = 0; i < 4; ++i) {
-                Post post = new Post("post#" + i, PostStatus.APPROVED)
-                        .addComment(new PostComment(String.format("[comment #%s] Great post!", i)));
+            for (int i = 0; i < POST_COUNT; ++i) {
+                Post post = new Post("post#" + (i + 1), PostStatus.APPROVED)
+                        .addComment(new PostComment(String.format("[comment #1] Post #%s rocks!", i + 1)))
+                        .addComment(new PostComment(String.format("[comment #2] Post #%s rocks!", i + 1)));
                 entityManager.persist(post);
             }
             return null;
         });
+    }
+
+    @BeforeEach
+    void beforeEach() {
+        testDataSource.reset();
+    }
+
+    @Nested
+    class PostCommentFetcher {
+
+        @Autowired
+        private PostCommentRepository postCommentRepository;
+
+        @Disabled("Use the default FetchType.Eager of the PostComment.post's @ManyToOne to see the N + 1 in action")
+        @Test
+        void findAllUsingRepoDefault() {
+            postCommentRepository.findAll();
+            assertThat(testDataSource).hasSelectCount(POST_COUNT + 1);
+        }
+
+        @Disabled("Use the default FetchType.Eager of the PostComment.post's @ManyToOne to see the N + 1 in action")
+        @Test
+        void findUsingRepoWithCustomQueryWithoutJoinFetch() {
+            postCommentRepository.findByIdWithoutJoinFetch(1L);
+            assertThat(testDataSource).hasSelectCount(2);
+        }
+
+        @Test
+        void findUsingEntityManager() {
+            PostComment fetchedPost = entityManager.find(PostComment.class, 1L);
+            logPostComment(fetchedPost);
+            assertThat(testDataSource).hasSelectCount(2);
+        }
+
+        @Test
+        void findUsingRepoDefault() {
+            PostComment fetchedPost = postCommentRepository.findById(1L).orElseThrow();
+            logPostComment(fetchedPost);
+            assertThat(testDataSource).hasSelectCount(2);
+        }
+
+        @Test
+        void findUsingRepoWithCustomQuery() {
+            PostComment postComment = postCommentRepository.findByIdWithExplicitJoinFetch(1L);
+            logPostComment(postComment);
+            assertThat(testDataSource).hasSelectCount(1);
+        }
+
+        @Test
+        void findUsingRepoWithGraph() {
+            PostComment postComment = postCommentRepository.getById(1L);
+            logPostComment(postComment);
+            assertThat(testDataSource).hasSelectCount(1);
+        }
+
+        private void logPostComment(PostComment postComment) {
+            log.info("PostComment: {}", postComment);
+            Post post = postComment.getPost();
+            log.info("Post: {} has status {}", post.getTitle(), post.getStatus());
+        }
+
     }
 
     @Nested
@@ -76,49 +139,37 @@ class NPlusOneTest extends MySqlSingletonContainer {
         void findUsingEntityManager() {
             Post fetchedPost = entityManager.find(Post.class, 1L);
             logPost(fetchedPost);
-        }
-
-        @Test
-        void useProjection() {
-            List<PostCommentDto> fetchedPostComments = entityManager.createQuery(
-                    "select new com.att.training.spring.boot.demo.nplusone.PostCommentDto(p.title, pc.review) " +
-                            "from PostComment pc join pc.post p", PostCommentDto.class)
-                    .getResultList();
-            log.info("PostCommentDtos: {}", fetchedPostComments);
-        }
-
-        @SuppressWarnings({"deprecation", "unchecked"})
-        @Test
-        void useProjectionWithNativeQuery() {
-            List<AnotherPostCommentDto> fetchedPostComments = entityManager.createNativeQuery(
-                    "SELECT p.title as postTitle, pc.review " +
-                    "FROM post_comment pc INNER JOIN post p ON pc.post_id = p.id")
-                    .unwrap(NativeQuery.class)
-                    .setResultTransformer(Transformers.aliasToBean(AnotherPostCommentDto.class))
-                    .getResultList();
-            log.info("AnotherPostCommentDtos: {}", fetchedPostComments);
+            assertThat(testDataSource).hasSelectCount(2);
         }
 
         @Test
         void findUsingRepoDefault() {
-            QueryCountHolder.clear();
             Post post = postRepository.findById(1L).orElseThrow();
             logPost(post);
-            QueryCount queryCount = QueryCountHolder.getGrandTotal();
-            long recordedSelectCount = queryCount.getSelect();
-            assertThat(recordedSelectCount).isEqualTo(2);
+            assertThat(testDataSource).hasSelectCount(2);
         }
 
         @Test
         void findUsingRepoWithCustomQuery() {
             Post post = postRepository.findByIdWithExplicitJoinFetch(1L);
             logPost(post);
+            assertThat(testDataSource).hasSelectCount(1);
         }
 
         @Test
         void findUsingRepoWithGraph() {
             Post post = postRepository.getById(1L);
             logPost(post);
+            assertThat(testDataSource).hasSelectCount(1);
+        }
+
+        @Test
+        void findAllUsingRepoDefault() {
+            List<Post> posts = postRepository.findAll();
+            for (Post post : posts) {
+                logPost(post);
+            }
+            assertThat(testDataSource).hasSelectCount(POST_COUNT + 1);
         }
 
         private void logPost(Post fetchedPost) {
@@ -127,55 +178,6 @@ class NPlusOneTest extends MySqlSingletonContainer {
             log.info("Post comments: {}", comments);
         }
     }
-
-    @Nested
-    class PostCommentFetcher {
-
-        @Autowired
-        private PostCommentRepository postCommentRepository;
-
-        @Test
-        void findUsingEntityManager() {
-            PostComment fetchedPost = entityManager.find(PostComment.class, 1L);
-            logPostComment(fetchedPost);
-        }
-
-
-        @Test
-        void findAllUsingRepoDefault() {
-            List<PostComment> postComments = postCommentRepository.findAll();
-            for (var comment : postComments) {
-                logPostComment(comment);
-            }
-        }
-
-        @Test
-        void findUsingRepoWithCustomQuery() {
-            PostComment postComment = postCommentRepository.findByIdWithExplicitJoinFetch(1L);
-            logPostComment(postComment);
-        }
-
-        @Test
-        void findUsingRepoWithGraph() {
-            PostComment postComment = postCommentRepository.getById(1L);
-            logPostComment(postComment);
-        }
-
-        private void logPostComment(PostComment postComment) {
-            log.info("PostComment: {}", postComment);
-            Post post = postComment.getPost();
-            log.info("Post: {} has status {}", post.getTitle(), post.getStatus());
-        }
-    }
-
-    @Getter
-    @Setter
-    @ToString
-    public static class PostDto {
-        private String title;
-        private String review;
-    }
-
 }
 
 interface PostRepository extends JpaRepository<Post, Long> {
@@ -185,21 +187,21 @@ interface PostRepository extends JpaRepository<Post, Long> {
 
     @EntityGraph(attributePaths = "comments")
     Post getById(Long id);
-
 }
 
 interface PostCommentRepository extends JpaRepository<PostComment, Long> {
+
+    @Query("select pc from PostComment pc where pc.id = :id")
+    PostComment findByIdWithoutJoinFetch(Long id);
 
     @Query("select pc from PostComment pc join fetch pc.post where pc.id = :id")
     PostComment findByIdWithExplicitJoinFetch(Long id);
 
     @EntityGraph(attributePaths = "post")
     PostComment getById(Long id);
-
 }
 
 @Entity
-@Table
 @Getter
 @Setter
 @NoArgsConstructor
@@ -230,7 +232,6 @@ class Post {
 }
 
 @Entity
-@Table
 @Getter
 @Setter
 @NoArgsConstructor

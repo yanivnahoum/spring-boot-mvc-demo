@@ -8,6 +8,8 @@
     <logger name="com.att.training.spring.boot.demo" level="debug"/>
     <logger name="org.testcontainers" level="info"/>
     <logger name="com.github.dockerjava" level="warn"/>
+    <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="info"/>
+    <logger name="con.hazelcast" level="info"/>
     <!-- use DEBUG to see SQL statements -->
     <logger name="org.hibernate.SQL" level="info"/>
     <!-- use TRACE to see values of parameters -->
