@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.CascadeType;
@@ -34,7 +35,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -126,7 +126,6 @@ class NPlusOneTest extends MySqlSingletonContainer {
             Post post = postComment.getPost();
             log.info("Post: {} has status {}", post.getTitle(), post.getStatus());
         }
-
     }
 
     @Nested
@@ -164,6 +163,26 @@ class NPlusOneTest extends MySqlSingletonContainer {
         }
 
         @Test
+        void findUsingRepoWithGraph2() {
+            Post post = postRepository.queryById(1L);
+            logPost(post);
+            assertThat(testDataSource).hasSelectCount(1);
+        }
+
+        @Test
+        void findUsingRepoWithGraph3() {
+            Post post = postRepository.findWithCommentsById(1L);
+            logPost(post);
+            assertThat(testDataSource).hasSelectCount(1);
+        }
+        @Test
+        void findAllUsingRepoWithGraph() {
+            List<Post> posts = postRepository.readAllWithCommentsBy();
+            posts.forEach(this::logPost);
+            assertThat(testDataSource).hasSelectCount(1);
+        }
+
+        @Test
         void findAllUsingRepoDefault() {
             List<Post> posts = postRepository.findAll();
             for (Post post : posts) {
@@ -186,7 +205,35 @@ interface PostRepository extends JpaRepository<Post, Long> {
     Post findByIdWithExplicitJoinFetch(Long id);
 
     @EntityGraph(attributePaths = "comments")
+    Post findWithCommentsById(Long id);
+
+    @EntityGraph(attributePaths = "comments")
+    Post readById(Long id);
+
+    @EntityGraph(attributePaths = "comments")
+    Post queryById(Long id);
+
+    @EntityGraph(attributePaths = "comments")
     Post getById(Long id);
+
+    @EntityGraph(attributePaths = "comments")
+    Post searchById(Long id);
+
+
+    @EntityGraph(attributePaths = "comments")
+    List<Post> findAllWithCommentsBy();
+
+    @EntityGraph(attributePaths = "comments")
+    List<Post> readAllWithCommentsBy();
+
+    @EntityGraph(attributePaths = "comments")
+    List<Post> queryAllBy();
+
+    @EntityGraph(attributePaths = "comments")
+    List<Post> getAllWithXxxBy();
+
+    @EntityGraph(attributePaths = "comments")
+    List<Post> searchAllWithYyyBy();
 }
 
 interface PostCommentRepository extends JpaRepository<PostComment, Long> {

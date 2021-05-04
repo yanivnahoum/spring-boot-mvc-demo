@@ -12,6 +12,7 @@
     <logger name="con.hazelcast" level="info"/>
     <!-- use DEBUG to see SQL statements -->
     <logger name="org.hibernate.SQL" level="info"/>
+    <logger name="org.hibernate.cache" level="info"/>
     <!-- use TRACE to see values of parameters -->
     <logger name="org.hibernate.type.descriptor.sql" level="info"/>
     <!--    <logger name="org.hibernate.SQL_SLOW" level="info"/>-->
