@@ -35,6 +35,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,14 +58,13 @@ class NPlusOneTest extends MySqlSingletonContainer {
 
     @BeforeAll
     void init() {
-        transactionTemplate.execute(status -> {
+        transactionTemplate.executeWithoutResult(status -> {
             for (int i = 0; i < POST_COUNT; ++i) {
                 Post post = new Post("post#" + (i + 1), PostStatus.APPROVED)
                         .addComment(new PostComment(String.format("[comment #1] Post #%s rocks!", i + 1)))
                         .addComment(new PostComment(String.format("[comment #2] Post #%s rocks!", i + 1)));
                 entityManager.persist(post);
             }
-            return null;
         });
     }
 
@@ -81,7 +81,7 @@ class NPlusOneTest extends MySqlSingletonContainer {
 
         @Disabled("Use the default FetchType.Eager of the PostComment.post's @ManyToOne to see the N + 1 in action")
         @Test
-        void findAllUsingRepoDefault() {
+        void findAllUsingRepoDefaultWithEager() {
             postCommentRepository.findAll();
             assertThat(testDataSource).hasSelectCount(POST_COUNT + 1);
         }
@@ -182,6 +182,13 @@ class NPlusOneTest extends MySqlSingletonContainer {
             assertThat(testDataSource).hasSelectCount(1);
         }
 
+        @Disabled("Change the fetch to FetchType.Eager of the Post.comments' @OneToMany to see the N + 1 in action")
+        @Test
+        void findAllUsingRepoDefaultWithEager() {
+            List<Post> posts = postRepository.findAll();
+            assertThat(testDataSource).hasSelectCount(POST_COUNT + 1);
+        }
+
         @Test
         void findAllUsingRepoDefault() {
             List<Post> posts = postRepository.findAll();
@@ -201,9 +208,10 @@ class NPlusOneTest extends MySqlSingletonContainer {
 
 interface PostRepository extends JpaRepository<Post, Long> {
 
-    @Query("select p from Post p join fetch p.comments where p.id = :id")
+    @Query("select p from Post p left join fetch p.comments where p.id = :id")
     Post findByIdWithExplicitJoinFetch(Long id);
 
+    // EntityGraph generates a LEFT JOIN
     @EntityGraph(attributePaths = "comments")
     Post findWithCommentsById(Long id);
 
@@ -292,6 +300,9 @@ class PostComment {
     private String review;
 
     @ToString.Exclude
+    // Marks the column as NOT NULL if used to create the schema,
+    // but also makes the em.find(id) generate inner joins when the association is eager
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Post post;
 
