@@ -3,15 +3,13 @@ package com.att.training.spring.boot.demo.bulk;
 import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.ttddyy.dsproxy.asserts.ProxyTestDataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Entity;
@@ -26,7 +24,6 @@ import static net.ttddyy.dsproxy.asserts.assertj.DataSourceAssertAssertions.asse
 class MultipleStatementVsBulkDeleteWithoutBatchingTest extends MySqlSingletonContainer {
 
     @Autowired private UserRepository userRepository;
-    @Autowired private ProxyTestDataSource testDataSource;
     private List<User> users;
 
     @BeforeEach
@@ -54,8 +51,8 @@ class MultipleStatementVsBulkDeleteWithoutBatchingTest extends MySqlSingletonCon
     }
 
     @Test
-    void deleteInBatch() {
-        userRepository.deleteInBatch(users);
+    void deleteAllInBatchSpecifiedEntities() {
+        userRepository.deleteAllInBatch(users);
         assertThat(testDataSource).hasSelectCount(0)
                 .hasDeleteCount(1);
     }
@@ -97,15 +94,10 @@ class MultipleStatementVsBulkDeleteWithoutBatchingTest extends MySqlSingletonCon
     }
 }
 
+@TestPropertySource(properties = "spring.jpa.properties.hibernate.jdbc.batch_size=25")
 class MultipleStatementVsBulkDeleteWithBatchingTest extends MySqlSingletonContainer {
 
     @Autowired private UserRepository userRepository;
-    @Autowired private ProxyTestDataSource testDataSource;
-
-    @DynamicPropertySource
-    static void hibernateProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.jpa.properties.hibernate.jdbc.batch_size", () -> 25);
-    }
 
     @BeforeEach
     void beforeEach() {

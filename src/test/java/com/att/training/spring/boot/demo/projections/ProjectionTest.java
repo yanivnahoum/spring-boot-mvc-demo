@@ -11,14 +11,11 @@ import org.hibernate.transform.Transformers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -31,6 +28,7 @@ import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 
 @Slf4j
@@ -38,20 +36,14 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @Transactional
 class ProjectionTest extends MySqlSingletonContainer {
 
-    @Autowired
-    private EntityManager entityManager;
-    @Autowired
-    private TransactionTemplate transactionTemplate;
-
     @BeforeAll
     void init() {
-        transactionTemplate.execute(status -> {
+        transactionTemplate.executeWithoutResult(status -> {
             for (int i = 0; i < 4; ++i) {
                 Post post = new Post("post#" + i, PostStatus.APPROVED)
                         .addComment(new PostComment(String.format("[comment #%s] Great post!", i)));
                 entityManager.persist(post);
             }
-            return null;
         });
     }
 
@@ -61,6 +53,7 @@ class ProjectionTest extends MySqlSingletonContainer {
                 "select new com.att.training.spring.boot.demo.projections.PostCommentDto(p.title, pc.review) " +
                         "from PostComment pc join pc.post p", PostCommentDto.class)
                 .getResultList();
+        assertThat(fetchedPostComments).isNotNull();
         log.info("PostCommentDtos: {}", fetchedPostComments);
     }
 
@@ -73,6 +66,7 @@ class ProjectionTest extends MySqlSingletonContainer {
                 .unwrap(NativeQuery.class)
                 .setResultTransformer(Transformers.aliasToBean(AnotherPostCommentDto.class))
                 .getResultList();
+        assertThat(fetchedPostComments).isNotNull();
         log.info("AnotherPostCommentDtos: {}", fetchedPostComments);
     }
 }

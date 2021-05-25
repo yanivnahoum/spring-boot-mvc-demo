@@ -6,11 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import net.ttddyy.dsproxy.asserts.ProxyTestDataSource;
 import org.hibernate.annotations.Cache;
 import org.hibernate.query.NativeQuery;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
@@ -23,15 +21,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.lang.NonNull;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -58,27 +53,18 @@ import static org.springframework.transaction.annotation.Propagation.NOT_SUPPORT
 @Slf4j
 @TestInstance(PER_CLASS)
 @Transactional
+@TestPropertySource(properties = {
+        "spring.jpa.properties.hibernate.generate_statistics=true",
+        "spring.jpa.properties.hibernate.cache.use_second_level_cache=true",
+        "spring.jpa.properties.hibernate.cache.use_query_cache=true",
+        "spring.jpa.properties.hibernate.cache.region.factory_class=com.hazelcast.hibernate.HazelcastCacheRegionFactory"
+})
 class L2CacheTest extends MySqlSingletonContainer {
 
-    @Autowired
-    private EntityManager entityManager;
-    @Autowired
-    private ProxyTestDataSource testDataSource;
-    @Autowired
-    private TransactionTemplate transactionTemplate;
     @Autowired
     private PostRepository postRepository;
     @Autowired
     private PostCommentRepository postCommentRepository;
-
-    @DynamicPropertySource
-    static void hibernateProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.jpa.properties.hibernate.generate_statistics", () -> true);
-        registry.add("spring.jpa.properties.hibernate.cache.use_second_level_cache", () -> true);
-        registry.add("spring.jpa.properties.hibernate.cache.use_query_cache", () -> true);
-        registry.add("spring.jpa.properties.hibernate.cache.region.factory_class",
-                () -> "com.hazelcast.hibernate.HazelcastCacheRegionFactory");
-    }
 
     @BeforeAll
     void init() {
@@ -92,9 +78,9 @@ class L2CacheTest extends MySqlSingletonContainer {
         });
     }
 
-    @BeforeEach
-    void beforeEach() {
-        testDataSource.reset();
+    @Override
+    protected List<String> tablesToDrop() {
+        return List.of("post_comment", "post");
     }
 
     @Test
@@ -128,7 +114,7 @@ class L2CacheTest extends MySqlSingletonContainer {
 
     @RepeatedTest(3)
     void findUsingRepoWithGraph(RepetitionInfo repetitionInfo) {
-        Post post = postRepository.getById(1L);
+        Post post = postRepository.readById(1L);
         logPost(post);
         assertThat(testDataSource).hasSelectCount(repetitionInfo.getCurrentRepetition() > 1 ? 0 : 1);
     }
@@ -215,12 +201,11 @@ class L2CacheTest extends MySqlSingletonContainer {
             // but since we're using a native query, Hibernate is in the dark
             // We manually provide the required information using addSynchronizedEntityClass()
             log.info("Updating comment(id=1) review with native query & synced entity");
-            transactionTemplate.executeWithoutResult(status -> {
-                entityManager.createNativeQuery("UPDATE post_comment SET review = 'changed from native& synced!' WHERE id = 1")
-                        .unwrap(NativeQuery.class)
-                        .addSynchronizedEntityClass(PostComment.class)
-                        .executeUpdate();
-            });
+            transactionTemplate.executeWithoutResult(status ->
+                    entityManager.createNativeQuery("UPDATE post_comment SET review = 'changed from native& synced!' WHERE id = 1")
+                            .unwrap(NativeQuery.class)
+                            .addSynchronizedEntityClass(PostComment.class)
+                            .executeUpdate());
 
             // Execute query again and make sure it doesn't hit the db, but taken from the query cache instead
             testDataSource.reset();
@@ -260,7 +245,7 @@ interface PostRepository extends JpaRepository<Post, Long> {
 
     @QueryCache
     @EntityGraph(attributePaths = "comments")
-    Post getById(Long id);
+    Post readById(Long id);
 }
 
 interface PostCommentRepository extends JpaRepository<PostComment, Long> {

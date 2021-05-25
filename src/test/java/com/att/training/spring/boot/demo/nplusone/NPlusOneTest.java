@@ -1,15 +1,12 @@
 package com.att.training.spring.boot.demo.nplusone;
 
 import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import net.ttddyy.dsproxy.asserts.ProxyTestDataSource;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -19,25 +16,20 @@ import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static net.ttddyy.dsproxy.asserts.assertj.DataSourceAssertAssertions.assertThat;
@@ -49,12 +41,6 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 class NPlusOneTest extends MySqlSingletonContainer {
 
     private static final int POST_COUNT = 4;
-    @Autowired
-    private EntityManager entityManager;
-    @Autowired
-    private ProxyTestDataSource testDataSource;
-    @Autowired
-    private TransactionTemplate transactionTemplate;
 
     @BeforeAll
     void init() {
@@ -68,9 +54,9 @@ class NPlusOneTest extends MySqlSingletonContainer {
         });
     }
 
-    @BeforeEach
-    void beforeEach() {
-        testDataSource.reset();
+    @Override
+    protected List<String> tablesToDrop() {
+        return List.of("post_comment", "post");
     }
 
     @Nested
@@ -116,7 +102,7 @@ class NPlusOneTest extends MySqlSingletonContainer {
 
         @Test
         void findUsingRepoWithGraph() {
-            PostComment postComment = postCommentRepository.getById(1L);
+            PostComment postComment = postCommentRepository.readById(1L);
             logPostComment(postComment);
             assertThat(testDataSource).hasSelectCount(1);
         }
@@ -157,7 +143,7 @@ class NPlusOneTest extends MySqlSingletonContainer {
 
         @Test
         void findUsingRepoWithGraph() {
-            Post post = postRepository.getById(1L);
+            Post post = postRepository.readById(1L);
             logPost(post);
             assertThat(testDataSource).hasSelectCount(1);
         }
@@ -175,6 +161,7 @@ class NPlusOneTest extends MySqlSingletonContainer {
             logPost(post);
             assertThat(testDataSource).hasSelectCount(1);
         }
+
         @Test
         void findAllUsingRepoWithGraph() {
             List<Post> posts = postRepository.readAllWithCommentsBy();
@@ -222,9 +209,6 @@ interface PostRepository extends JpaRepository<Post, Long> {
     Post queryById(Long id);
 
     @EntityGraph(attributePaths = "comments")
-    Post getById(Long id);
-
-    @EntityGraph(attributePaths = "comments")
     Post searchById(Long id);
 
 
@@ -253,7 +237,7 @@ interface PostCommentRepository extends JpaRepository<PostComment, Long> {
     PostComment findByIdWithExplicitJoinFetch(Long id);
 
     @EntityGraph(attributePaths = "post")
-    PostComment getById(Long id);
+    PostComment readById(Long id);
 }
 
 @Entity
@@ -303,7 +287,10 @@ class PostComment {
     // Marks the column as NOT NULL if used to create the schema,
     // but also makes the em.find(id) generate inner joins when the association is eager
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(
+            fetch = FetchType.LAZY
+//            , optional = false // Has the same effect as @NotNull
+    )
     private Post post;
 
     public PostComment(String review) {
@@ -315,22 +302,4 @@ enum PostStatus {
     PENDING,
     APPROVED,
     SPAM
-}
-
-//@Entity
-//@Table
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-class PostDetails {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Date createdOn;
-    private String createdBy;
-    @OneToOne
-    @JoinColumn(name = "post_id", unique = true)
-    private Post post;
 }

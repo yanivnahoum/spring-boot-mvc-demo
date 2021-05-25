@@ -7,25 +7,26 @@ spring:
     url: jdbc:mysql://docker:3306/demo
     username: dbuser
     password: Aa123456!
-    initialization-mode: always
     hikari:
       maximum-pool-size: 2
-
+#  sql:
+#    init:
+#      enabled: true
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     properties:
       hibernate:
-#        jdbc:
-#          batch_size: 10
-#        #time_zone: "Asia/Jerusalem"
-#        order_inserts: true
-#        order_updates: true
+        #        jdbc:
+        #          batch_size: 10
+        #        #time_zone: "Asia/Jerusalem"
+        #        order_inserts: true
+        #        order_updates: true
         cache:
-          use_second_level_cache: false
-          use_query_cache: false
-          region:
-            factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+        use_second_level_cache: false
+        use_query_cache: false
+        region:
+        factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
         generate_statistics: false
         session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 25
