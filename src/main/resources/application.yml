@@ -20,9 +20,9 @@ spring:
     url: jdbc:mysql://docker:3306/demo
     username: dbuser
     password: Aa123456!
-    initialization-mode: always
 
   jpa:
+    defer-datasource-initialization: true
     hibernate:
       ddl-auto: create
     properties:
@@ -31,6 +31,9 @@ spring:
       hibernate.order_updates: true
     open-in-view: false
 
+  sql:
+    init:
+      enabled: true
 
 #  jackson:
 #    serialization:

@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.4.5"
+    id("org.springframework.boot") version "2.5.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "5.3.3.3"
 }
@@ -12,8 +12,6 @@ repositories {
     mavenCentral()
 }
 
-// Groovy 3+ plays nice with java 11
-extra["groovy.version"] = "3.0.7"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
