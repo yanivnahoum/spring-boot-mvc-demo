@@ -20,6 +20,9 @@ spring:
     url: jdbc:mysql://docker:3306/demo
     username: dbuser
     password: Aa123456!
+    hikari:
+      minimum-idle: 3
+      maximum-pool-size: 10
 
   jpa:
     defer-datasource-initialization: true
