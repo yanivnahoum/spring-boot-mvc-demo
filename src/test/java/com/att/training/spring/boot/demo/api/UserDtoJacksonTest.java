@@ -18,6 +18,6 @@ class UserDtoJacksonTest {
     void given2PojosWithSameFieldsAndAtLeastOneIsImmutable_whenConvert_thenJacksonMapsBetweenThem() {
         User user = new User(100L, "Yaniv", "Nahoum", 40);
         UserDto userDto = mapper.convertValue(user, UserDto.class);
-        assertThat(userDto).isEqualToComparingFieldByField(user);
+        assertThat(userDto).usingRecursiveComparison().isEqualTo(user);
     }
 }
