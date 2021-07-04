@@ -36,8 +36,9 @@ spring:
 
   sql:
     init:
-      enabled: true
+      mode: always
 
+#wiremock.server.https-port: -1
 #  jackson:
 #    serialization:
 #      wrap-root-value: true

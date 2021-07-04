@@ -22,7 +22,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RestClientTest
+// Forcing https-port=-1 since https is enabled for some reason (since v3.0.3)
+@RestClientTest(properties = "wiremock.server.https-port=-1")
 @AutoConfigureMockRestServiceServer(enabled = false)
 @AutoConfigureWireMock
 @Import({QuoteClient.class, QuoteClientResponseErrorHandler.class})

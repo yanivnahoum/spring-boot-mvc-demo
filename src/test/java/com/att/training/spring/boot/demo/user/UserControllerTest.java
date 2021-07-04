@@ -51,7 +51,7 @@ class UserControllerTest {
     private static final MySQLContainer<?> mySqlContainer = createAndStart();
 
     private static MySQLContainer<?> createAndStart() {
-        var container = new MySQLContainer<>("mysql:8.0.23")
+        var container = new MySQLContainer<>("mysql:8.0.25")
                 .withDatabaseName("demo")
                 .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
         // This is only needed because of spring-cloud-contract-wiremock's WireMockTestExecutionListener

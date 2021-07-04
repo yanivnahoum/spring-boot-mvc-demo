@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.5.1"
+    id("org.springframework.boot") version "2.5.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "5.3.3.3"
 }
@@ -24,7 +24,7 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:3.0.2")
+    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:3.0.3")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.15.3"))
     testImplementation("org.testcontainers:mysql")
