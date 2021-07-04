@@ -24,7 +24,9 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner:3.0.3")
+
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.3"))
+    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.15.3"))
     testImplementation("org.testcontainers:mysql")
