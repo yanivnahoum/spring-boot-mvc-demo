@@ -22,7 +22,7 @@ public class QuoteClient {
     public QuoteClient(RestTemplateBuilder builder, QuoteClientResponseErrorHandler errorHandler) {
         this.restTemplate = builder
                 .requestFactory(() -> new OkHttp3ClientHttpRequestFactory(newClient()))
-                .rootUri("http://quotes.rest")
+                .rootUri("https://quotes.rest")
                 .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
                 .errorHandler(errorHandler)
                 .build();

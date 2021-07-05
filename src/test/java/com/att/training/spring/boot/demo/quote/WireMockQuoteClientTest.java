@@ -6,9 +6,9 @@ import com.att.training.spring.boot.demo.quote.api.QuoteDetails;
 import com.att.training.spring.boot.demo.quote.api.QuoteResponse;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureMockRestServiceServer;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.boot.web.client.RootUriTemplateHandler;
@@ -17,14 +17,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// Forcing https-port=-1 since https is enabled for some reason (since v3.0.3)
-@RestClientTest(properties = "wiremock.server.https-port=-1")
-@AutoConfigureMockRestServiceServer(enabled = false)
+@ExtendWith(SpringExtension.class)
+@AutoConfigureWebClient
 @AutoConfigureWireMock
 @Import({QuoteClient.class, QuoteClientResponseErrorHandler.class})
 class WireMockQuoteClientTest {
