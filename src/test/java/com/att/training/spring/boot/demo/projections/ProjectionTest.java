@@ -11,6 +11,7 @@ import org.hibernate.transform.Transformers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.CascadeType;
@@ -24,7 +25,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.Tuple;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,9 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @Slf4j
 @TestInstance(PER_CLASS)
 @Transactional
+@TestPropertySource(properties = {
+        "spring.jpa.properties.hibernate.integrator_provider=com.att.training.spring.boot.demo.projections.ClassImportIntegratorIntegratorProvider"
+})
 class ProjectionTest extends MySqlSingletonContainer {
 
     @BeforeAll
@@ -57,11 +61,21 @@ class ProjectionTest extends MySqlSingletonContainer {
         log.info("PostCommentDtos: {}", fetchedPostComments);
     }
 
+    @Test
+    void useProjectionWithJpqlReturningTuple() {
+        List<Tuple> fetchedPostComments = entityManager.createQuery(
+                "select pc.review as review, p.title as postTitle " +
+                        "from PostComment pc join pc.post p", Tuple.class)
+                .getResultList();
+        assertThat(fetchedPostComments).isNotNull();
+        log.info("PostCommentDtos: {}", tuplesToString(fetchedPostComments));
+    }
+
     @SuppressWarnings({"deprecation", "unchecked"})
     @Test
     void useProjectionWithNativeQuery() {
         List<AnotherPostCommentDto> fetchedPostComments = entityManager.createNativeQuery(
-                "SELECT p.title as postTitle, pc.review " +
+                "SELECT p.title AS postTitle, pc.review " +
                         "FROM post_comment pc INNER JOIN post p ON pc.post_id = p.id")
                 .unwrap(NativeQuery.class)
                 .setResultTransformer(Transformers.aliasToBean(AnotherPostCommentDto.class))
@@ -69,13 +83,46 @@ class ProjectionTest extends MySqlSingletonContainer {
         assertThat(fetchedPostComments).isNotNull();
         log.info("AnotherPostCommentDtos: {}", fetchedPostComments);
     }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    void useProjectionWithNativeQueryReturningTuple() {
+        List<Tuple> fetchedPostComments = entityManager.createNativeQuery(
+                "SELECT p.title AS postTitle, pc.review " +
+                        "FROM post_comment pc INNER JOIN post p ON pc.post_id = p.id", Tuple.class)
+                .getResultList();
+        assertThat(fetchedPostComments).isNotNull();
+        log.info("AnotherPostCommentDtos: {}", tuplesToString(fetchedPostComments));
+    }
+
+    @Test
+    void useProjectionWithJpqlWithSimpleNameDto() {
+        List<PostCommentDto> fetchedPostComments = entityManager.createQuery(
+                "select new PostCommentDto(p.title, pc.review) " +
+                        "from PostComment pc join pc.post p", PostCommentDto.class)
+                .getResultList();
+        assertThat(fetchedPostComments).isNotNull();
+        log.info("PostCommentDtos: {}", fetchedPostComments);
+    }
+
+    private String tuplesToString(List<Tuple> fetchedPostComments) {
+        var builder = new StringBuilder("[");
+        for (var tuple : fetchedPostComments) {
+            builder.append(tupleToString(tuple));
+        }
+        builder.append("]");
+        return builder.toString();
+    }
+
+    private String tupleToString(Tuple tuple) {
+        return String.format("{review=%s, postTitle=%s}", tuple.get("review"), tuple.get("postTitle"));
+    }
 }
 //interface PostRepository extends JpaRepository<Post, Long> {}
 //
 //interface PostCommentRepository extends JpaRepository<PostComment, Long> {}
 
 @Entity
-@Table
 @Getter
 @Setter
 @NoArgsConstructor
@@ -106,7 +153,6 @@ class Post {
 }
 
 @Entity
-@Table
 @Getter
 @Setter
 @NoArgsConstructor

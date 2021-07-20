@@ -20,6 +20,7 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
 
+    implementation("com.vladmihalcea:hibernate-types-52:2.12.1")
     implementation("com.hazelcast:hazelcast")
     implementation("com.hazelcast:hazelcast-hibernate53")
 
