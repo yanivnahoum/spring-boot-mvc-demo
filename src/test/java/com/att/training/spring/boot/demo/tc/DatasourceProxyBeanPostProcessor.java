@@ -43,11 +43,12 @@ public class DatasourceProxyBeanPostProcessor implements BeanPostProcessor {
         DefaultListableBeanFactory beanRegistry = (DefaultListableBeanFactory) configContext.getBeanFactory();
         beanRegistry.registerSingleton("proxyTestDataSource", proxyTestDataSource);
     }
+
     public static class ProxyDataSourceInterceptor implements MethodInterceptor {
         @Getter
         private final ProxyTestDataSource dataSource;
 
-        public ProxyDataSourceInterceptor(final DataSource dataSource) {
+        public ProxyDataSourceInterceptor(DataSource dataSource) {
             this.dataSource = new ProxyTestDataSource(ProxyDataSourceBuilder
                     .create(dataSource)
                     .name("datasource-proxy")
@@ -57,7 +58,7 @@ public class DatasourceProxyBeanPostProcessor implements BeanPostProcessor {
         }
 
         @Override
-        public Object invoke(final MethodInvocation invocation) throws Throwable {
+        public Object invoke(MethodInvocation invocation) throws Throwable {
             final Method proxyMethod = ReflectionUtils.findMethod(this.dataSource.getClass(),
                     invocation.getMethod().getName());
             if (proxyMethod != null) {
@@ -66,5 +67,4 @@ public class DatasourceProxyBeanPostProcessor implements BeanPostProcessor {
             return invocation.proceed();
         }
     }
-
 }

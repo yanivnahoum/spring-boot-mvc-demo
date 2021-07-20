@@ -285,7 +285,7 @@ class PostComment {
 
     @ToString.Exclude
     // Marks the column as NOT NULL if used to create the schema,
-    // but also makes the em.find(id) generate inner joins when the association is eager
+    // but also makes the em.find(id) generate inner join (as opposed to left join) when the association is eager
     @NotNull
     @ManyToOne(
             fetch = FetchType.LAZY
