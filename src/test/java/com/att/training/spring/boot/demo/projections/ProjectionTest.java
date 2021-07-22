@@ -144,6 +144,14 @@ class ProjectionTest extends MySqlSingletonContainer {
 
         @Test
         void useDerivedQuery_returningInterfaceProjection() {
+            List<PostCommentShortSummary> postCommentSummaries = postCommentRepository.findAllFetchingShortSummaryBy();
+            assertThat(postCommentSummaries).hasSize(POST_COMMENT_COUNT);
+            log.info("PostCommentSummaries: {}", top.toString(postCommentSummaries, top::toString));
+            assertThat(testDataSource).hasSelectCount(1);
+        }
+
+        @Test
+        void useDerivedQuery_returningInterfaceProjectionWithNestedAssociation() {
             List<PostCommentSummary> postCommentSummaries = postCommentRepository.findAllFetchingSummaryBy();
             assertThat(postCommentSummaries).hasSize(POST_COMMENT_COUNT);
             log.info("PostCommentSummaries: {}", top.toString(postCommentSummaries, top::toString));
@@ -227,6 +235,10 @@ class ProjectionTest extends MySqlSingletonContainer {
         return String.format("{review=%s, postTitle=%s}", tuple.get("review"), tuple.get("postTitle"));
     }
 
+    private String toString(PostCommentShortSummary commentSummary) {
+        return String.format("{review=%s}", commentSummary.getReview());
+    }
+
     private String toString(PostCommentSummary commentSummary) {
         return String.format("{review=%s, postTitle=%s}", commentSummary.getReview(), commentSummary.getPost().getTitle());
     }
@@ -260,12 +272,29 @@ interface PostCommentRepository extends JpaRepository<PostComment, Long> {
      */
     List<PostCommentReviewDto> findAllFetchingReviewOnlyBy();
 
+    /**
+     * The interface projection returned here includes only properties of the main entity with no nested
+     * associations. This works perfectly - generating a query that includes only the properties included in
+     * the interface.
+     * @return an interface projections
+     */
+    List<PostCommentShortSummary> findAllFetchingShortSummaryBy();
+
+    /**
+     * The interface projection returned here includes a nested association as an interface projection.
+     * This causes Spring to fetch all of the properties of the nested Entity, regardless of what is actually included
+     * in the interface projection.
+     * nested association
+     * @return an interface projections with a nested association
+     */
     List<PostCommentSummary> findAllFetchingSummaryBy();
 
     List<PostCommentSummaryWithDefaultMethods> findAllFetchingSummaryWithDefaultMethodsBy();
 
     /**
      * Here we return a type that uses SpEL - this causes the N+1 issue when the property is referenced.
+     * It also causes Spring to fetch all properties of the Entity, regardless of what is actually included
+     * in the interface projection.
      * @return interface projection with SpEL property
      */
     List<PostCommentSummaryWithSpEL> findAllFetchingSummaryWithSpELNPlusOneBy();
@@ -304,6 +333,10 @@ interface PostRepository extends JpaRepository<Post, Long> {
 @lombok.Value
 class PostCommentReviewDto {
     String review;
+}
+
+interface PostCommentShortSummary {
+    String getReview();
 }
 
 interface PostCommentSummary {
