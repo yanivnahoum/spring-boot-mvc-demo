@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.5.2"
+    id("org.springframework.boot") version "2.5.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "5.3.3.3"
 }
@@ -28,7 +28,7 @@ dependencies {
     implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.3"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.15.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.16.0"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
@@ -36,6 +36,10 @@ dependencies {
 tasks {
     withType<JavaCompile>().configureEach {
         options.release.set(11)
+    }
+
+    jar {
+        enabled = false
     }
 
     generateLombokConfig {
