@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.5.4"
+    id("org.springframework.boot") version "2.5.5"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "6.1.0"
+    id("io.freefair.lombok") version "6.2.0"
 }
 
 group = "com.att.training.spring.boot"
