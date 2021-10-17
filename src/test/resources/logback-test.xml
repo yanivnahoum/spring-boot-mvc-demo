@@ -9,7 +9,7 @@
     <logger name="org.testcontainers" level="info"/>
     <logger name="com.github.dockerjava" level="warn"/>
     <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="info"/>
-    <logger name="con.hazelcast" level="info"/>
+    <logger name="com.hazelcast" level="info"/>
     <!-- use DEBUG to see SQL statements -->
     <logger name="org.hibernate.SQL" level="info"/>
     <logger name="org.hibernate.cache" level="info"/>
