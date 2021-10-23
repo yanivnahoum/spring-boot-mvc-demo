@@ -48,7 +48,7 @@ class UserControllerTest {
     };
 
     @Container
-    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.26")
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.27")
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
 
