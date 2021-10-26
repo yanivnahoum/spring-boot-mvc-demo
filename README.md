@@ -25,7 +25,8 @@ Use the withITs profile to run all tests (including the slower integration tests
 Use the onlyITs profile to run only the slower integration tests
 ### Running the application:
 ```
-mvn spring-boot:run
+./mvnw spring-boot:run
+./gradlew bootRun
 ```
 or just run the main in class [SpringMvcBootApplication](src/main/java/com/att/training/spring/boot/demo/SpringMvcBootApplication.java)
 
