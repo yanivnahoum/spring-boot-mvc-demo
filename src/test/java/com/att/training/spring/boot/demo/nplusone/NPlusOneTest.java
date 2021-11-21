@@ -101,6 +101,13 @@ class NPlusOneTest extends MySqlSingletonContainer {
         }
 
         @Test
+        void findUsingRepoWithCustomNativeQuery() {
+            PostComment postComment = postCommentRepository.findByIdWithNativeJoin(1L);
+            logPostComment(postComment);
+            assertThat(testDataSource).hasSelectCount(2);
+        }
+
+        @Test
         void findUsingRepoWithGraph() {
             PostComment postComment = postCommentRepository.readById(1L);
             logPostComment(postComment);
@@ -235,6 +242,9 @@ interface PostCommentRepository extends JpaRepository<PostComment, Long> {
 
     @Query("select pc from PostComment pc join fetch pc.post where pc.id = :id")
     PostComment findByIdWithExplicitJoinFetch(Long id);
+
+    @Query(value = "SELECT * FROM post_comment pc INNER JOIN post p on pc.post_id = p.id WHERE pc.id = :id", nativeQuery = true)
+    PostComment findByIdWithNativeJoin(Long id);
 
     @EntityGraph(attributePaths = "post")
     PostComment readById(Long id);
