@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.5.6"
+    id("org.springframework.boot") version "2.6.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "6.2.0"
+    id("io.freefair.lombok") version "6.3.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -20,7 +20,7 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
 
-    implementation("com.vladmihalcea:hibernate-types-52:2.12.1")
+    implementation("com.vladmihalcea:hibernate-types-55:2.14.0")
     implementation("com.hazelcast:hazelcast")
     implementation("com.hazelcast:hazelcast-hibernate53")
 
