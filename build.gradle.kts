@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.6.1"
+    id("org.springframework.boot") version "2.6.2"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "6.3.0"
 }
@@ -25,7 +25,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2020.0.4"))
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.0"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.16.2"))
