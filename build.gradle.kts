@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.6.2"
+    id("org.springframework.boot") version "2.6.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "6.3.0"
 }
@@ -16,6 +16,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.data:spring-data-jpa") {
+        version {
+            // Until a bug introduced in 2.6.1 gets fixed: https://github.com/spring-projects/spring-data-jpa/issues/2408
+            strictly("2.6.0")
+        }
+    }
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
@@ -28,7 +34,7 @@ dependencies {
     testImplementation("net.ttddyy:datasource-proxy:1.7")
     testImplementation("net.ttddyy:datasource-assert:1.0")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.16.2"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.16.3"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
@@ -49,12 +55,12 @@ tasks {
             showStandardStreams = true
         }
         val hazelcastJvmArgs = listOf(
-                "--add-exports java.base/jdk.internal.ref=ALL-UNNAMED",
-                "--add-opens java.base/java.lang=ALL-UNNAMED",
-                "--add-opens java.base/java.nio=ALL-UNNAMED",
-                "--add-opens java.base/sun.nio.ch=ALL-UNNAMED",
-                "--add-opens java.management/sun.management=ALL-UNNAMED",
-                "--add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED"
+            "--add-exports java.base/jdk.internal.ref=ALL-UNNAMED",
+            "--add-opens java.base/java.lang=ALL-UNNAMED",
+            "--add-opens java.base/java.nio=ALL-UNNAMED",
+            "--add-opens java.base/sun.nio.ch=ALL-UNNAMED",
+            "--add-opens java.management/sun.management=ALL-UNNAMED",
+            "--add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED"
         ).flatMap { it.split(" ") }
 
         jvmArgs(hazelcastJvmArgs)
