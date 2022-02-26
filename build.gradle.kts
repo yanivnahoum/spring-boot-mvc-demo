@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.6.3"
+    id("org.springframework.boot") version "2.6.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "6.3.0"
+    id("io.freefair.lombok") version "6.4.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -16,12 +16,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.data:spring-data-jpa") {
-        version {
-            // Until a bug introduced in 2.6.1 gets fixed: https://github.com/spring-projects/spring-data-jpa/issues/2408
-            strictly("2.6.0")
-        }
-    }
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
