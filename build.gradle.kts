@@ -28,7 +28,7 @@ dependencies {
     implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.1"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.16.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.17.0"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
