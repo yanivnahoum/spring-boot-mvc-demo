@@ -28,7 +28,7 @@ dependencies {
     testImplementation("net.ttddyy:datasource-proxy:1.7")
     testImplementation("net.ttddyy:datasource-assert:1.0")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.16.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.17.0"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
