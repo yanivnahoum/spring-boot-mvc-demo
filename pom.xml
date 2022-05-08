@@ -17,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>11</java.version>
-        <hibernate-types.version>2.16.1</hibernate-types.version>
+        <hibernate-types.version>2.16.2</hibernate-types.version>
         <testcontainers.version>1.17.1</testcontainers.version>
         <datasource-proxy.version>1.7</datasource-proxy.version>
         <datasource-assert.version>1.0</datasource-assert.version>
