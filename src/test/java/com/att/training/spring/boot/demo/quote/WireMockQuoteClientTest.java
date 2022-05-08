@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureWebClient
-@AutoConfigureWireMock
+@AutoConfigureWireMock(port = 0)
 @Import({QuoteClient.class, QuoteClientResponseErrorHandler.class})
 class WireMockQuoteClientTest {
 
