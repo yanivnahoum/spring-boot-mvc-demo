@@ -25,7 +25,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.1"))
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.2"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.1"))

@@ -21,7 +21,7 @@
         <java.version>11</java.version>
         <guava.version>31.1-jre</guava.version>
         <testcontainers.version>1.17.1</testcontainers.version>
-        <spring-cloud.version>2021.0.1</spring-cloud.version>
+        <spring-cloud.version>2021.0.2</spring-cloud.version>
         <includedTestTags>!slow</includedTestTags>
     </properties>
 
