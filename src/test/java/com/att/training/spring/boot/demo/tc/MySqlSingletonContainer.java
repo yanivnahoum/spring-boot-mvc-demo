@@ -36,7 +36,7 @@ public abstract class MySqlSingletonContainer {
             "--log-bin-trust-function-creators=true"
     };
 
-    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.28")
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.29")
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
