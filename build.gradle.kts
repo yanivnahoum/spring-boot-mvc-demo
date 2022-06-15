@@ -2,7 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "6.4.3"
+    id("io.freefair.lombok") version "6.4.3.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -25,7 +25,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.2"))
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.3"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.2"))
