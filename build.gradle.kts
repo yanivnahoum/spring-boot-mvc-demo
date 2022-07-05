@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.7.0"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "6.4.3.1"
+    id("org.springframework.boot") version "2.7.1"
+    id("io.spring.dependency-management") version "1.0.12.RELEASE"
+    id("io.freefair.lombok") version "6.5.0.2"
 }
 
 group = "com.att.training.spring.boot"
@@ -20,7 +20,7 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("mysql:mysql-connector-java")
 
-    implementation("com.vladmihalcea:hibernate-types-55:2.16.2")
+    implementation("com.vladmihalcea:hibernate-types-55:2.16.3")
     implementation("com.hazelcast:hazelcast")
     implementation("com.hazelcast:hazelcast-hibernate53")
 
@@ -28,7 +28,7 @@ dependencies {
     testImplementation("net.ttddyy:datasource-proxy:1.7")
     testImplementation("net.ttddyy:datasource-assert:1.0")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.17.2"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.17.3"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
