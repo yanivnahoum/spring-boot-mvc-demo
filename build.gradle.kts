@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.7.3"
-    id("io.spring.dependency-management") version "1.0.13.RELEASE"
-    id("io.freefair.lombok") version "6.5.0.3"
+    id("org.springframework.boot") version "2.7.5"
+    id("io.spring.dependency-management") version "1.1.0"
+    id("io.freefair.lombok") version "6.5.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -12,6 +12,7 @@ repositories {
     mavenCentral()
 }
 
+extra["snakeyaml.version"] = "1.33"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -21,21 +22,21 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.google.guava:guava:31.1-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-    runtimeOnly("mysql:mysql-connector-java")
+    runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.3"))
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.4"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.17.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.17.5"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(11)
+        options.release.set(17)
     }
 
     jar {
@@ -51,7 +52,7 @@ tasks {
             }
         }
         testLogging {
-            events("skipped", "failed")
+            events("passed", "skipped", "failed")
             showStandardStreams = true
         }
     }

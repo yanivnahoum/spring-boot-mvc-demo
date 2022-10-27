@@ -47,8 +47,9 @@ class UserControllerTest {
             "--log-bin-trust-function-creators=true"
     };
 
+    @SuppressWarnings("resource")
     @Container
-    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.30")
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.31")
             .withDatabaseName("demo")
             .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
 

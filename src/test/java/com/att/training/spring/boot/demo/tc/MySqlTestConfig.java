@@ -17,8 +17,9 @@ public class MySqlTestConfig {
     };
     private static final MySQLContainer<?> mySqlContainer = createAndStart();
 
+    @SuppressWarnings("resource")
     private static MySQLContainer<?> createAndStart() {
-        var container = new MySQLContainer<>("mysql:8.0.30")
+        var container = new MySQLContainer<>("mysql:8.0.31")
                 .withDatabaseName("demo")
                 .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options));
         container.start();
