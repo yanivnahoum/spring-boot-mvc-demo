@@ -42,8 +42,9 @@ public abstract class MySqlSingletonContainer {
         registry.add("spring.datasource.password", mySqlContainer::getPassword);
     }
 
+    @SuppressWarnings("resource")
     private static MySQLContainer<?> createAndStartDb() {
-        var container = new MySQLContainer<>("mysql:8.0.30")
+        var container = new MySQLContainer<>("mysql:8.0.31")
                 .withDatabaseName("demo")
                 .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
