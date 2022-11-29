@@ -32,6 +32,7 @@ dependencies {
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.5"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("com.squareup.okhttp3:mockwebserver")
 }
 
 tasks {
