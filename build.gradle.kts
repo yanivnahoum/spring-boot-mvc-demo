@@ -33,6 +33,7 @@ dependencies {
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("com.squareup.okhttp3:mockwebserver")
+    testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks {

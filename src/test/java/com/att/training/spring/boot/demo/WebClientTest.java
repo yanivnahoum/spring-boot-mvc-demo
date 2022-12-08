@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.io.IOException;
 
@@ -47,14 +48,16 @@ class WebClientTest {
                         """)
         );
 
-        var person = webClient.get()
+        var personMono = webClient.get()
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(Person.class)
-                .block();
+                .bodyToMono(Person.class);
 
-        assertThat(person).isNotNull()
-                .isEqualTo(new Person(100, "John"));
+        StepVerifier.create(personMono)
+                .assertNext(person -> assertThat(person).isNotNull()
+                        .isEqualTo(new Person(100, "John")))
+                .expectComplete()
+                .verify();
     }
 
     @Test
@@ -114,17 +117,18 @@ class WebClientTest {
         mockWebServer.enqueue(new MockResponse().setResponseCode(BAD_REQUEST.value())
                 .addHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON));
 
-        var person = webClient.get()
+        var personMono = webClient.get()
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(Person.class)
                 .onErrorResume(ex -> {
                     log.error("An error occurred", ex);
                     return Mono.empty();
-                })
-                .block();
+                });
 
-        assertThat(person).isNull();
+        StepVerifier.create(personMono)
+                .expectComplete()
+                .verify();
     }
 
     @Test
