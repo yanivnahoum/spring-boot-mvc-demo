@@ -18,7 +18,6 @@ import reactor.test.StepVerifier;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Slf4j
@@ -56,8 +55,7 @@ class WebClientTest {
         StepVerifier.create(personMono)
                 .assertNext(person -> assertThat(person).isNotNull()
                         .isEqualTo(new Person(100, "John")))
-                .expectComplete()
-                .verify();
+                .verifyComplete();
     }
 
     @Test
@@ -127,8 +125,7 @@ class WebClientTest {
                 });
 
         StepVerifier.create(personMono)
-                .expectComplete()
-                .verify();
+                .verifyComplete();
     }
 
     @Test
@@ -156,7 +153,9 @@ class WebClientTest {
                 .retrieve()
                 .toEntity(Person.class);
 
-        assertThatExceptionOfType(WebClientResponseException.class).isThrownBy(personResponseEntity::block);
+        StepVerifier.create(personResponseEntity)
+                .expectErrorMatches(WebClientResponseException.class::isInstance)
+                .verify();
     }
 
     @Test
