@@ -1,10 +1,9 @@
 package com.att.training.spring.boot.demo.api;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Value;
 import org.hibernate.validator.constraints.Range;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 
 @Value
 public class UserDto {

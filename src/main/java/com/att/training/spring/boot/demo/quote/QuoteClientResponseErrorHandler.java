@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
@@ -24,7 +24,7 @@ public class QuoteClientResponseErrorHandler extends DefaultResponseErrorHandler
     private final ObjectMapper objectMapper;
 
     @Override
-    protected void handleError(@NonNull ClientHttpResponse response, @NonNull HttpStatus statusCode) throws IOException {
+    protected void handleError(@NonNull ClientHttpResponse response, @NonNull HttpStatusCode statusCode) throws IOException {
         try {
             super.handleError(response, statusCode);
         } catch (RestClientResponseException e) {
@@ -33,7 +33,7 @@ public class QuoteClientResponseErrorHandler extends DefaultResponseErrorHandler
                 quoteError = objectMapper.readValue(e.getResponseBodyAsString(), QuoteError.class);
             } catch (IOException ioEx) {
                 log.warn("#handleError - an error occurred: ", ioEx);
-                quoteError = new QuoteError(e.getRawStatusCode(), "N/A");
+                quoteError = new QuoteError(e.getStatusCode().value(), "N/A");
             }
             throw new QuoteClientException(e, quoteError);
         }
@@ -43,10 +43,10 @@ public class QuoteClientResponseErrorHandler extends DefaultResponseErrorHandler
 @Getter
 class QuoteClientException extends RestClientResponseException {
 
-    private final transient QuoteError quoteError;
+    private final QuoteError quoteError;
 
     public QuoteClientException(RestClientResponseException e, QuoteError quoteError) {
-        super(firstNonNull(e.getMessage(), "N/A"), e.getRawStatusCode(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
+        super(firstNonNull(e.getMessage(), "N/A"), e.getStatusCode().value(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);
         this.quoteError = quoteError;
     }
 }

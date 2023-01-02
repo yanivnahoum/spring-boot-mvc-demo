@@ -2,6 +2,8 @@ package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.api.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,11 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
@@ -37,9 +36,9 @@ public class UserController {
     @GetMapping
     public List<UserDto> fetchAll() {
         return userService.fetchAll()
-                          .stream()
-                          .map(this::toDto)
-                          .collect(toList());
+                .stream()
+                .map(this::toDto)
+                .toList();
     }
 
     @PutMapping

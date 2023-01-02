@@ -1,9 +1,11 @@
 package com.att.training.spring.boot.demo.errors;
 
 import com.att.training.spring.boot.demo.api.ErrorDto;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
@@ -14,9 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -59,12 +58,12 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
 
     @Override
     @NonNull
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex,@NonNull HttpHeaders headers,
-                                                                  @NonNull HttpStatus status, @NonNull WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,
+                                                                  @NonNull HttpStatusCode statusCode, @NonNull WebRequest request) {
         log.error("#handleMethodArgumentNotValid - ", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
-        return new ResponseEntity<>(errorDto, status);
+        return new ResponseEntity<>(errorDto, statusCode);
     }
 
     private String buildMessage(MethodArgumentNotValidException ex) {
@@ -86,9 +85,9 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     @Override
     @NonNull
     protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body, @NonNull HttpHeaders headers,
-                                                             @NonNull HttpStatus status, @NonNull WebRequest request) {
+                                                             @NonNull HttpStatusCode statusCode, @NonNull WebRequest request) {
         log.error("#handleExceptionInternal - ", ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
-        return new ResponseEntity<>(errorDto, status);
+        return new ResponseEntity<>(errorDto, statusCode);
     }
 }

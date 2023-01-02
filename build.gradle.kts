@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.7.6"
+    id("org.springframework.boot") version "3.0.1"
     id("io.spring.dependency-management") version "1.1.0"
-    id("io.freefair.lombok") version "6.6"
+    id("io.freefair.lombok") version "6.6.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -12,7 +12,6 @@ repositories {
     mavenCentral()
 }
 
-extra["snakeyaml.version"] = "1.33"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -26,7 +25,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2021.0.5"))
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.0"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.6"))
@@ -38,7 +37,10 @@ dependencies {
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(17)
+        with(options) {
+            release.set(17)
+            compilerArgs.add("-Xlint:all,-processing,-auxiliaryclass")
+        }
     }
 
     jar {
