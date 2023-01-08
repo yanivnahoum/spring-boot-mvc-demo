@@ -1,5 +1,6 @@
 package com.att.training.spring.boot.demo.tc;
 
+import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import net.ttddyy.dsproxy.asserts.ProxyTestDataSource;
 import org.junit.jupiter.api.AfterAll;
@@ -13,7 +14,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.MySQLContainer;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 import static java.util.Collections.emptyList;

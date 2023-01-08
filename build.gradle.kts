@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.7.6"
+    id("org.springframework.boot") version "3.0.1"
     id("io.spring.dependency-management") version "1.1.0"
-    id("io.freefair.lombok") version "6.6"
+    id("io.freefair.lombok") version "6.6.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -12,7 +12,6 @@ repositories {
     mavenCentral()
 }
 
-extra["snakeyaml.version"] = "1.33"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -21,9 +20,8 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("com.mysql:mysql-connector-j")
 
-    implementation("com.vladmihalcea:hibernate-types-55:2.20.0")
-    implementation("com.hazelcast:hazelcast")
-    implementation("com.hazelcast:hazelcast-hibernate53")
+    implementation("com.vladmihalcea:hibernate-types-60:2.21.1")
+    implementation("com.hazelcast:hazelcast-hibernate53:5.0.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("net.ttddyy:datasource-proxy:1.8.1")

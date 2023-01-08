@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.6</version>
+        <version>3.0.1</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -17,8 +17,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <snakeyaml.version>1.33</snakeyaml.version>
-        <hibernate-types.version>2.20.0</hibernate-types.version>
+        <hibernate-types.version>2.21.1</hibernate-types.version>
+        <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
         <testcontainers.version>1.17.6</testcontainers.version>
         <datasource-proxy.version>1.8.1</datasource-proxy.version>
         <datasource-assert.version>1.0</datasource-assert.version>
@@ -60,18 +60,14 @@
 
         <dependency>
             <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-55</artifactId>
+            <artifactId>hibernate-types-60</artifactId>
             <version>${hibernate-types.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.hazelcast</groupId>
             <artifactId>hazelcast-hibernate53</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
+            <version>${hazelcast-hibernate53.version}</version>
         </dependency>
 
         <dependency>

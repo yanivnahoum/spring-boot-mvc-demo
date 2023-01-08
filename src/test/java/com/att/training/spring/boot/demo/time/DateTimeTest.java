@@ -1,35 +1,29 @@
 package com.att.training.spring.boot.demo.time;
 
 import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static javax.persistence.GenerationType.IDENTITY;
+import static jakarta.persistence.GenerationType.IDENTITY;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 @Entity
 @Table(name = "date_time_test")
@@ -77,22 +71,5 @@ class DateTimeTest extends MySqlSingletonContainer {
 
         var fetched = repo.findById(savedEntity.getId());
         System.out.println(fetched.orElseThrow());
-    }
-}
-
-class Service {
-
-    int foo(int x, Class<?> clazz) {
-        return x + clazz.hashCode();
-    }
-}
-
-@ExtendWith(MockitoExtension.class)
-class Tester {
-
-    @Test
-    void test(@Mock Service service) {
-        when(service.foo(anyInt(), eq(String.class))).thenReturn(1);
-        assertThat(service.foo(100, String.class)).isOne();
     }
 }

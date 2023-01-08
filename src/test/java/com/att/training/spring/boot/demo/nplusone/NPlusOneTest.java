@@ -1,6 +1,18 @@
 package com.att.training.spring.boot.demo.nplusone;
 
 import com.att.training.spring.boot.demo.tc.MySqlSingletonContainer;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,18 +29,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -243,7 +243,7 @@ interface PostCommentRepository extends JpaRepository<PostComment, Long> {
     @Query("select pc from PostComment pc join fetch pc.post where pc.id = :id")
     PostComment findByIdWithExplicitJoinFetch(Long id);
 
-    @Query(value = "SELECT * FROM post_comment pc INNER JOIN post p on pc.post_id = p.id WHERE pc.id = :id", nativeQuery = true)
+    @Query(value = "SELECT pc.* FROM post_comment pc INNER JOIN post p ON pc.post_id = p.id WHERE pc.id = :id", nativeQuery = true)
     PostComment findByIdWithNativeJoin(Long id);
 
     @EntityGraph(attributePaths = "post")
