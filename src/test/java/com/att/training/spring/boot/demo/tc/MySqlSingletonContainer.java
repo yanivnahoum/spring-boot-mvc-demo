@@ -44,7 +44,7 @@ public abstract class MySqlSingletonContainer {
 
     @SuppressWarnings("resource")
     private static MySQLContainer<?> createAndStartDb() {
-        var container = new MySQLContainer<>("mysql:8.0.31")
+        var container = new MySQLContainer<>("mysql:8.0.32")
                 .withDatabaseName("demo")
                 .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
