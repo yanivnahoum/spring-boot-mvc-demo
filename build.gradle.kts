@@ -25,7 +25,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.0"))
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.1"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
     implementation(platform("org.testcontainers:testcontainers-bom:1.17.6"))
@@ -33,6 +33,8 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("com.squareup.okhttp3:mockwebserver")
     testImplementation("io.projectreactor:reactor-test")
+
+
 }
 
 tasks {
