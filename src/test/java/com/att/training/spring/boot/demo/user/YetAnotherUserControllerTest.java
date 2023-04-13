@@ -50,7 +50,7 @@ class YetAnotherUserControllerTest extends MySqlSingletonContainer {
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 @DisplayName("When calling GET /users/{id}")
-class YetAnotherGetSingleUser extends MySqlSingletonContainer {
+class YetAnotherGetSingleUserTest extends MySqlSingletonContainer {
 
     @Autowired
     private MockMvc mockMvc;
