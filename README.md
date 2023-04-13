@@ -16,6 +16,7 @@ This project demonstrates the following features:
   * Using WireMock
     * [Explicit start/stop](src/test/java/com/att/training/spring/boot/demo/quote/BasicWireMockQuoteClientTest.java)
     * [With spring-cloud-contract's `@AutoConfigureWireMock`](src/test/java/com/att/training/spring/boot/demo/quote/WireMockQuoteClientTest.java)
+  * [Using okhttp's MockWebServer](src/test/java/com/att/training/spring/boot/demo/WebClientTest.java)
 ### Building the application:
 ```
 ./mvnw clean install [-P withITs|onlyITs]
