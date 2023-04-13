@@ -1,4 +1,4 @@
-# A Spring Boot 2 component testing demo app 
+# A Spring Boot 3 component testing demo app
 
 This project demonstrates the following features:
 * Testing HTTP endpoints:
