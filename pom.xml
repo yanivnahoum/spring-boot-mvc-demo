@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.5</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -19,7 +19,7 @@
         <java.version>17</java.version>
         <hibernate-types.version>2.21.1</hibernate-types.version>
         <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
-        <testcontainers.version>1.17.6</testcontainers.version>
+        <testcontainers.version>1.18.0</testcontainers.version>
         <datasource-proxy.version>1.8.1</datasource-proxy.version>
         <datasource-assert.version>1.0</datasource-assert.version>
     </properties>

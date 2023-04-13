@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.0.2"
+    id("org.springframework.boot") version "3.0.5"
     id("io.spring.dependency-management") version "1.1.0"
-    id("io.freefair.lombok") version "6.6.1"
+    id("io.freefair.lombok") version "8.0.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -27,7 +27,7 @@ dependencies {
     testImplementation("net.ttddyy:datasource-proxy:1.8.1")
     testImplementation("net.ttddyy:datasource-assert:1.0")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.17.6"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.18.0"))
     testImplementation("org.testcontainers:mysql")
 }
 
