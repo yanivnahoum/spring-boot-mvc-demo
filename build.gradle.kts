@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.0.5"
+    id("org.springframework.boot") version "3.0.6"
     id("io.spring.dependency-management") version "1.1.0"
     id("io.freefair.lombok") version "8.0.1"
 }
@@ -28,7 +28,7 @@ dependencies {
     implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.2"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.18.0"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.18.1"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("com.squareup.okhttp3:mockwebserver")
