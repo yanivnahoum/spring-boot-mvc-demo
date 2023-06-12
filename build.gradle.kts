@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.0.5"
+    id("org.springframework.boot") version "3.0.7"
     id("io.spring.dependency-management") version "1.1.0"
     id("io.freefair.lombok") version "8.0.1"
 }
@@ -12,6 +12,13 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
+extra["snakeyaml.version"] = "2.0"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -27,17 +34,13 @@ dependencies {
     testImplementation("net.ttddyy:datasource-proxy:1.8.1")
     testImplementation("net.ttddyy:datasource-assert:1.0")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.18.0"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.18.3"))
     testImplementation("org.testcontainers:mysql")
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
         options.release.set(17)
-    }
-
-    jar {
-        enabled = false
     }
 
     test {
