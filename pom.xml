@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.2</version>
+        <version>3.1.4</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -20,15 +20,16 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <guava.version>32.1.2-jre</guava.version>
-        <testcontainers.version>1.18.3</testcontainers.version>
+        <testcontainers.version>1.19.0</testcontainers.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <includedTestTags>!slow</includedTestTags>
         <!-- Override Spring's managed versions: -->
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.1.0</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-jar-plugin.version>3.3.0</maven-jar-plugin.version>
         <maven-install-plugin.version>3.1.1</maven-install-plugin.version>
+        <snakeyaml.version>2.2</snakeyaml.version>
     </properties>
 
     <dependencyManagement>

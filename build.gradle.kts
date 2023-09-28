@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.0.6"
-    id("io.spring.dependency-management") version "1.1.0"
-    id("io.freefair.lombok") version "8.0.1"
+    id("org.springframework.boot") version "3.1.4"
+    id("io.spring.dependency-management") version "1.1.3"
+    id("io.freefair.lombok") version "8.3"
 }
 
 group = "com.att.training.spring.boot"
@@ -12,6 +12,13 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
+extra["snakeyaml.version"] = "2.2"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
@@ -19,16 +26,16 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.squareup.okhttp3:okhttp")
-    implementation("com.google.guava:guava:31.1-jre")
+    implementation("com.google.guava:guava:32.1.2-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.2"))
+    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:2022.0.4"))
     testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.18.1"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.19.0"))
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("com.squareup.okhttp3:mockwebserver")
@@ -40,13 +47,9 @@ dependencies {
 tasks {
     withType<JavaCompile>().configureEach {
         with(options) {
-            release.set(17)
+            release = 17
             compilerArgs.add("-Xlint:all,-processing,-auxiliaryclass")
         }
-    }
-
-    jar {
-        enabled = false
     }
 
     test {
