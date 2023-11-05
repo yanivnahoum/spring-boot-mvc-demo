@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.0.7"
-    id("io.spring.dependency-management") version "1.1.0"
-    id("io.freefair.lombok") version "8.0.1"
+    id("org.springframework.boot") version "3.1.5"
+    id("io.spring.dependency-management") version "1.1.3"
+    id("io.freefair.lombok") version "8.4"
 }
 
 group = "com.att.training.spring.boot"
@@ -28,19 +28,19 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     implementation("com.vladmihalcea:hibernate-types-60:2.21.1")
-    implementation("com.hazelcast:hazelcast-hibernate53:5.0.0")
+    implementation("com.hazelcast:hazelcast-hibernate53:5.1.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("net.ttddyy:datasource-proxy:1.8.1")
+    testImplementation("net.ttddyy:datasource-proxy:1.9")
     testImplementation("net.ttddyy:datasource-assert:1.0")
 
-    implementation(platform("org.testcontainers:testcontainers-bom:1.18.3"))
+    implementation(platform("org.testcontainers:testcontainers-bom:1.19.1"))
     testImplementation("org.testcontainers:mysql")
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(17)
+        options.release = 17
     }
 
     test {

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.7</version>
+        <version>3.1.5</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -18,12 +18,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
         <hibernate-types.version>2.21.1</hibernate-types.version>
-        <hazelcast-hibernate53.version>5.0.0</hazelcast-hibernate53.version>
-        <testcontainers.version>1.18.3</testcontainers.version>
-        <datasource-proxy.version>1.8.1</datasource-proxy.version>
+        <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
+        <testcontainers.version>1.19.1</testcontainers.version>
+        <datasource-proxy.version>1.9</datasource-proxy.version>
         <datasource-assert.version>1.0</datasource-assert.version>
-        <maven-surefire-plugin.version>3.1.0</maven-surefire-plugin.version>
-        <snakeyaml.version>2.0</snakeyaml.version>
+        <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
+        <snakeyaml.version>2.2</snakeyaml.version>
     </properties>
 
     <dependencies>
@@ -125,10 +125,6 @@
                         <exclude>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                        </exclude>
-                        <exclude>
-                            <groupId>org.springframework.boot</groupId>
-                            <artifactId>spring-boot-configuration-processor</artifactId>
                         </exclude>
                     </excludes>
                 </configuration>

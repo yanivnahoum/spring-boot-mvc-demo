@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.TestInstance.Lifecycle.PER_CLASS;
 @TestInstance(PER_CLASS)
 @Slf4j
 public abstract class MySqlSingletonContainer {
-
     private static final String[] options = {
             "--character-set-server=latin1",
             "--collation-server=latin1_general_ci",
@@ -44,7 +43,7 @@ public abstract class MySqlSingletonContainer {
 
     @SuppressWarnings("resource")
     private static MySQLContainer<?> createAndStartDb() {
-        var container = new MySQLContainer<>("mysql:8.0.32")
+        var container = new MySQLContainer<>("mysql:8.0.33")
                 .withDatabaseName("demo")
                 .withCreateContainerCmdModifier(cmd -> cmd.withCmd(options))
 //            .withUrlParam("profileSQL", "true")
