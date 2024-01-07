@@ -65,8 +65,8 @@ class MultipleStatementVsBulkDeleteWithoutBatchingTest extends MySqlSingletonCon
     }
 
     @Test
-    void deleteByLastNameIsContaining() {
-        userRepository.deleteByLastNameIsContaining("e");
+    void deleteByLastNameContaining() {
+        userRepository.deleteByLastNameContaining("e");
         assertThat(testDataSource).hasSelectCount(1)
                 .hasDeleteCount(3);
     }
@@ -120,7 +120,7 @@ class MultipleStatementVsBulkDeleteWithBatchingTest extends MySqlSingletonContai
 
 @Transactional
 interface UserRepository extends JpaRepository<User, Long> {
-    void deleteByLastNameIsContaining(String token);
+    void deleteByLastNameContaining(String token);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("delete from User u where u.lastName like %:token%")

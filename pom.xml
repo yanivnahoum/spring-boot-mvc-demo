@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.2.1</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -17,13 +17,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>17</java.version>
-        <hibernate-types.version>2.21.1</hibernate-types.version>
+        <hypersistence>3.7.0</hypersistence>
         <hazelcast-hibernate53.version>5.1.0</hazelcast-hibernate53.version>
-        <testcontainers.version>1.19.1</testcontainers.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
         <datasource-proxy.version>1.9</datasource-proxy.version>
         <datasource-assert.version>1.0</datasource-assert.version>
-        <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
-        <snakeyaml.version>2.2</snakeyaml.version>
     </properties>
 
     <dependencies>
@@ -61,9 +59,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.vladmihalcea</groupId>
-            <artifactId>hibernate-types-60</artifactId>
-            <version>${hibernate-types.version}</version>
+            <groupId>io.hypersistence</groupId>
+            <artifactId>hypersistence-utils-hibernate-63</artifactId>
+            <version>${hypersistence}</version>
         </dependency>
 
         <dependency>
