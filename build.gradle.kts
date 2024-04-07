@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.2.3"
+    id("org.springframework.boot") version "3.2.4"
     id("io.spring.dependency-management") version "1.1.4"
     id("io.freefair.lombok") version "8.6"
 }
@@ -22,7 +22,6 @@ dependencies {
     val hazelcast = "5.1.0"
     val datasourceProxy = "1.9"
     val datasourceAssert = "1.0"
-    val testcontainers = "1.19.6"
     val hypersistence = "3.7.3"
 
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -31,7 +30,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("io.hypersistence:hypersistence-utils-hibernate-63:$hypersistence")
     implementation("com.hazelcast:hazelcast-hibernate53:$hazelcast")
-    implementation(platform("org.testcontainers:testcontainers-bom:$testcontainers"))
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("com.mysql:mysql-connector-j")
