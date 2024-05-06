@@ -52,7 +52,7 @@ class AnotherUserControllerTest {
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
 @DisplayName("When calling GET /users/{id}")
-class AnotherGetSingleUser {
+class AnotherGetSingleUserTest {
 
     @Autowired
     private MockMvc mockMvc;
