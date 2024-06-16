@@ -1,7 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.2.5"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("org.springframework.boot") version "3.3.0"
+    id("io.spring.dependency-management") version "1.1.5"
     id("io.freefair.lombok") version "8.6"
 }
 
@@ -19,8 +19,8 @@ configurations {
 }
 
 dependencies {
-    val guavaVersion = "33.1.0-jre"
-    val springCloudVersion = "2023.0.1"
+    val guavaVersion = "33.2.1-jre"
+    val springCloudVersion = "2023.0.2"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
