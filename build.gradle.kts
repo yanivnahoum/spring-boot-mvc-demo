@@ -1,7 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.2.4"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("org.springframework.boot") version "3.3.1"
+    id("io.spring.dependency-management") version "1.1.5"
     id("io.freefair.lombok") version "8.6"
 }
 
@@ -20,9 +20,9 @@ configurations {
 
 dependencies {
     val hazelcast = "5.1.0"
-    val datasourceProxy = "1.9"
+    val datasourceProxy = "1.10"
     val datasourceAssert = "1.0"
-    val hypersistence = "3.7.3"
+    val hypersistence = "3.8.0"
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
