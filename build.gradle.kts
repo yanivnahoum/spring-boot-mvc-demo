@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.5.3"
+    id("org.springframework.boot") version "2.5.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "5.3.3.3"
+    id("io.freefair.lombok") version "6.1.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -39,10 +39,6 @@ tasks {
 
     jar {
         enabled = false
-    }
-
-    generateLombokConfig {
-        isEnabled = false
     }
 
     test {
