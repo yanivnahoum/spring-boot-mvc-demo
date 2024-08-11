@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.4.4"
+    id("org.springframework.boot") version "2.4.5"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "5.3.0"
+    id("io.freefair.lombok") version "5.3.3.3"
 }
 
 group = "com.att.training.spring.boot"
@@ -22,7 +22,7 @@ dependencies {
 
     implementation("io.springfox:springfox-boot-starter:3.0.0")
 
-    implementation("com.google.guava:guava:30.1-jre")
+    implementation("com.google.guava:guava:30.1.1-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 
