@@ -27,7 +27,7 @@ management:
         host: 127.0.0.1
         step: 5s
         # Run graphite and update ip/port before enabling
-        enabled: true
+        enabled: false
     web:
       server:
         request:
@@ -36,6 +36,8 @@ management:
 
 info:
   app:
-    encoding: @project.build.sourceEncoding@
+#    encoding: @project.build.sourceEncoding@
+    encoding: UTF-8
     java:
-      source: @java.version@
+#      source: @java.version@
+      source: 1.0.0

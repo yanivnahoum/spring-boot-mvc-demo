@@ -16,7 +16,8 @@ This project demonstrates the following features:
   * [Info](http://localhost:8090/demo/actuator/info)
   * [Health](http://localhost:8090/demo/actuator/health)
   * [Metrics](http://localhost:8090/demo/actuator/metrics)
-* Integration tests MockMvc using Junit Jupiter 
+* Integration tests MockMvc using Junit Jupiter
+* [Adding Servlet filters and testing them](src/test/java/com/att/training/spring/boot/demo/user/FilterTest.java)  
 
 ### Building the application:
 ```

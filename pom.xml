@@ -21,6 +21,8 @@
         <java.version>11</java.version>
         <guava.version>28.2-jre</guava.version>
         <springfox.version>2.9.2</springfox.version>
+        <annotations.version>17.0.0</annotations.version>
+        <rest-assured.version>4.2.0</rest-assured.version>
     </properties>
 
     <dependencies>
@@ -76,9 +78,21 @@
         </dependency>
 
         <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${annotations.version}</version>
         </dependency>
     </dependencies>
 

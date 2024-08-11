@@ -2,6 +2,7 @@ package com.att.training.spring.boot.demo.errors;
 
 import com.att.training.spring.boot.demo.api.ErrorDto;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,9 +57,10 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
                  .collect(joining(", "));
     }
 
+    @NotNull
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,HttpHeaders headers,
-                                                                  HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NotNull MethodArgumentNotValidException ex, @NotNull HttpHeaders headers,
+                                                                  @NotNull HttpStatus status, @NotNull WebRequest request) {
         log.error("#handleMethodArgumentNotValid - ", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
@@ -81,9 +83,10 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return String.format("Field '%s.%s' %s", error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 
+    @NotNull
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
-                                                             HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(@NotNull Exception ex, Object body, HttpHeaders headers,
+                                                             HttpStatus status, @NotNull WebRequest request) {
         log.error("#handleExceptionInternal - ", ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
         return new ResponseEntity<>(errorDto, status);
