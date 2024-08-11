@@ -36,7 +36,7 @@ or just run the main in class [SpringMvcBootApplication](src/main/java/com/att/t
 * [/demo/users](http://localhost:8090/demo/users) - Update user (PUT). You can modify names or age (based on id of course)
 
 ### Setting up Metrics:
-* Enable key metrics.export.graphite.enabled in the [application.yml](src/main/resources/application.yml)
+* Enable key management.metrics.export.graphite.enabled in the [application.yml](src/main/resources/application.yml)
 * From your terminal, cd into the metrics directory.
 * run `docker-compose up -d`
 * Run the spring-boot app
