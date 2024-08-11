@@ -1,7 +1,6 @@
 package com.att.training.spring.boot.demo.serdes;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.annotation.Nulls;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
@@ -22,6 +21,7 @@ import java.util.stream.Stream;
 
 import static com.att.training.spring.boot.demo.serdes.JacksonDeserializationOfEnumsWithoutNullsTest.Status.NONE;
 import static com.att.training.spring.boot.demo.utils.JsonUtils.singleToDoubleQuotes;
+import static com.fasterxml.jackson.annotation.Nulls.SKIP;
 import static java.util.Objects.requireNonNullElse;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -35,7 +35,7 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
         @Bean
         Jackson2ObjectMapperBuilderCustomizer customizer() {
             return builder -> builder.postConfigurer(mapper ->
-                    mapper.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP)));
+                    mapper.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(SKIP)));
         }
     }
 
@@ -82,6 +82,8 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
 
     @Data
     static class SomeMutablePojo implements StatusProvider {
+        // Skip nulls on specific field:
+        // @JsonSetter(nulls = SKIP)
         private Status status = NONE;
     }
 
