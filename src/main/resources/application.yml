@@ -26,26 +26,34 @@ spring:
     timeout-per-shutdown-phase: 30s
 
 management:
+  server:
+    port: 8091
   endpoints:
     web:
       exposure:
         include:
         - info
+        - env
         - health
         - metrics
-  #      cors:
-  #        allowed-origins: "*"
+    #      cors:
+    #        allowed-origins: "*"
   endpoint:
     health:
       show-details: always
       # probes.enabled is only needed if you'd like to check this locally. On k8s, it is enabled by default
       probes:
+        # This is useful for exposing the liveness group on the server port, since we exposed the actuator endpoints
+        #  on the management port (via management.server.port). It's as if we set:
+        #  management.endpoint.health.group.liveness.additional-path="server:livez"
+        #  For the readiness group, see below.
+        add-additional-paths: true
         enabled: true
       group:
         readiness:
           # This would typically include external resources critical to the app like db
           include: readinessState,info
-
+          additional-path: server:/ready-for-action
   metrics:
     export:
       graphite:
@@ -58,6 +66,8 @@ management:
         request:
           autotime:
             enabled: true
+
+
 
 info:
   app:

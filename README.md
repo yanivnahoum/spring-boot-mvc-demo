@@ -28,10 +28,12 @@ This project demonstrates the following features:
 * [Lombok copyable annotations](src/test/java/com/att/training/spring/boot/demo/LombokTest.java) (additionally, see [lombok.config](jetbrains://idea/navigate/reference?project=spring-boot-mvc-demo&path=lombok.config))
 * [spring-aop](src/main/java/com/att/training/spring/boot/demo/RandomDelayAspect.java)
 * Swagger2 using [springdoc](https://springdoc.org/) ([swagger url](http://localhost:8090/demo/swagger-ui.html/))
-* spring-actuator
-  * [Info](http://localhost:8090/demo/actuator/info)
-  * [Health](http://localhost:8090/demo/actuator/health)
-  * [Metrics](http://localhost:8090/demo/actuator/metrics)
+* spring-actuator exposed on management port & k8s health probes on main port:
+  * [Info](http://localhost:8091/demo/actuator/info)
+  * [Health](http://localhost:8091/demo/actuator/env)
+  * [Metrics](http://localhost:8091/demo/actuator/metrics)
+  * [Liveness](http://localhost:8090/demo/livez)
+  * [Readiness](http://localhost:8090/demo/ready-for-action)
 * Integration tests MockMvc using Junit Jupiter
 * [Adding Servlet filters and testing them](src/test/java/com/att/training/spring/boot/demo/FilterTest.java)  
 * [Using POJOs instead of simple method args in Controller methods](src/test/java/com/att/training/spring/boot/demo/ControllerMethodParametersTest.java)  

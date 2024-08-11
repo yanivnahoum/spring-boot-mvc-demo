@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Configuration(proxyBeanMethods = false)
 public class ErrorConfig {
     @Bean
-    ErrorViewResolver viewResolver() {
+    ErrorViewResolver errorViewResolver() {
         return (request, status, model) ->  {
             var modelAndView = new ModelAndView();
             modelAndView.setViewName("/fallback-error.html");
