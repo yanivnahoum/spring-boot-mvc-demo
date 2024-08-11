@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.Uninterruptibles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
@@ -13,7 +14,6 @@ import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.scheduling.annotation.EnableAsync;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
 import java.time.Clock;
@@ -69,15 +69,17 @@ public class AppConfig {
 
     @Bean
     public Executor taskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         var coreCount = Runtime.getRuntime().availableProcessors();
-        executor.setCorePoolSize(coreCount);
-        executor.setMaxPoolSize(coreCount);
-        executor.setDaemon(true);
-        executor.setThreadNamePrefix("file-download-");
-        executor.setThreadFactory(new ExceptionHandlingThreadFactory(executor, (t, e) -> log
-                .error("An error occurred", e)));
-        return executor;
+        var taskExecutor = new TaskExecutorBuilder()
+                .corePoolSize(coreCount)
+                .maxPoolSize(coreCount)
+                .threadNamePrefix("file-download-")
+                .build();
+
+        taskExecutor.setDaemon(true);
+        taskExecutor.setThreadFactory(new ExceptionHandlingThreadFactory(taskExecutor,
+                (t, e) -> log.error("An error occurred", e)));
+        return taskExecutor;
     }
 
     @Bean
