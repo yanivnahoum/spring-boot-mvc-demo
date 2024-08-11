@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.serdes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import static com.att.training.spring.boot.demo.utils.JsonUtils.singleToDoubleQu
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
-class JacksonDeserializationWithInterfaces {
+class JacksonDeserializationWithInterfacesTest {
 
     @TestConfiguration
     static class TestConfig {

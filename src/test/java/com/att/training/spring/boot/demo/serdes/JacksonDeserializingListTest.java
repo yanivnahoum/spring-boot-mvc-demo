@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.serdes;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
 class JacksonDeserializingListTest {
-
     @Autowired private ObjectMapper mapper;
 
     @Nested
@@ -132,7 +131,6 @@ class JacksonDeserializingListTest {
             assertThat(deserializedDto.getValues()).isEmpty();
         }
     }
-
     @Value
     static class SomeDto {
         List<String> values;
@@ -142,8 +140,4 @@ class JacksonDeserializingListTest {
     static class FinalDto {
         private final List<String> values = new ArrayList<>();
     }
-
 }
-
-
-
