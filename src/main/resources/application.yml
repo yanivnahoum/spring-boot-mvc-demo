@@ -57,8 +57,8 @@ management:
         enabled: true
       group:
         readiness:
-          # This would typically include external resources critical to the app like db
-          include: readinessState, db
+          # This would typically include external resources critical to the app like db: readinessState, db
+          include: readinessState
           # This is no longer needed since 2.7.3 (default additional path wasn't created when group was explicitly defined
           # additional-path: server:/readyz
   graphite:
