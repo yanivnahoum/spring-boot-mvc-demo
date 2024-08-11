@@ -16,9 +16,14 @@ This project demonstrates the following features:
   * [Metrics](http://localhost:8090/demo/actuator/info)
 * Integration tests MockMvc using Junit Jupiter 
 
+### Building the application:
+```
+./mvnw clean install -gs settings.xml
+```
+
 ### Running the application:
 ```
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 or just run the main in class [SpringMvcBootApplication](src/main/java/com/att/training/spring/boot/demo/SpringMvcBootApplication.java)
 
