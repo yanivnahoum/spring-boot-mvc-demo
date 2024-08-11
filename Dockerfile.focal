@@ -1,17 +1,16 @@
-FROM eclipse-temurin:11-jre-alpine as builder
+FROM eclipse-temurin:11-jre-focal as builder
 WORKDIR application
 ARG JAR_FILE=target/*.jar
 COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM eclipse-temurin:11-jre-alpine
-#RUN apk add --no-cache jattach
+FROM eclipse-temurin:11-jre-focal
 
 WORKDIR application
 ARG USER_NAME=demouser
 ARG GROUP_NAME=demogroup
-RUN addgroup -g 1001 -S $GROUP_NAME \
-    && adduser -u 1000 -S $USER_NAME -G $GROUP_NAME \
+RUN groupadd $GROUP_NAME -g 1001 \
+    && useradd $USER_NAME -u 1000 -g $GROUP_NAME \
     && chown $USER_NAME:$GROUP_NAME ./
 USER $USER_NAME
 
