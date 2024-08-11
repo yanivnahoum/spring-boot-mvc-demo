@@ -8,7 +8,6 @@ import org.springframework.boot.task.TaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -26,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @EnableAsync
 @Configuration
-public class AsyncConfig implements AsyncConfigurer {
+public class AsyncConfig {
 
     @Bean(name = {"taskExecutor", "cpuTaskExecutor"})
     public Executor cpuTaskExecutor() {
@@ -40,11 +39,11 @@ public class AsyncConfig implements AsyncConfigurer {
         return buildExecutor(coreCount, "io-pool-");
     }
 
-    private ThreadPoolTaskExecutor buildExecutor(int coreCount, String s) {
+    private ThreadPoolTaskExecutor buildExecutor(int coreCount, String prefix) {
         var taskExecutor = new TaskExecutorBuilder()
                 .corePoolSize(coreCount)
                 .maxPoolSize(coreCount)
-                .threadNamePrefix(s)
+                .threadNamePrefix(prefix)
                 .build();
 
         taskExecutor.setDaemon(true);
