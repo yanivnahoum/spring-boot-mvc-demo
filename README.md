@@ -1,10 +1,10 @@
-# A Spring Boot 2.4.x demo app 
+# A Spring Boot 2.x demo app 
 
 This project demonstrates the following features:
 * Spring DI
 * [Singleton vs Prototype `@Scope`](src/test/java/com/att/training/spring/boot/demo/scopes/MySingletonTest.java)
 * HTTP endpoints (Controllers)
-* Exception handlers
+* [Exception handlers](src/main/java/com/att/training/spring/boot/demo/errors/ExceptionHandlers.java)
 * Bean Validation 2.0
 * Binding POJOs to configuration
 * [Binding POJOs to external files (*.yaml)](src/main/java/com/att/training/spring/boot/demo/user/ExternalUserProperties.java) 

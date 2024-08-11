@@ -10,7 +10,9 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+// We use @ConfigurationPropertiesScan on main class instead of @Component
 //@Component
+// We don't need this starting from 2.5.x: using spring.config.import in instead
 //@PropertySource(factory = YamlPropertySourceFactory.class, value = "${app.config.dir:classpath:}external.yml")
 @ConfigurationProperties(prefix = "ext")
 @Validated
