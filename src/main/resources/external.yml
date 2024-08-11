@@ -1,5 +1,5 @@
 ext:
   users:
-    - { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
-    - { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
-    - { id: 3, first-name: Larry, last-name: Bird, age: 53 }
+    - { id: 1, first-name: Lebron, last-name: James, age: 36 }
+    - { id: 2, first-name: Jimmy, last-name: Butler, age: 30 }
+    - { id: 3, first-name: Anthony, last-name: Davis, age: 25 }
