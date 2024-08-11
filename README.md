@@ -17,6 +17,7 @@ This project demonstrates the following features:
   * [Deserialization to POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/JacksonTest.java)
   * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/JacksonDeserializationWithInterfaces.java)
   * [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
+  * [Custom serializer / deserializer of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeCustomSerDesTest.java)
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * [Lombok copyable annotations]() (see lombok.config)

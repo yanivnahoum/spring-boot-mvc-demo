@@ -9,7 +9,7 @@ import java.util.Arrays;
 @Component
 @Slf4j
 class AsyncRunner1 {
-    // Takes the default Executor names "taskExecutor"
+    // Takes the default Executor named "taskExecutor"
     @Async
     void runAsync(String[] args) {
         log.info("#runAsync1 - running with args: {}", Arrays.toString(args));
