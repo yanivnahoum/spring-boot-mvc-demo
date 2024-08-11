@@ -30,7 +30,7 @@ class LombokTest {
 
     @Configuration(proxyBeanMethods = false)
     @Import(ClassWithCopyableAnnotationsOnFields.class)
-    static class Config{
+    static class Config {
 
         @Bean
         @Qualifier("pojo1")
@@ -48,8 +48,10 @@ class LombokTest {
 
 @RequiredArgsConstructor
 @Getter
-class SomePojo{
+class SomePojo {
+
     private final int id;
+
 }
 
 @TestComponent
