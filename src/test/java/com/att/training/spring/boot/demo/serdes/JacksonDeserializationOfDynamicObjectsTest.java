@@ -53,7 +53,7 @@ class JacksonDeserializationOfDynamicObjectsTest {
     class JsonNodeTest {
 
         @Test
-        void simpleMapValueIsDeserializedCorrectly() throws JsonProcessingException {
+        void simpleJsonNodeValueIsDeserializedCorrectly() throws JsonProcessingException {
             var somePojoWithJsonNode = mapper.readValue(singleToDoubleQuotes(SIMPLE_JSON), SomePojoWithJsonNode.class);
 
             assertThat(somePojoWithJsonNode.getName()).isEqualTo("John");
@@ -64,7 +64,7 @@ class JacksonDeserializationOfDynamicObjectsTest {
         }
 
         @Test
-        void nestedMapValueIsDeserializedCorrectly() throws JsonProcessingException {
+        void nestedJsonNodeValueIsDeserializedCorrectly() throws JsonProcessingException {
             var somePojoWithJsonNode = mapper.readValue(singleToDoubleQuotes(NESTED_JSON), SomePojoWithJsonNode.class);
 
             assertThat(somePojoWithJsonNode.getName()).isEqualTo("John");
