@@ -17,8 +17,6 @@ import org.junit.jupiter.api.Test;
 
 import java.beans.ConstructorProperties;
 
-import static com.fasterxml.jackson.annotation.JsonCreator.Mode.PROPERTIES;
-
 class JacksonPolymorphismTest {
     // In Spring Boot, the auto-configured ObjectMapper is similar to the one below:
     private final ObjectMapper mapper = JsonMapper.builder()
@@ -88,7 +86,7 @@ class JacksonPolymorphismTest {
         static class M2 extends Message {
             // Here's another way to solve the single property c'tor issue.
             // It assumes we registered the ParameterNamesModule (as in Spring Boot's auto-configured ObjectMapper):
-            @JsonCreator(mode = PROPERTIES)
+            @JsonCreator
             public M2(String message) {
                 super(message);
             }
