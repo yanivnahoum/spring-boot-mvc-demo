@@ -28,6 +28,7 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.rest-assured:rest-assured")
+    testImplementation("com.fasterxml.jackson.module:jackson-module-mrbean")
 }
 
 tasks {
