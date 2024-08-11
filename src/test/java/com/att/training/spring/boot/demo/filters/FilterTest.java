@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.filters;
 
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;

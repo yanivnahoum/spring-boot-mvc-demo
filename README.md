@@ -35,7 +35,8 @@ This project demonstrates the following features:
   * [Liveness](http://localhost:8090/demo/livez)
   * [Readiness](http://localhost:8090/demo/ready-for-action)
 * Integration tests MockMvc using Junit Jupiter
-* [Adding Servlet filters and testing them](src/test/java/com/att/training/spring/boot/demo/FilterTest.java)  
+* [Adding Servlet filters and testing them](src/test/java/com/att/training/spring/boot/demo/filters/FilterTest.java)  
+* [Mapping errors from servlet filters to the ControllerAdvice](src/test/java/com/att/training/spring/boot/demo/filters/errors/ErrorInFilterTest.java)  
 * [Using POJOs instead of simple method args in Controller methods](src/test/java/com/att/training/spring/boot/demo/ControllerMethodParametersTest.java)  
 
 ### Building the application:
