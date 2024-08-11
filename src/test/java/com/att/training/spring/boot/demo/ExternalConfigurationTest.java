@@ -1,5 +1,6 @@
-package com.att.training.spring.boot.demo.user;
+package com.att.training.spring.boot.demo;
 
+import com.att.training.spring.boot.demo.user.ExternalUserConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,6 @@ class ExternalConfigurationTest {
 
     @Test
     void foo() {
-        System.out.println(config);
         assertThat(config).isNotNull();
         assertThat(config.getUsers()).hasSize(3);
     }

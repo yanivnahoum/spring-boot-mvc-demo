@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo.user;
+package com.att.training.spring.boot.demo;
 
 import io.restassured.RestAssured;
 import org.jetbrains.annotations.NotNull;
