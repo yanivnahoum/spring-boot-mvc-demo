@@ -24,7 +24,7 @@ import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @EnableAsync
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class AsyncConfig {
 
     @Bean(name = {"taskExecutor", "cpuTaskExecutor"})

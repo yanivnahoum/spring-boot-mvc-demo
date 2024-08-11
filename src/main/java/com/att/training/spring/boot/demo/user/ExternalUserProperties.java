@@ -7,13 +7,16 @@ import org.springframework.validation.annotation.Validated;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
-@ConfigurationProperties(prefix = "app")
+//@Component
+//@PropertySource(factory = YamlPropertySourceFactory.class, value = "${app.config.dir:classpath:}external.yml")
+@ConfigurationProperties(prefix = "ext")
 @Validated
-public @Data class UserConfiguration {
-    
+@Data
+public class ExternalUserProperties {
+
     @Valid
-    @NotNull
-    private List<@NotNull  User> users;
+    private final List<@NotNull User> users = new ArrayList<>();
 }

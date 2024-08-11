@@ -1,6 +1,6 @@
 package com.att.training.spring.boot.demo;
 
-import com.att.training.spring.boot.demo.user.ExternalUserConfiguration;
+import com.att.training.spring.boot.demo.user.ExternalUserProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,20 +14,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ExternalConfigurationTest {
 
     @Autowired
-    private ExternalUserConfiguration config;
+    private ExternalUserProperties config;
     @Autowired
     private Environment env;
 
     @Test
-    void foo() {
+    void externalConfigurationCanBeReadFromClasspathOrFromDisk() {
         var configDir = env.getProperty("app.config.dir");
         int expectedUserCount = configDir == null ? 3 : 2;
         assertThat(config).isNotNull();
         assertThat(config.getUsers()).hasSize(expectedUserCount);
     }
 
-    @EnableConfigurationProperties(ExternalUserConfiguration.class)
-    @Configuration
+    @EnableConfigurationProperties(ExternalUserProperties.class)
+    @Configuration(proxyBeanMethods = false)
     static class TestConfiguration {
     }
 }
+

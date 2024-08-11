@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExternalUserController {
 
-    private final ExternalUserConfiguration users;
+    private final ExternalUserProperties users;
 
     @GetMapping
     public List<User> fetchAll() {

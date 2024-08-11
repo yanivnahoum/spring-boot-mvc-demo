@@ -36,7 +36,7 @@ class RandomDelayAspectTest {
         verify(sleeper).sleepRandom(MIN_DELAY_AT_METHOD_LEVEL, MAX_DELAY_AT_METHOD_LEVEL);
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @EnableAspectJAutoProxy
     @Import({RandomDelayAspect.class, TargetClass.class})
     static class Config {

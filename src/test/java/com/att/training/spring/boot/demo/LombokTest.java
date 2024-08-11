@@ -28,7 +28,7 @@ class LombokTest {
         assertThat(testClass.getSomePojoB().getId()).isEqualTo(2);
     }
 
-    @Configuration
+    @Configuration(proxyBeanMethods = false)
     @Import(ClassWithCopyableAnnotationsOnFields.class)
     static class Config{
 

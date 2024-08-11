@@ -1,6 +1,6 @@
 package com.att.training.spring.boot.demo.config;
 
-import com.att.training.spring.boot.demo.user.UserConfiguration;
+import com.att.training.spring.boot.demo.user.UserProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -15,13 +15,13 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
 import java.time.Clock;
 import java.time.format.DateTimeFormatter;
 
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @EnableAspectJAutoProxy
 @Slf4j
 public class AppConfig {
 
     @Bean
-    CommandLineRunner configurationPrinter(UserConfiguration userConfiguration) {
+    CommandLineRunner configurationPrinter(UserProperties userConfiguration) {
         return args -> log.info("#configurationPrinter - {}", userConfiguration);
     }
 
@@ -42,9 +42,9 @@ public class AppConfig {
 
     //@Bean
     public FormattingConversionService conversionService() {
-        DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService(false);
+        var conversionService = new DefaultFormattingConversionService(false);
         conversionService.addFormatterForFieldAnnotation(new NumberFormatAnnotationFormatterFactory());
-        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+        var registrar = new DateTimeFormatterRegistrar();
         registrar.setDateFormatter(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
         registrar.setDateTimeFormatter(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
         registrar.registerFormatters(conversionService);

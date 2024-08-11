@@ -15,7 +15,7 @@ public class UserRepository {
     
     private final Map<Long, User> users;
 
-    public UserRepository(UserConfiguration userConfig) {
+    public UserRepository(UserProperties userConfig) {
         users = userConfig.getUsers()
             .stream()
             .collect(toMap(User::getId, Function.identity()));

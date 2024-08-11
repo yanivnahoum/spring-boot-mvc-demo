@@ -34,7 +34,7 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private UserConfiguration userConfiguration;
+    private UserProperties userConfiguration;
 
     @Nested
     @DisplayName("When calling GET /users/{id}")
