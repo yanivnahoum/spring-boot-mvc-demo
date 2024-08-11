@@ -24,6 +24,9 @@ spring:
     - "${app.config.dir:classpath:}external.yml"
   lifecycle:
     timeout-per-shutdown-phase: 30s
+  output:
+    ansi:
+      enabled: always
 
 management:
   server:
