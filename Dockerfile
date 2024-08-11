@@ -1,13 +1,19 @@
-FROM eclipse-temurin:17-jre AS builder
+FROM eclipse-temurin:21-jre AS builder
 WORKDIR application
 COPY build/libs/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:21-jre
+
 RUN apt-get update \
-    && apt-get install -y \
-    jattach \
-    && rm -rf /var/lib/apt/lists/*
+      && apt-get -y dist-upgrade \
+      && apt-get install -y jattach \
+      && apt-get autoremove -y --purge \
+      && apt-get -y clean \
+      && apt-get -y autoclean \
+      && rm -rf /var/lib/apt/lists/* \
+      && find /var/cache/debconf -type f -print0 | xargs -0 rm -f \
+      && find /var/cache/apt -type f -print0 | xargs -0 rm -f
 
 ARG USER_NAME=demouser
 ARG UID=1000
