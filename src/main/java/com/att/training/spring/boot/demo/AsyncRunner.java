@@ -8,10 +8,20 @@ import java.util.Arrays;
 
 @Component
 @Slf4j
-class AsyncRunner {
-    @Async // Takes the default Executor names "taskExecutor"
-    // @Async("ioTaskExecutor") // But we can choose a different thread-pool
+class AsyncRunner1 {
+    // Takes the default Executor names "taskExecutor"
+    @Async
     void runAsync(String[] args) {
-        log.info("#runAsync - running with args: {}", Arrays.toString(args));
+        log.info("#runAsync1 - running with args: {}", Arrays.toString(args));
+    }
+}
+
+@Component
+@Slf4j
+class AsyncRunner2 {
+    // We can choose a different thread-pool
+    @Async("ioTaskExecutor")
+    void runAsync(String[] args) {
+        log.info("#runAsync2 - running with args: {}", Arrays.toString(args));
     }
 }

@@ -53,7 +53,12 @@ public class AsyncConfig {
     }
 
     @Bean
-    CommandLineRunner asyncTester(AsyncRunner runner) {
+    CommandLineRunner asyncTester1(AsyncRunner1 runner) {
+        return runner::runAsync;
+    }
+
+    @Bean
+    CommandLineRunner asyncTester2(AsyncRunner2 runner) {
         return runner::runAsync;
     }
 
