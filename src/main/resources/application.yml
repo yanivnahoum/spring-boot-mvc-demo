@@ -45,3 +45,9 @@ spring:
 #    deserialization:
 #      unwrap-root-value: true
 #      fail-on-unknown-properties: false
+
+app:
+  quote-client:
+    base-url: https://quotes.rest
+    connect-timeout: 3s
+    read-timeout: 10s

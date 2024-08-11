@@ -4,20 +4,15 @@ import com.att.training.spring.boot.demo.quote.api.Contents;
 import com.att.training.spring.boot.demo.quote.api.Copyright;
 import com.att.training.spring.boot.demo.quote.api.QuoteDetails;
 import com.att.training.spring.boot.demo.quote.api.QuoteResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.web.client.RestTemplateCustomizer;
-import org.springframework.boot.web.client.RootUriTemplateHandler;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 
+import java.time.Duration;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
@@ -29,13 +24,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-@ExtendWith(SpringExtension.class)
-@AutoConfigureWebClient
-@Import({QuoteClient.class, QuoteClientResponseErrorHandler.class})
 class BasicWireMockQuoteClientTest {
-
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final WireMockServer wireMockServer = createStarted();
-    @Autowired private QuoteClient quoteClient;
+    private QuoteClient quoteClient;
+
+    @BeforeEach
+    void before() {
+        var quoteClientProperties = new QuoteClientProperties(wireMockServer.baseUrl(), Duration.ofSeconds(1), Duration.ofSeconds(1));
+        quoteClient = new QuoteClient(new RestTemplateBuilder(), new QuoteClientResponseErrorHandler(objectMapper), quoteClientProperties);
+    }
+
+    @AfterEach
+    void afterEach() {
+        wireMockServer.resetAll();
+    }
 
     @AfterAll
     static void after() {
@@ -61,21 +64,7 @@ class BasicWireMockQuoteClientTest {
 
     private static WireMockServer createStarted() {
         WireMockServer wireMockServer = new WireMockServer(options().dynamicPort());
-        // Start very early so that the baseUrl() could be fetched in the AdditionalConfig#customizer
         wireMockServer.start();
         return wireMockServer;
-    }
-
-    @TestConfiguration(proxyBeanMethods = false)
-    static class AdditionalConfig {
-
-        @Bean
-        RestTemplateCustomizer customizer() {
-            return restTemplate -> {
-                RootUriTemplateHandler.addTo(restTemplate, wireMockServer.baseUrl());
-                // Don't register proxy
-                restTemplate.setRequestFactory(new OkHttp3ClientHttpRequestFactory());
-            };
-        }
     }
 }

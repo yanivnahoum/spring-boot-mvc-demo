@@ -1,7 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.3.1"
-    id("io.spring.dependency-management") version "1.1.5"
+    id("org.springframework.boot") version "3.3.2"
+    id("io.spring.dependency-management") version "1.1.6"
     id("io.freefair.lombok") version "8.6"
 }
 
@@ -20,7 +20,7 @@ configurations {
 
 dependencies {
     val guavaVersion = "33.2.1-jre"
-    val springCloudVersion = "2023.0.2"
+    val wireMockVersion = "3.9.1"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -28,15 +28,14 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.google.guava:guava:$guavaVersion")
-    implementation(platform("org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"))
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.cloud:spring-cloud-starter-contract-stub-runner")
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.wiremock:wiremock-standalone:$wireMockVersion")
     testImplementation("com.squareup.okhttp3:mockwebserver")
     testImplementation("io.projectreactor:reactor-test")
 }

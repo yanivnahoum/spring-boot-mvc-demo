@@ -7,6 +7,7 @@ import com.att.training.spring.boot.demo.quote.api.QuoteError;
 import com.att.training.spring.boot.demo.quote.api.QuoteResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.web.client.MockRestServiceServer;
@@ -26,8 +27,8 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 @RestClientTest({QuoteClient.class, QuoteClientResponseErrorHandler.class})
+@EnableConfigurationProperties(QuoteClientProperties.class)
 class QuoteClientTest {
-
     @Autowired
     private MockRestServiceServer server;
     @Autowired
