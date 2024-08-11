@@ -28,6 +28,7 @@
 
 	<logger name="org.springframework" level="info" />
 	<logger name="com.att.training.spring.boot.demo" level="trace" />
+	<logger name="com.codahale.metrics.graphite" level="info" />
 	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
 
 	<root level="INFO">

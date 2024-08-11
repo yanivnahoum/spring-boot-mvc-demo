@@ -48,10 +48,10 @@ management:
   metrics:
     export:
       graphite:
-        host: 127.0.0.1
         step: 5s
-        # Run graphite and update ip/port before enabling
-        enabled: false
+        # Run graphite and update ip/port before enabling (default is localhost:2004)
+        enabled: true
+        graphite-tags-enabled: false
     web:
       server:
         request:
