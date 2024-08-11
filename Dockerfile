@@ -13,8 +13,8 @@ ARG USER_NAME=demouser
 ARG UID=1000
 ARG GROUP_NAME=demogroup
 ARG GID=1001
-RUN groupadd --gid $GID $GROUP_NAME && \
-    useradd --uid $UID --gid $GID $USER_NAME
+RUN groupadd --gid "$GID" "$GROUP_NAME" && \
+    useradd --uid "$UID" --gid "$GID" "$USER_NAME"
 USER $UID
 WORKDIR application
 
