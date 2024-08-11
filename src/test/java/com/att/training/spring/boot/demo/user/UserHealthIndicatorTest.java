@@ -2,7 +2,6 @@ package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.api.User;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -10,9 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Status;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,13 +50,5 @@ class UserHealthIndicatorTest {
             users.add(JOHN_DOE);
         }
         return users;
-    }
-
-    @Test
-    void foo() {
-        var localDateTime = LocalDate.of(2000, 1, 1).atStartOfDay();
-        var dateTimeFormatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT, FormatStyle.SHORT);
-        var result = dateTimeFormatter.format(localDateTime);
-        System.out.println(result);
     }
 }
