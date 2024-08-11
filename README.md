@@ -2,7 +2,9 @@
 
 This project demonstrates the following features:
 * Spring DI
+* [Singleton vs Prototype `@Scope`](src/test/java/com/att/training/spring/boot/demo/scopes/MySingletonTest.java)
 * HTTP endpoints (Controllers)
+* HTTP [Async](src/main/java/com/att/training/spring/boot/demo/user/AsyncUserController.java) controller
 * Exception handlers
 * Bean Validation 2.0
 * Binding POJOs to configuration

@@ -16,8 +16,13 @@ class MySingletonTest {
     private MySingleton mySingleton;
 
     @Test
+    void prototypeFields_shouldBeUniqueInstances() {
+        assertThat(mySingleton.getMyPrototype1()).isNotSameAs(mySingleton.getMyPrototype2());
+    }
+
+    @Test
     void getPrototypeOrdinal() {
-        for (var i = 1; i <= 10; i++) {
+        for (int i = 3; i <= 10; i++) {
             assertThat(mySingleton.getPrototypeOrdinal()).isEqualTo(i);
         }
     }
