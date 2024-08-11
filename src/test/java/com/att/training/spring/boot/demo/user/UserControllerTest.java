@@ -8,10 +8,12 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.json.BasicJsonTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
@@ -38,6 +40,8 @@ class UserControllerTest {
     @DisplayName("When calling GET /users/{id}")
     class GetSingleUser {
 
+        private BasicJsonTester json = new BasicJsonTester(getClass());
+
         @Test
         void givenId1_shouldReturn200OK_withMichaelAsJson() throws Exception {
             mockMvc.perform(get("/users/{id}", 1))
@@ -49,14 +53,16 @@ class UserControllerTest {
 
         @Test
         void givenId1_shouldReturnMichaelAsJson() throws Exception {
-            String json = mockMvc.perform(get("/users/{id}", 1))
-                                 .andDo(print())
-                                 .andExpect(status().isOk())
-                                 .andReturn()
-                                 .getResponse()
-                                 .getContentAsString();
+            var actualJson = mockMvc.perform(get("/users/{id}", 1))
+                                    .andDo(print())
+                                    .andExpect(status().isOk())
+                                    .andReturn()
+                                    .getResponse()
+                                    .getContentAsString();
 
-            JSONAssert.assertEquals(json, "{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}", LENIENT);
+            var expectedJson = "{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}";
+            JSONAssert.assertEquals(expectedJson, actualJson, LENIENT);
+            assertThat(json.from(actualJson)).isEqualToJson(expectedJson);
         }
 
         @Test

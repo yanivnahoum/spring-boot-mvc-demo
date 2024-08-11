@@ -2,18 +2,17 @@ package com.att.training.spring.boot.demo;
 
 import com.att.training.spring.boot.demo.user.UserConfiguration;
 import com.google.common.util.concurrent.Uninterruptibles;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
-import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
@@ -23,6 +22,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadFactory;
 import java.util.stream.IntStream;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
@@ -31,6 +31,7 @@ import static java.util.stream.Collectors.toList;
 
 @Configuration
 @EnableAspectJAutoProxy
+@EnableAsync
 @Slf4j
 public class AppConfig {
 
@@ -67,39 +68,32 @@ public class AppConfig {
     }
 
     @Bean
-    Executor taskExecutor() {
+    public Executor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
+        var coreCount = Runtime.getRuntime().availableProcessors();
+        executor.setCorePoolSize(coreCount);
+        executor.setMaxPoolSize(coreCount);
         executor.setDaemon(true);
         executor.setThreadNamePrefix("file-download-");
+        executor.setThreadFactory(new ExceptionHandlingThreadFactory(executor, (t, e) -> log
+                .error("An error occurred", e)));
         return executor;
     }
 
     @Bean
-    AsyncConfigurer asyncConfigurer() {
-        return new AsyncConfigurer() {
-            @Override
-            public Executor getAsyncExecutor() {
-                return taskExecutor();
-            }
-
-            @Override
-            public AsyncUncaughtExceptionHandler getAsyncUncaughtExceptionHandler() {
-                return (ex, method, params) -> log.error("An error occurred in method {} invoked with params: {}: ", method
-                        .getName(), params, ex);
-            }
-        };
-
+    CommandLineRunner asyncTester(AsyncRunner runner) {
+        return runner::runAsync;
     }
 
     @Bean
-    CommandLineRunner asyncRunner(TaskExecutor executor) {
+    CommandLineRunner completableFutures(Executor executor) {
         return args -> {
             List<CompletableFuture<String>> futures = IntStream.range(1, 10)
                                                                .mapToObj(i -> asyncTask(i, executor))
                                                                .collect(toList());
 
             merge(futures).thenAccept(results -> log.info("Got the following results: {}", results));
+            executor.execute(() -> {throw new RuntimeException("Boom!");});
         };
     }
 
@@ -124,5 +118,20 @@ public class AppConfig {
         }
         log.info("[{}] - Slept {}ms, now returning {}", Thread.currentThread().getName(), ms, obj);
         return obj;
+    }
+
+}
+
+@RequiredArgsConstructor
+class ExceptionHandlingThreadFactory implements ThreadFactory {
+
+    private final ThreadFactory backingThreadFactory;
+    private final Thread.UncaughtExceptionHandler handler;
+
+    @Override
+    public Thread newThread(Runnable r) {
+        var thread = backingThreadFactory.newThread(r);
+        thread.setUncaughtExceptionHandler(handler);
+        return thread;
     }
 }
