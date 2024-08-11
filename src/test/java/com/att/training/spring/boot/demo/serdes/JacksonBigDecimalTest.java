@@ -69,9 +69,6 @@ class JacksonBigDecimalTest {
     }
 
 
-    record BigDecimalHolder(
-//            @JsonFormat(shape = STRING)
-            BigDecimal value
-    ) {
+    record BigDecimalHolder(/*@JsonFormat(shape = STRING)*/BigDecimal value) {
     }
 }
