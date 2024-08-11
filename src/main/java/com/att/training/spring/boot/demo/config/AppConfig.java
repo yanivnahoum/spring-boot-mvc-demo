@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.config;
 
 import com.att.training.spring.boot.demo.user.UserConfiguration;
 import lombok.extern.slf4j.Slf4j;

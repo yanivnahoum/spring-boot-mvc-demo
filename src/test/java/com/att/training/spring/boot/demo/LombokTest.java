@@ -20,7 +20,7 @@ class LombokTest {
 
     @Autowired private ClassWithCopyableAnnotationsOnFields testClass;
 
-    @DisplayName("@Value and @Qualifier on fields sould be copied by lombok to c'tor parameters")
+    @DisplayName("@Value and @Qualifier on fields should be copied by lombok to c'tor parameters")
     @Test
     void testCopyableAnnotations() {
         assertThat(testClass.getValue()).isEqualTo("defaultValue");

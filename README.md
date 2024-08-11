@@ -1,4 +1,4 @@
-# A Spring Boot 2.x demo app 
+# A Spring Boot 2.4.x demo app 
 
 This project demonstrates the following features:
 * Spring DI
@@ -8,8 +8,12 @@ This project demonstrates the following features:
 * Bean Validation 2.0
 * Binding POJOs to configuration
 * [Binding POJOs to external files (*.yaml)](src/main/java/com/att/training/spring/boot/demo/user/ExternalUserConfiguration.java) 
+* Global **html** error pages
+  * [404 page](src/main/resources/static/error/404.html)
+  * [5xx page](src/main/resources/static/error/5xx.html)
+  * fallback error page (see [ErrorConfig](src/main/java/com/att/training/spring/boot/demo/config/ErrorConfig.java))
 * Spring Async - usage and configuration
-  * [Configuring multiple thread-pools](src/main/java/com/att/training/spring/boot/demo/AsyncConfig.java) & [using `@Async`](src/main/java/com/att/training/spring/boot/demo/AsyncRunner.java)
+  * [Configuring multiple thread-pools](src/main/java/com/att/training/spring/boot/demo/config/AsyncConfig.java) & [using `@Async`](src/main/java/com/att/training/spring/boot/demo/AsyncRunner.java)
   * HTTP [Async controller](src/main/java/com/att/training/spring/boot/demo/user/AsyncUserController.java)
   * [Testing Async controllers](src/test/java/com/att/training/spring/boot/demo/AsyncControllerTest.java)
 * Serialization / deserialization with Jackson
@@ -18,9 +22,9 @@ This project demonstrates the following features:
   * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/JacksonDeserializationWithInterfaces.java)
   * [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
   * [Custom serializer / deserializer of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeCustomSerDesTest.java)
-* [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
-* Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
-* [Lombok copyable annotations]() (see lombok.config)
+* [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/config/AppConfig.java)
+* Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/config/AppConfig.java)
+* [Lombok copyable annotations](src/test/java/com/att/training/spring/boot/demo/LombokTest.java) (additionally, see [lombok.config](jetbrains://idea/navigate/reference?project=spring-boot-mvc-demo&path=lombok.config))
 * [spring-aop](src/main/java/com/att/training/spring/boot/demo/RandomDelayAspect.java)
 * Swagger2 using [springfox](https://springfox.github.io/springfox/docs/current/#springfox-spring-mvc-and-spring-boot) ([swagger url](http://localhost:8090/demo/swagger-ui/))
 * spring-actuator
@@ -33,12 +37,14 @@ This project demonstrates the following features:
 
 ### Building the application:
 ```
-./mvnw clean install -gs settings.xml
+./mvnw clean install
+./gradlew build
 ```
 
 ### Running the application:
 ```
 ./mvnw spring-boot:run
+./gradlew bootRun
 ```
 or just run the main in class [SpringMvcBootApplication](src/main/java/com/att/training/spring/boot/demo/SpringMvcBootApplication.java)
 

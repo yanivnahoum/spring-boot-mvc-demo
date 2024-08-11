@@ -8,6 +8,9 @@ server:
   port: 8090
   servlet:
     context-path: /demo
+  error:
+    whitelabel:
+      enabled: false
 
 management:
   endpoints:

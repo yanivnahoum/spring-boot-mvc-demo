@@ -1,4 +1,4 @@
-package com.att.training.spring.boot.demo;
+package com.att.training.spring.boot.demo.config;
 
 import com.google.common.util.concurrent.Uninterruptibles;
 import lombok.RequiredArgsConstructor;
