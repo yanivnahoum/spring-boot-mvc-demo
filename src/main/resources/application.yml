@@ -17,6 +17,9 @@ server:
     whitelabel:
       enabled: false
   shutdown: graceful
+  tomcat:
+    mbeanregistry:
+      enabled: true
 
 spring:
   config:
