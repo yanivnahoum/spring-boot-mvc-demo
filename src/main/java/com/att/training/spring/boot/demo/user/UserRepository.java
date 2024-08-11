@@ -1,7 +1,6 @@
 package com.att.training.spring.boot.demo.user;
 
 import com.att.training.spring.boot.demo.api.User;
-import com.google.common.collect.ImmutableList;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -39,6 +38,6 @@ public class UserRepository {
      * @return an immutable list of all users.
      */
     public List<User> findAll() {
-        return ImmutableList.copyOf(users.values());
+        return List.copyOf(users.values());
     }
 }
