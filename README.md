@@ -20,6 +20,7 @@ This project demonstrates the following features:
 * Serialization / deserialization with Jackson
   * Immutable POJOs (see lombok.config for handling POJOs with **single** constructor parameter)
   * [Deserialization to POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializingListTest.java)
+  * [Serialization / deserialization of BigDecimal](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonBigDecimalTest.java)
   * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializationWithInterfacesTest.java)
   * [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
   * [Custom serializer / deserializer of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeCustomSerDesTest.java)
