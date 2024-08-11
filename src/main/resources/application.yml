@@ -12,6 +12,10 @@ server:
     whitelabel:
       enabled: false
 
+spring:
+  config:
+    import: "${app.config.dir:classpath:}external.yml"
+
 management:
   endpoints:
     web:
@@ -31,7 +35,6 @@ management:
         readiness:
           # This would typically include external resources critical to the app like db
           include: readinessState,info
-
 
   metrics:
     export:
