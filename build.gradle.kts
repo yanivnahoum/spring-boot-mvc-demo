@@ -2,9 +2,9 @@ import org.springframework.boot.gradle.tasks.bundling.BootJar
 
 plugins {
     java
-    id("org.springframework.boot") version "2.3.4.RELEASE"
+    id("org.springframework.boot") version "2.3.5.RELEASE"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
-    id("io.freefair.lombok") version "5.2.1"
+    id("io.freefair.lombok") version "5.3.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -14,8 +14,8 @@ repositories {
     mavenCentral()
 }
 
-extra["rest-assured.version"] = "4.3.1"
-extra["groovy.version"] = "3.0.5" // upgrading from 2.x for rest-assured
+extra["rest-assured.version"] = "4.3.2"
+extra["groovy.version"] = "3.0.6" // upgrading from 2.x for rest-assured
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -24,7 +24,7 @@ dependencies {
 
     implementation("io.springfox:springfox-boot-starter:3.0.0")
 
-    implementation("com.google.guava:guava:29.0-jre")
+    implementation("com.google.guava:guava:30.0-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 
