@@ -3,7 +3,7 @@
 
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>INFO</level>
+			<level>ALL</level>
 		</filter>
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
 			<pattern>%d %-5level [%thread] %logger{20} %msg%n</pattern>
@@ -26,6 +26,7 @@
 		</encoder>
 	</appender>
 
+	<logger name="org.springframework" level="DEBUG" />
 	<logger name="com.att.training.spring.boot.demo" level="TRACE" />
 	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
 

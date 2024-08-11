@@ -22,8 +22,9 @@ class MySingletonTest {
 
     @Test
     void getPrototypeOrdinal() {
-        for (int i = 3; i <= 10; i++) {
-            assertThat(mySingleton.getPrototypeOrdinal()).isEqualTo(i);
+        int startOrdinal = mySingleton.getPrototypeOrdinal();
+        for (int i = 1; i <= 10; i++) {
+            assertThat(mySingleton.getPrototypeOrdinal()).isEqualTo(startOrdinal + i);
         }
     }
 }

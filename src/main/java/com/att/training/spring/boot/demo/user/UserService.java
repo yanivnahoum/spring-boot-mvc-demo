@@ -4,11 +4,11 @@ import com.att.training.spring.boot.demo.RandomDelay;
 import com.att.training.spring.boot.demo.api.User;
 import com.att.training.spring.boot.demo.errors.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @Service
 @RequiredArgsConstructor
@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final TaskExecutor taskExecutor;
+    private final Executor executor;
 
     public User fetch(long id) {
         return findUser(id);
@@ -28,7 +28,7 @@ public class UserService {
     }
 
     public CompletableFuture<List<User>> fetchAllAsync() {
-        return CompletableFuture.supplyAsync(userRepository::findAll, taskExecutor);
+        return CompletableFuture.supplyAsync(userRepository::findAll, executor);
     }
 
     public void update(User user) {

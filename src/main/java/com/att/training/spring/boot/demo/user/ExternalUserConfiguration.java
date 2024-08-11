@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@PropertySource(factory = YamlPropertySourceFactory.class, value = "classpath:external.yml")
+@PropertySource(factory = YamlPropertySourceFactory.class, value = "${app.config.dir:classpath:}external.yml")
 @ConfigurationProperties(prefix = "ext")
 @Validated
 @Data

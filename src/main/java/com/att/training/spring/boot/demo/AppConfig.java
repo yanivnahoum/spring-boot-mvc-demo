@@ -13,6 +13,7 @@ import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
@@ -95,7 +96,7 @@ public class AppConfig {
                                                                .collect(toList());
 
             merge(futures).thenAccept(results -> log.info("Got the following results: {}", results));
-            executor.execute(() -> {throw new RuntimeException("Boom!");});
+            executor.execute(() -> {throw new IllegalStateException("Boom!");});
         };
     }
 
@@ -116,7 +117,7 @@ public class AppConfig {
     private static <T> T sleepAndReturn(int ms, T obj) {
         Uninterruptibles.sleepUninterruptibly(ms, MILLISECONDS);
         if (ms > 750) {
-            throw new RuntimeException("Boom!");
+            throw new IllegalStateException("Boom!");
         }
         log.info("[{}] - Slept {}ms, now returning {}", Thread.currentThread().getName(), ms, obj);
         return obj;
@@ -131,7 +132,7 @@ class ExceptionHandlingThreadFactory implements ThreadFactory {
     private final Thread.UncaughtExceptionHandler handler;
 
     @Override
-    public Thread newThread(Runnable r) {
+    public Thread newThread(@NonNull Runnable r) {
         var thread = backingThreadFactory.newThread(r);
         thread.setUncaughtExceptionHandler(handler);
         return thread;

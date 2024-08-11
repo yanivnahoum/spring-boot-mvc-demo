@@ -40,7 +40,7 @@ class UserControllerTest {
     @DisplayName("When calling GET /users/{id}")
     class GetSingleUser {
 
-        private BasicJsonTester json = new BasicJsonTester(getClass());
+        private final BasicJsonTester json = new BasicJsonTester(getClass());
 
         @Test
         void givenId1_shouldReturn200OK_withMichaelAsJson() throws Exception {
