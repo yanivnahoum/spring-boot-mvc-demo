@@ -10,31 +10,13 @@
 			<pattern>%clr(%d){faint} %clr(%-5level) %clr(%thread){magenta} %clr(%logger{20}){cyan} %msg%n</pattern>
 		</encoder>
 	</appender>
-	
-	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>logs/boot-demo.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<!-- daily rollover -->
-			<fileNamePattern>logs/boot-demo.%d{yyyy-MM-dd}.log</fileNamePattern>
-
-			<!-- keep 30 days' worth of history capped at 1GB total size -->
-			<maxHistory>30</maxHistory>
-			<totalSizeCap>1GB</totalSizeCap>
-		</rollingPolicy>
-
-		<encoder>
-<!--			<pattern>%d %-5level [%thread] %X{node} %logger{20} %replace(%msg){'\r?\n','___'}%n</pattern>-->
-			<pattern>%clr(%d){faint} %clr(%-5level) %clr(%thread){magenta} %clr(%logger{20}){cyan} %msg%n</pattern>
-		</encoder>
-	</appender>
 
 	<logger name="org.springframework" level="info" />
 	<logger name="com.att.training.spring.boot.demo" level="trace" />
 	<logger name="com.codahale.metrics.graphite" level="info" />
-	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG" />
+	<logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="debug"/>
 
 	<root level="INFO">
 		<appender-ref ref="STDOUT" />
-		<appender-ref ref="FILE" />
 	</root>
 </configuration>
