@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.actuate.health.Status;
 
@@ -14,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserHealthIndicatorTest {
@@ -31,7 +31,7 @@ class UserHealthIndicatorTest {
     @ParameterizedTest
     @ValueSource(ints = {1, 3, 5})
     void whenRepositoryContainsAnOddUserCount_shouldReturnStatusUp(int listSize) {
-        Mockito.when(userRepository.findAll()).thenReturn(buildListOfSize(listSize));
+        when(userRepository.findAll()).thenReturn(buildListOfSize(listSize));
         Status actualStatus = userHealthIndicator.health().getStatus();
         assertThat(actualStatus).isEqualTo(Status.UP);
     }
@@ -39,7 +39,7 @@ class UserHealthIndicatorTest {
     @ParameterizedTest
     @ValueSource(ints = {2, 4, 6})
     void whenRepositoryContainsAnEvenUserCount_shouldReturnStatusDown(int listSize) {
-        Mockito.when(userRepository.findAll()).thenReturn(buildListOfSize(listSize));
+        when(userRepository.findAll()).thenReturn(buildListOfSize(listSize));
         Status actualStatus = userHealthIndicator.health().getStatus();
         assertThat(actualStatus).isEqualTo(Status.DOWN);
     }
