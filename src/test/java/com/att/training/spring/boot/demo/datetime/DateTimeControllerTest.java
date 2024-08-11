@@ -51,7 +51,7 @@ class DateTimeControllerTest {
     void whenGetJsr310WithQueryParamsInDefaultFormat_then200OkWithCorrectValues() throws Exception {
         mockMvc.perform(get("/jsr310/v2")
                 .param("instant", "2000-01-01T00:00:00Z")
-                .param("datetime", "1/1/00, 12:00 AM"))
+                        .param("datetime", "2000-01-01T00:00"))
                .andDo(print())
                .andExpect(status().isOk())
                .andExpect(content().json(EXPECTED_JSON));

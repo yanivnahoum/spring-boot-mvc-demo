@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.1.6"
+    id("org.springframework.boot") version "3.2.1"
     id("io.spring.dependency-management") version "1.1.4"
     id("io.freefair.lombok") version "8.4"
 }
@@ -18,16 +18,16 @@ configurations {
     }
 }
 
-extra["snakeyaml.version"] = "2.2"
 dependencies {
+    val guavaVersion = "33.0.0-jre"
+    val springdocVersion = "2.3.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
-
-    implementation("com.google.guava:guava:32.1.3-jre")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
+    implementation("com.google.guava:guava:$guavaVersion")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 
@@ -39,7 +39,7 @@ dependencies {
 tasks {
     withType<JavaCompile>().configureEach {
         with(options) {
-            release = 17
+            release = 21
             compilerArgs.add("-Xlint:all,-processing,-auxiliaryclass")
         }
     }

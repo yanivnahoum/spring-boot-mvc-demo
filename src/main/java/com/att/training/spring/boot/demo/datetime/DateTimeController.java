@@ -23,7 +23,6 @@ import static org.springframework.http.HttpStatus.ACCEPTED;
 @RestController
 @Slf4j
 public class DateTimeController {
-
     private final Clock clock;
 
     public DateTimeController(Clock clock) {
@@ -59,5 +58,3 @@ public class DateTimeController {
         log.info("#post - {}", jsr310);
     }
 }
-
-record Jsr310(Instant instant, LocalDateTime localDateTime) {}

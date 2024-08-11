@@ -4,7 +4,7 @@ import com.google.common.util.concurrent.Uninterruptibles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.task.TaskExecutorBuilder;
+import org.springframework.boot.task.ThreadPoolTaskExecutorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
@@ -40,7 +40,7 @@ public class AsyncConfig {
     }
 
     private ThreadPoolTaskExecutor buildExecutor(int coreCount, String prefix) {
-        var taskExecutor = new TaskExecutorBuilder()
+        var taskExecutor = new ThreadPoolTaskExecutorBuilder()
                 .corePoolSize(coreCount)
                 .maxPoolSize(coreCount)
                 .threadNamePrefix(prefix)
