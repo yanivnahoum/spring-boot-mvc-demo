@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ContextConfiguration(classes = HttpServicePropertiesTest.TestConfiguration.class)
+@TestPropertySource(properties = "app.http-service.url=https://some-domain.com:8080")
 class HttpServicePropertiesTest {
 
     @EnableConfigurationProperties(HttpServiceProperties.class)

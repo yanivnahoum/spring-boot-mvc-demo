@@ -3,8 +3,8 @@ app:
     - { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
     - { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
     - { id: 3, first-name: Larry, last-name: Bird, age: 53 }
-  http-service:
-    url: https://some-domain.com:8080
+#  http-service:
+#    url: https://some-domain.com:8080
 #    connect-timeout: 5s
 #    read-timeout: 10s
 #    max-retries: 3
