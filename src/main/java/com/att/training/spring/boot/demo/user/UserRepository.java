@@ -18,11 +18,11 @@ public class UserRepository {
     public UserRepository(UserProperties userConfig) {
         users = userConfig.getUsers()
             .stream()
-            .collect(toMap(User::getId, Function.identity()));
+            .collect(toMap(User::id, Function.identity()));
     }
 
     public void save(User user) {
-        users.put(user.getId(), user);
+        users.put(user.id(), user);
     }
     
     public User delete(long id) {

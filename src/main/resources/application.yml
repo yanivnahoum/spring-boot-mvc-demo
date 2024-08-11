@@ -61,20 +61,13 @@ management:
           include: readinessState, db
           # This is no longer needed since 2.7.3 (default additional path wasn't created when group was explicitly defined
           # additional-path: server:/readyz
-  metrics:
-    export:
-      graphite:
+  graphite:
+    metrics:
+      export:
         step: 5s
         # Run graphite and update ip/port before enabling (default is localhost:2004)
         enabled: false
         graphite-tags-enabled: false
-    web:
-      server:
-        request:
-          autotime:
-            enabled: true
-
-
 
 info:
   app:

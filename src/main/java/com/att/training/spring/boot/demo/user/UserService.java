@@ -32,7 +32,7 @@ public class UserService {
     }
 
     public void update(User user) {
-        findUser(user.getId());
+        findUser(user.id());
         userRepository.save(user);
     }
 

@@ -4,6 +4,10 @@ import com.att.training.spring.boot.demo.api.ErrorDto;
 import com.att.training.spring.boot.demo.errors.ErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +19,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
@@ -28,11 +32,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import javax.servlet.FilterChain;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -51,7 +50,7 @@ class SpringBootServerThrowingFilterTest {
     @Test
     void whenFilterThrows_shouldReachErrorControllerAndThenGlobalExceptionHandler() throws JsonProcessingException {
         ResponseEntity<String> response = restTemplate.getForEntity(DefaultController.REQUEST_PATH, String.class);
-        assertThat(response.getStatusCodeValue()).isEqualTo(BAD_REQUEST.value());
+        assertThat(response.getStatusCode()).isEqualTo(BAD_REQUEST);
         var actualErrorDto = mapper.readValue(response.getBody(), ErrorDto.class);
         var expectedErrorDto = new ErrorDto(ErrorCode.GENERIC, ThrowingFilter.ERROR_MESSAGE);
         assertThat(actualErrorDto).isEqualTo(expectedErrorDto);
@@ -98,9 +97,9 @@ class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @NonNull
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body, @NonNull HttpHeaders headers,
-                                                             @NonNull HttpStatus status, @NonNull WebRequest request) {
+                                                             @NonNull HttpStatusCode statusCode, @NonNull WebRequest request) {
         ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
-        return new ResponseEntity<>(errorDto, status);
+        return new ResponseEntity<>(errorDto, statusCode);
     }
 
 }

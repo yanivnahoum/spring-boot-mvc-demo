@@ -2,7 +2,6 @@ package com.att.training.spring.boot.demo.datetime;
 
 
 import com.att.training.spring.boot.demo.config.AppConfig;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,8 +60,4 @@ public class DateTimeController {
     }
 }
 
-@Value
-class Jsr310 {
-    Instant instant;
-    LocalDateTime localDateTime;
-}
+record Jsr310(Instant instant, LocalDateTime localDateTime) {}

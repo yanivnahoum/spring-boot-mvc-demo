@@ -1,6 +1,10 @@
 package com.att.training.spring.boot.demo.filters;
 
 import io.restassured.RestAssured;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -22,10 +26,6 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
@@ -89,7 +89,7 @@ class SpringBootServerFilterTest {
     @Test
     void greetingFilter_shouldAddGreetingInRequestAttribute() {
         ResponseEntity<String> response = restTemplate.getForEntity(HelloController.GREET_PATH, String.class);
-        assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(GreetingFilter.GREETING_VALUE);
     }
 }
