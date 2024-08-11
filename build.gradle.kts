@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     java
     id("org.springframework.boot") version "2.3.4.RELEASE"
@@ -35,6 +37,12 @@ dependencies {
 tasks {
     withType<JavaCompile>().configureEach {
         options.release.set(11)
+    }
+
+    getByName<BootJar>("bootJar") {
+        layered {
+            isIncludeLayerTools = false
+        }
     }
 
     generateLombokConfig {
