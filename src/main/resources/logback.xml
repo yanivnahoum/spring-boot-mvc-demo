@@ -22,7 +22,7 @@
 		</rollingPolicy>
 
 		<encoder>
-			<pattern>%d %-5level [%thread] %X{node} %logger{20} %msg%n</pattern>
+			<pattern>%d %-5level [%thread] %X{node} %logger{20} %replace(%msg){'\n','___'}%n</pattern>
 		</encoder>
 	</appender>
 
