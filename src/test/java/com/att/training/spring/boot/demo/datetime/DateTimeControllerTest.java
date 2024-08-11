@@ -11,6 +11,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDate;
 
+import static com.att.training.spring.boot.demo.utils.JsonUtils.singleToDoubleQuotes;
 import static java.time.ZoneOffset.UTC;
 import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -78,7 +79,7 @@ class DateTimeControllerTest {
 
     @Test
     void whenPostJsr310_then202Accepted() throws Exception {
-        var jsr310 = EXPECTED_JSON.replace('\'', '"');
+        var jsr310 = singleToDoubleQuotes(EXPECTED_JSON);
         mockMvc.perform(post("/jsr310")
                 .contentType(APPLICATION_JSON)
                 .content(jsr310))

@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static com.att.training.spring.boot.demo.utils.JsonUtils.singleToDoubleQuotes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
@@ -67,9 +68,5 @@ class UserControllerWebMvcTest {
                 .contentType(APPLICATION_JSON)
                 .content(singleToDoubleQuotes("{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}")))
                 .andExpect(status().isNoContent());
-    }
-
-    private static String singleToDoubleQuotes(String json) {
-        return json.replace("'", "\"");
     }
 }

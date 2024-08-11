@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.att.training.spring.boot.demo.utils.JsonUtils.singleToDoubleQuotes;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
@@ -142,9 +143,6 @@ class JacksonTest {
         private final List<String> values = new ArrayList<>();
     }
 
-    private static String singleToDoubleQuotes(String json) {
-        return json.replace("'", "\"");
-    }
 }
 
 
