@@ -9,6 +9,10 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.task.SyncTaskExecutor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 import static java.lang.Boolean.parseBoolean;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -29,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+// Uncomment to have a SyncTaskExecutor replace all Executors, running everything on the main thread.
+//@Import(TestConfig.class)
 class AsyncControllerTest {
 
     @Autowired private MockMvc mockMvc;
@@ -54,9 +61,19 @@ class AsyncControllerTest {
     }
 }
 
+@TestConfiguration
+class TestConfig {
+    @Primary
+    @Bean
+    Executor syncTaskExecutor() {
+        return new SyncTaskExecutor();
+    }
+}
+
 @RestController
 @RequiredArgsConstructor
 class AsyncController {
+
     private final AsyncTestRunner runner;
 
     @GetMapping("sync")

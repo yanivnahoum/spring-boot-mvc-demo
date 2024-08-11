@@ -16,7 +16,7 @@ import java.util.concurrent.Executor;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final Executor executor;
+    private final Executor cpuTaskExecutor;
 
     public User fetch(long id) {
         return findUser(id);
@@ -28,7 +28,7 @@ public class UserService {
     }
 
     public CompletableFuture<List<User>> fetchAllAsync() {
-        return CompletableFuture.supplyAsync(userRepository::findAll, executor);
+        return CompletableFuture.supplyAsync(userRepository::findAll, cpuTaskExecutor);
     }
 
     public void update(User user) {
