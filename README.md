@@ -6,11 +6,12 @@ This project demonstrates the following features:
 * Exception handlers
 * Bean Validation 2.0
 * Binding POJOs to configuration
-* Binding POJOs to  external files (*.yaml) - see ExternalUserConfiguration 
+* [Binding POJOs to  external files (*.yaml)](src/main/java/com/att/training/spring/boot/demo/user/ExternalUserConfiguration.java) 
 * Serialization / deserialization of immutable POJOs
+* [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
-* spring-aop (see @RandomDelay)
+* [spring-aop](src/main/java/com/att/training/spring/boot/demo/RandomDelayAspect.java)
 * spring-actuator
   * [Info](http://localhost:8090/demo/actuator/info)
   * [Health](http://localhost:8090/demo/actuator/health)
