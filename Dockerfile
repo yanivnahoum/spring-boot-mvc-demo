@@ -21,7 +21,7 @@ ARG GROUP_NAME=demogroup
 ARG GID=1001
 RUN groupadd --gid "$GID" "$GROUP_NAME" && \
     useradd --uid "$UID" --gid "$GID" "$USER_NAME"
-USER $UID
+USER $USER_NAME
 WORKDIR application
 
 COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/dependencies/ ./
