@@ -53,11 +53,12 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return ex.getConstraintViolations()
                  .stream()
                  .map(this::toMessage)
-                 .collect(joining(",", "[", "]"));
+                 .collect(joining(", "));
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,HttpHeaders headers,
+                                                                  HttpStatus status, WebRequest request) {
         log.error("#handleMethodArgumentNotValid - ", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
@@ -69,7 +70,7 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return bindingResult.getFieldErrors()
                             .stream()
                             .map(this::toMessage)
-                            .collect(joining(",", "[", "]"));
+                            .collect(joining(", "));
     }
 
     private String toMessage(ConstraintViolation<?> constraintViolation) {
@@ -81,7 +82,8 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+                                                             HttpStatus status, WebRequest request) {
         log.error("#handleExceptionInternal - ", ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
         return new ResponseEntity<>(errorDto, status);
