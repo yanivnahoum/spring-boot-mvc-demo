@@ -22,16 +22,17 @@ import static org.springframework.test.context.TestConstructor.AutowireMode.ALL;
 @Import(MyPrototype.class)
 @TestInstance(PER_METHOD)
 @TestMethodOrder(OrderAnnotation.class)
-class MyPrototypeTestWithSpringExtensionPerMethod {
+class MyPrototypeWithSpringExtensionPerMethodTest {
 
     @Autowired
     private MyPrototype myPrototype;
-
     private MyPrototype firstTestInstance;
+
     @Order(1)
     @Test
-    void firstTest() {
+    void setup() {
         firstTestInstance = myPrototype;
+        assertThat(firstTestInstance).isNotNull();
     }
 
     @Order(2)
@@ -45,16 +46,17 @@ class MyPrototypeTestWithSpringExtensionPerMethod {
 @Import(MyPrototype.class)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class MyPrototypeTestWithSpringExtensionPerClass {
+class MyPrototypeWithSpringExtensionPerClassTest {
 
     @Autowired
     private MyPrototype myPrototype;
-
     private MyPrototype firstTestInstance;
+
     @Order(1)
     @Test
     void firstTest() {
         firstTestInstance = myPrototype;
+        assertThat(firstTestInstance).isNotNull();
     }
 
     @Order(2)
@@ -71,12 +73,13 @@ class MyPrototypeTestSpringBootTest {
 
     @Autowired
     private MyPrototype myPrototype;
-
     private MyPrototype firstTestInstance;
+
     @Order(1)
     @Test
     void firstTest() {
         firstTestInstance = myPrototype;
+        assertThat(firstTestInstance).isNotNull();
     }
 
     @Order(2)
@@ -91,7 +94,7 @@ class MyPrototypeTestSpringBootTest {
 @TestConstructor(autowireMode = ALL)
 @TestInstance(PER_CLASS)
 @TestMethodOrder(OrderAnnotation.class)
-class MyPrototypeTestSpringBootTestWithConstructor {
+class MyPrototypeSpringBootTestWithConstructorTest {
 
     private final MyPrototype myPrototype;
     private MyPrototype firstTestInstance;
@@ -100,6 +103,7 @@ class MyPrototypeTestSpringBootTestWithConstructor {
     @Test
     void firstTest() {
         firstTestInstance = myPrototype;
+        assertThat(firstTestInstance).isNotNull();
     }
 
     @Order(2)

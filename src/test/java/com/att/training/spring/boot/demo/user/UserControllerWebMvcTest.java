@@ -32,27 +32,33 @@ class UserControllerWebMvcTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Test
-    void givenServiceReturnsMultipleUsers_shouldReturn200OK_withMultipleUsers() throws Exception {
-        when(userService.fetchAll()).thenReturn(USERS);
-        mockMvc.perform(get("/users"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(equalTo(USERS.size()))));
-    }
+    @Nested
+    @DisplayName("When calling GET /users")
+    class GetAllUsers {
 
-    @Test
-    void givenServiceReturnsSingleUser_shouldReturn200OK_withSingleUser() throws Exception {
-        when(userService.fetchAll()).thenReturn(SINGLE_USER);
-        mockMvc.perform(get("/users"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(equalTo(SINGLE_USER.size()))));
-    }
+        @Test
+        void givenServiceReturnsMultipleUsers_shouldReturn200OK_withMultipleUsers() throws Exception {
+            when(userService.fetchAll()).thenReturn(USERS);
+            mockMvc.perform(get("/users"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.length()", is(equalTo(USERS.size()))));
+        }
 
-    @Test
-    void givenServiceReturnsEmptyList_shouldReturn200OK_withNoUsers() throws Exception {
-        mockMvc.perform(get("/users"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()", is(equalTo(0))));
+        @Test
+        void givenServiceReturnsSingleUser_shouldReturn200OK_withSingleUser() throws Exception {
+            when(userService.fetchAll()).thenReturn(SINGLE_USER);
+            mockMvc.perform(get("/users"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.length()", is(equalTo(SINGLE_USER.size()))));
+        }
+
+        @Test
+        void givenServiceReturnsEmptyList_shouldReturn200OK_withNoUsers() throws Exception {
+            mockMvc.perform(get("/users"))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.length()", is(equalTo(0))));
+        }
+
     }
 
     @Test
@@ -61,11 +67,5 @@ class UserControllerWebMvcTest {
                 .contentType(APPLICATION_JSON)
                 .content("{\"id\":1,\"firstName\":\"Michael\",\"lastName\":\"Jordan\",\"age\":50}"))
                 .andExpect(status().isNoContent());
-    }
-
-    // @MockBean doesn't get reset in @Nested classes: https://github.com/spring-projects/spring-boot/issues/12470
-    @Nested
-    @DisplayName("When calling GET /users")
-    class GetAllUsers {
     }
 }
