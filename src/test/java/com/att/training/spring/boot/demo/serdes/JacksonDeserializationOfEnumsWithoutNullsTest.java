@@ -35,14 +35,17 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
         @Bean
         Jackson2ObjectMapperBuilderCustomizer customizer() {
             return builder -> builder.postConfigurer(mapper ->
+                    // Needed for mutable POJOs. Can also be done via empty c'tor like in records.
                     mapper.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(SKIP)));
+
         }
     }
 
-    @Autowired private ObjectMapper mapper;
+    @Autowired
+    private ObjectMapper mapper;
 
     @ParameterizedTest
-    @ValueSource(classes = { SomeMutablePojo.class, SomeImmutablePojo.class })
+    @ValueSource(classes = {SomeMutablePojo.class, SomeImmutablePojo.class})
     void knownEnumValueIsDeserializedCorrectly(Class<? extends StatusProvider> klass) throws JsonProcessingException {
         var somePojo = mapper.readValue(singleToDoubleQuotes("{ 'status': 'ACTIVE' }"), klass);
         assertThat(somePojo.getStatus()).isEqualTo(Status.ACTIVE);
@@ -72,7 +75,8 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
     static Stream<Arguments> classSource() {
         return Stream.of(
                 arguments(named(SomeMutablePojo.class.getSimpleName(), SomeMutablePojo.class)),
-                arguments(named(SomeImmutablePojo.class.getSimpleName(), SomeImmutablePojo.class))
+                arguments(named(SomeImmutablePojo.class.getSimpleName(), SomeImmutablePojo.class)),
+                arguments(named(SomeRecord.class.getSimpleName(), SomeRecord.class))
         );
     }
 
@@ -85,13 +89,14 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
         // Skip nulls on specific field:
         // @JsonSetter(nulls = SKIP)
         private Status status = NONE;
+
+        // Another option:
+//        public Status getStatus() {
+//            return requireNonNullElse(status, NONE);
+//        }
     }
 
-    @Data
-    static class SomePojo implements StatusProvider {
-        private Status status = NONE;
-    }
-
+    // This class is mostly for pre-java 17 code.
     @Value
     static class SomeImmutablePojo implements StatusProvider {
         Status status;
@@ -101,6 +106,18 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
         @ConstructorProperties("status")
         public SomeImmutablePojo(Status status) {
             this.status = requireNonNullElse(status, NONE);
+        }
+    }
+
+    record SomeRecord(Status status) implements StatusProvider {
+        SomeRecord {
+            status = requireNonNullElse(status, NONE);
+        }
+
+
+        @Override
+        public Status getStatus() {
+            return status;
         }
     }
 
