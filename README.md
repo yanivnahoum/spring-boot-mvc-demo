@@ -1,4 +1,4 @@
-# A Spring Boot 2.x demo app 
+# A Spring Boot 3.x demo app
 
 This project demonstrates the following features:
 * Spring DI
@@ -19,8 +19,8 @@ This project demonstrates the following features:
   * [Testing Async controllers](src/test/java/com/att/training/spring/boot/demo/AsyncControllerTest.java)
 * Serialization / deserialization with Jackson
   * Immutable POJOs (see lombok.config for handling POJOs with **single** constructor parameter)
-  * [Deserialization to POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/JacksonDeserializingListTest.java)
-  * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/JacksonDeserializationWithInterfaces.java)
+  * [Deserialization to POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializingListTest.java)
+  * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializationWithInterfacesTest.java)
   * [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
   * [Custom serializer / deserializer of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeCustomSerDesTest.java)
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/config/AppConfig.java)
