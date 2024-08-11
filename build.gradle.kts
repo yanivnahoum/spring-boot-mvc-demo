@@ -1,8 +1,6 @@
-import org.springframework.boot.gradle.tasks.bundling.BootJar
-
 plugins {
     java
-    id("org.springframework.boot") version "2.4.0"
+    id("org.springframework.boot") version "2.4.1"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("io.freefair.lombok") version "5.3.0"
 }
@@ -35,12 +33,6 @@ dependencies {
 tasks {
     withType<JavaCompile>().configureEach {
         options.release.set(11)
-    }
-
-    getByName<BootJar>("bootJar") {
-        layered {
-            isIncludeLayerTools = false
-        }
     }
 
     generateLombokConfig {
