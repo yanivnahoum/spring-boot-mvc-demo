@@ -29,7 +29,6 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:$swaggerVersion")
 
     implementation("com.google.guava:guava:28.2-jre")
-    implementation("org.jetbrains:annotations:19.0.0")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 

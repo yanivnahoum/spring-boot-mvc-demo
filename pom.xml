@@ -21,7 +21,6 @@
         <java.version>11</java.version>
         <guava.version>28.2-jre</guava.version>
         <springfox.version>2.9.2</springfox.version>
-        <annotations.version>19.0.0</annotations.version>
         <rest-assured.version>4.3.0</rest-assured.version>
         <groovy.version>3.0.2</groovy.version> <!-- upgrading from 2.x for rest-assured -->
     </properties>
@@ -94,12 +93,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>${annotations.version}</version>
         </dependency>
     </dependencies>
 

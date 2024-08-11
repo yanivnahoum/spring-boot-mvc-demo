@@ -1,7 +1,6 @@
 package com.att.training.spring.boot.demo;
 
 import io.restassured.RestAssured;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,6 +13,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -39,13 +39,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class StandaloneMockMvcFilterTest {
 
-    private MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new HelloController())
+    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new HelloController())
             .addFilter(new GreetingFilter())
             .build();
 
     @Test
     void greetingFilter_shouldAddGreetingInRequestAttribute_withStandaloneMockMvc() throws Exception {
-        mockMvc.perform(get("/greet"))
+        mockMvc.perform(get(HelloController.GREET_PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().string(GreetingFilter.GREETING_VALUE));
     }
@@ -58,12 +58,11 @@ class FilterTest {
     private MockMvc mockMvc;
 
     @Test
-    void greetingFilterShouldAddGreetingInRequestAttribute() throws Exception {
-        mockMvc.perform(get("/greet"))
+    void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
+        mockMvc.perform(get(HelloController.GREET_PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().string(GreetingFilter.GREETING_VALUE));
     }
-
 }
 
 @SpringBootTest(classes = {HelloController.class, GreetingFilter.class})
@@ -74,8 +73,8 @@ class SpringBootFilterTest {
     private MockMvc mockMvc;
 
     @Test
-    void greetingFilterShouldAddGreetingInRequestAttribute() throws Exception {
-        mockMvc.perform(get("/greet"))
+    void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
+        mockMvc.perform(get(HelloController.GREET_PATH))
                 .andExpect(status().isOk())
                 .andExpect(content().string(GreetingFilter.GREETING_VALUE));
     }
@@ -88,8 +87,8 @@ class SpringBootServerFilterTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    void greetingFilterShouldAddGreetingInRequestAttribute() throws Exception {
-        ResponseEntity<String> response = restTemplate.getForEntity("/greet", String.class);
+    void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
+        ResponseEntity<String> response = restTemplate.getForEntity(HelloController.GREET_PATH, String.class);
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getBody()).isEqualTo(GreetingFilter.GREETING_VALUE);
     }
@@ -111,9 +110,9 @@ class SpringBootServerRestAssuredFilterTest {
     }
 
     @Test
-    void greetingFilterShouldAddGreetingInRequestAttribute() throws Exception {
+    void greetingFilter_shouldAddGreetingInRequestAttribute() {
         given()
-                .when().get("/greet")
+                .when().get(HelloController.GREET_PATH)
                 .then().assertThat().statusCode(equalTo(200))
                 .and().assertThat().body(equalTo(GreetingFilter.GREETING_VALUE));
     }
@@ -122,7 +121,9 @@ class SpringBootServerRestAssuredFilterTest {
 @RestController
 class HelloController {
 
-    @GetMapping("/greet")
+    static final String GREET_PATH = "/greet";
+
+    @GetMapping(GREET_PATH)
     public String greet(@RequestAttribute String greeting) {
         return greeting;
     }
@@ -135,8 +136,8 @@ class GreetingFilter extends OncePerRequestFilter {
     static final String GREETING_VALUE = "Hello!";
 
     @Override
-    protected void doFilterInternal(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response,
-                                    @NotNull FilterChain filterChain) throws IOException, ServletException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws IOException, ServletException {
         request.setAttribute(GREETING_KEY, GREETING_VALUE);
         filterChain.doFilter(request, response);
     }

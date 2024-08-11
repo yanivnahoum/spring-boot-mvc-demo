@@ -2,10 +2,10 @@ package com.att.training.spring.boot.demo.errors;
 
 import com.att.training.spring.boot.demo.api.ErrorDto;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -52,15 +52,15 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
 
     private String buildMessage(ConstraintViolationException ex) {
         return ex.getConstraintViolations()
-                 .stream()
-                 .map(this::toMessage)
-                 .collect(joining(", "));
+                .stream()
+                .map(this::toMessage)
+                .collect(joining(", "));
     }
 
-    @NotNull
+    @NonNull
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NotNull MethodArgumentNotValidException ex, @NotNull HttpHeaders headers,
-                                                                  @NotNull HttpStatus status, @NotNull WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,
+                                                                  @NonNull HttpStatus status, @NonNull WebRequest request) {
         log.error("#handleMethodArgumentNotValid - ", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
@@ -70,9 +70,9 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     private String buildMessage(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
         return bindingResult.getFieldErrors()
-                            .stream()
-                            .map(this::toMessage)
-                            .collect(joining(", "));
+                .stream()
+                .map(this::toMessage)
+                .collect(joining(", "));
     }
 
     private String toMessage(ConstraintViolation<?> constraintViolation) {
@@ -83,10 +83,10 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return String.format("Field '%s.%s' %s", error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 
-    @NotNull
+    @NonNull
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(@NotNull Exception ex, Object body, HttpHeaders headers,
-                                                             HttpStatus status, @NotNull WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body, @NonNull HttpHeaders headers,
+                                                             @NonNull HttpStatus status, @NonNull WebRequest request) {
         log.error("#handleExceptionInternal - ", ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
         return new ResponseEntity<>(errorDto, status);
