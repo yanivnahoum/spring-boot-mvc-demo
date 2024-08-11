@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static java.util.stream.Collectors.toList;
+
 
 @Slf4j
 @EnableAsync
@@ -67,9 +67,9 @@ public class AsyncConfig {
         return args -> {
             List<CompletableFuture<String>> futures = IntStream.range(1, 10)
                     .mapToObj(i -> asyncTask(i, ioTaskExecutor))
-                    .collect(toList());
+                    .toList();
 
-            merge(futures).thenAccept(results -> log.info("Got the following results: {}", results));
+            merge(futures).thenAccept(results -> log.info("Got the following results: {}", results)).join();
             ioTaskExecutor.execute(() -> {throw new IllegalStateException("Boom!");});
         };
     }
@@ -85,7 +85,7 @@ public class AsyncConfig {
         CompletableFuture<Void> all = CompletableFuture.allOf(futures.toArray(new CompletableFuture<?>[0]));
         return all.thenApply(ignore -> futures.stream()
                 .map(CompletableFuture::join)
-                .collect(toList()));
+                .toList());
     }
 
     private static <T> T sleepAndReturn(int ms, T obj) {
