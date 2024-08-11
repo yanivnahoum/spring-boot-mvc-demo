@@ -11,6 +11,6 @@ public enum ErrorCode {
     VALIDATION(5002),
     GENERIC(9999);
 
-    @Getter(onMethod_ = @__({@JsonValue}))
+    @Getter(onMethod_ = {@JsonValue})
     private final int code;
 }

@@ -14,7 +14,9 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,23 +36,31 @@ class UserControllerWebMvcTest {
     void givenServiceReturnsMultipleUsers_shouldReturn200OK_withMultipleUsers() throws Exception {
         when(userService.fetchAll()).thenReturn(USERS);
         mockMvc.perform(get("/users"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.length()", is(equalTo(USERS.size()))));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(equalTo(USERS.size()))));
     }
 
     @Test
     void givenServiceReturnsSingleUser_shouldReturn200OK_withSingleUser() throws Exception {
         when(userService.fetchAll()).thenReturn(SINGLE_USER);
         mockMvc.perform(get("/users"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.length()", is(equalTo(SINGLE_USER.size()))));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(equalTo(SINGLE_USER.size()))));
     }
 
     @Test
     void givenServiceReturnsEmptyList_shouldReturn200OK_withNoUsers() throws Exception {
         mockMvc.perform(get("/users"))
-               .andExpect(status().isOk())
-               .andExpect(jsonPath("$.length()", is(equalTo(0))));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()", is(equalTo(0))));
+    }
+
+    @Test
+    void givenUserInBody_whenPUT_shouldReturn200OK() throws Exception {
+        mockMvc.perform(put("/users")
+                .contentType(APPLICATION_JSON)
+                .content("{\"id\":1,\"firstName\":\"Michael\",\"lastName\":\"Jordan\",\"age\":50}"))
+                .andExpect(status().isNoContent());
     }
 
     // @MockBean doesn't get reset in @Nested classes: https://github.com/spring-projects/spring-boot/issues/12470
