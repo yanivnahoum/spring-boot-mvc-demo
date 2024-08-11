@@ -1,29 +1,19 @@
-import org.gradle.api.JavaVersion.VERSION_11
-
 plugins {
     java
-    id("org.springframework.boot") version "2.3.2.RELEASE"
+    id("org.springframework.boot") version "2.3.3.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("io.freefair.lombok") version "5.1.0"
-}
-
-repositories {
-    mavenCentral()
 }
 
 group = "com.att.training.spring.boot"
 version = "0.0.1-SNAPSHOT"
 
-java {
-    sourceCompatibility = VERSION_11
-    targetCompatibility = VERSION_11
-}
-
-tasks.generateLombokConfig {
-    isEnabled = false
+repositories {
+    mavenCentral()
 }
 
 extra["rest-assured.version"] = "4.3.1"
+
 extra["groovy.version"] = "3.0.5" // upgrading from 2.x for rest-assured
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -43,6 +33,13 @@ dependencies {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("io.rest-assured:rest-assured")
+}
+tasks.withType<JavaCompile> {
+    options.release.set(11)
+}
+
+tasks.generateLombokConfig {
+    isEnabled = false
 }
 
 tasks.test {
