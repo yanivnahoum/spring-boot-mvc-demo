@@ -19,7 +19,7 @@ configurations {
 }
 
 dependencies {
-    val guavaVersion = "33.2.0-jre"
+    val guavaVersion = "33.2.1-jre"
     val springdocVersion = "2.5.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
