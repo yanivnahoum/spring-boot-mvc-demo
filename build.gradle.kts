@@ -20,9 +20,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    val swaggerVersion = "3.0.0"
-    implementation("io.springfox:springfox-swagger2:$swaggerVersion")
-    implementation("io.springfox:springfox-swagger-ui:$swaggerVersion")
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
 
     implementation("com.google.guava:guava:29.0-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
