@@ -23,4 +23,4 @@ COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/spring-boot-loade
 COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/snapshot-dependencies/ ./
 COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/application/ ./
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.JarLauncher"]
+ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
