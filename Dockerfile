@@ -5,7 +5,7 @@ COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM eclipse-temurin:11-jre-alpine
-#RUN apk add --no-cache jattach
+RUN apk add --no-cache jattach
 
 WORKDIR application
 ARG USER_NAME=demouser
