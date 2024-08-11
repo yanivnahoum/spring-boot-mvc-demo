@@ -23,7 +23,7 @@
         <springfox.version>3.0.0</springfox.version>
         <rest-assured.version>4.3.2</rest-assured.version>
         <groovy.version>3.0.6</groovy.version> <!-- upgrading from 2.x for rest-assured -->
-        <proxy>http://emea-chain.proxy.att.com:8080</proxy>
+        <proxy>http://pxyapp.proxy.att.com:8080</proxy>
     </properties>
 
     <dependencies>
