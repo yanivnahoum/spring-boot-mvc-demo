@@ -1,7 +1,8 @@
-users:
-- { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
-- { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
-- { id: 3, first-name: Larry, last-name: Bird, age: 53 }
+app:
+  users:
+  - { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
+  - { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
+  - { id: 3, first-name: Larry, last-name: Bird, age: 53 }
 
 server:
   port: 8090
@@ -13,9 +14,9 @@ management:
     web:
       exposure:
         include:
-        - info
-        - health
-        - metrics
+          - info
+          - health
+          - metrics
   endpoint:
     health:
       show-details: always
