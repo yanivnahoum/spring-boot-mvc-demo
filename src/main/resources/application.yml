@@ -9,9 +9,22 @@ server:
     context-path: /demo
 
 management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - info
+        - health
+        - metrics
   endpoint:
     health:
       show-details: always
+
+  metrics:
+    export:
+      graphite:
+        host: 192.168.99.100
+        step: 5s
 
 info:
   app:

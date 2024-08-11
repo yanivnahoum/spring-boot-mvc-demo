@@ -5,12 +5,6 @@ import lombok.Value;
 
 
 public @Value class ErrorDto {
-
-    int code;
+    ErrorCode code;
     String message;
-
-    public ErrorDto(ErrorCode errorCode, String message) {
-        this.code = errorCode.getCode();
-        this.message = message;
-    }
 }
