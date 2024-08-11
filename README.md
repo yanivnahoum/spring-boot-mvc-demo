@@ -27,7 +27,7 @@ This project demonstrates the following features:
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/config/AppConfig.java)
 * [Lombok copyable annotations](src/test/java/com/att/training/spring/boot/demo/LombokTest.java) (additionally, see [lombok.config](jetbrains://idea/navigate/reference?project=spring-boot-mvc-demo&path=lombok.config))
 * [spring-aop](src/main/java/com/att/training/spring/boot/demo/RandomDelayAspect.java)
-* Swagger2 using [springfox](https://springfox.github.io/springfox/docs/current/#springfox-spring-mvc-and-spring-boot) ([swagger url](http://localhost:8090/demo/swagger-ui/))
+* Swagger2 using [springdoc](https://springdoc.org/) ([swagger url](http://localhost:8090/demo/swagger-ui.html/))
 * spring-actuator
   * [Info](http://localhost:8090/demo/actuator/info)
   * [Health](http://localhost:8090/demo/actuator/health)
