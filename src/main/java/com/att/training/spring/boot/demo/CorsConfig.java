@@ -15,6 +15,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(@NonNull CorsRegistry registry) {
                 registry.addMapping("/**")
+                        .allowedOrigins("*.att.com")
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowCredentials(true);
