@@ -38,6 +38,7 @@ management:
   endpoint:
     health:
       show-details: always
+      # probes.enabled is only needed if you'd like to check this locally. On k8s, it is enabled by default
       probes:
         enabled: true
       group:
@@ -50,7 +51,7 @@ management:
       graphite:
         step: 5s
         # Run graphite and update ip/port before enabling (default is localhost:2004)
-        enabled: true
+        enabled: false
         graphite-tags-enabled: false
     web:
       server:
