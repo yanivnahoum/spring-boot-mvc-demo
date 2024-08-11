@@ -1,8 +1,8 @@
 plugins {
     java
     id("org.springframework.boot") version "2.3.3.RELEASE"
-    id("io.spring.dependency-management") version "1.0.9.RELEASE"
-    id("io.freefair.lombok") version "5.1.0"
+    id("io.spring.dependency-management") version "1.0.10.RELEASE"
+    id("io.freefair.lombok") version "5.1.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -13,7 +13,6 @@ repositories {
 }
 
 extra["rest-assured.version"] = "4.3.1"
-
 extra["groovy.version"] = "3.0.5" // upgrading from 2.x for rest-assured
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -34,18 +33,21 @@ dependencies {
     }
     testImplementation("io.rest-assured:rest-assured")
 }
-tasks.withType<JavaCompile> {
-    options.release.set(11)
-}
 
-tasks.generateLombokConfig {
-    isEnabled = false
-}
+tasks {
+    withType<JavaCompile>().configureEach {
+        options.release.set(11)
+    }
 
-tasks.test {
-    useJUnitPlatform()
-    testLogging {
-        events("passed", "skipped", "failed")
-        showStandardStreams = true
+    generateLombokConfig {
+        isEnabled = false
+    }
+
+    test {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+            showStandardStreams = true
+        }
     }
 }
