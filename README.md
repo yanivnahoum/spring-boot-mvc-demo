@@ -8,7 +8,7 @@ This project demonstrates the following features:
 * Binding POJOs to configuration
 * [Binding POJOs to  external files (*.yaml)](src/main/java/com/att/training/spring/boot/demo/user/ExternalUserConfiguration.java) 
 * Serialization / deserialization of immutable POJOs
-* [\Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
+* [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * [spring-aop](src/main/java/com/att/training/spring/boot/demo/RandomDelayAspect.java)

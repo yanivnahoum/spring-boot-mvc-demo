@@ -1,8 +1,12 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.2.5.RELEASE"
+    id("org.springframework.boot") version "2.2.6.RELEASE"
     id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("io.freefair.lombok") version "4.1.6"
+}
+
+repositories {
+    mavenCentral()
 }
 
 group = "com.att.training.spring.boot"
@@ -29,7 +33,9 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
+    }
     testImplementation("io.rest-assured:rest-assured")
 }
 
