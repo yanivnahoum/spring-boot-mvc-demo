@@ -15,7 +15,7 @@ This project demonstrates the following features:
 * spring-actuator
   * [Info](http://localhost:8090/demo/actuator/info)
   * [Health](http://localhost:8090/demo/actuator/health)
-  * [Metrics](http://localhost:8090/demo/actuator/info)
+  * [Metrics](http://localhost:8090/demo/actuator/metrics)
 * Integration tests MockMvc using Junit Jupiter 
 
 ### Building the application:
@@ -36,29 +36,14 @@ or just run the main in class [SpringMvcBootApplication](src/main/java/com/att/t
 * [/demo/users](http://localhost:8090/demo/users) - Update user (PUT). You can modify names or age (based on id of course)
 
 ### Setting up Metrics:
-* Start up graphite docker:
-```
-docker run \
-  -d \
-  --name graphite \
-  --restart=always \
-  -p 80:80 \
-  -p 2003-2004:2003-2004 \
-  -p 2023-2024:2023-2024 \
-  -p 8125:8125/udp \
-  -p 8126:8126 \
-  graphiteapp/graphite-statsd
-```    
-* Start up Grafana docker:
-```
-docker run \
-  -d \
-  -p 3000:3000 \
-  --name=grafana \
-  grafana/grafana
-```
 * Enable key metrics.export.graphite.enabled in the [application.yml](src/main/resources/application.yml)
+* From your terminal, cd into the metrics directory.
+* run `docker-compose up -d`
 * Run the spring-boot app
 * Go to <http://localhost:3000>  
-* Import the [spring-boot dashboard](grafana-dashboard.json) or create your own
+  * Log in (admin/admin)
+  * Change your password, as required
+  * Click the Spring Boot Demo dashboard
+  * Make some requests to [/demo/users/{id}](http://localhost:8090/demo/users/1) and [/demo/users](http://localhost:8090/demo/users) to see the response times.
+
  

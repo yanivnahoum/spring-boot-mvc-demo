@@ -24,10 +24,15 @@ management:
   metrics:
     export:
       graphite:
-        host: 192.168.99.100
+        host: 127.0.0.1
         step: 5s
         # Run graphite and update ip/port before enabling
-        enabled: false
+        enabled: true
+    web:
+      server:
+        request:
+          autotime:
+            enabled: true
 
 info:
   app:
