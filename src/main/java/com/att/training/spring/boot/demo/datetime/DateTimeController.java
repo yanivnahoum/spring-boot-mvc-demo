@@ -2,7 +2,7 @@ package com.att.training.spring.boot.demo.datetime;
 
 
 import com.att.training.spring.boot.demo.AppConfig;
-import lombok.Data;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,26 +33,17 @@ public class DateTimeController {
 
     @GetMapping
     public Jsr310 get() {
-        var jsr310 = new Jsr310();
-        jsr310.setInstant(Instant.now(clock));
-        jsr310.setLocalDateTime(LocalDateTime.now(clock));
-        return jsr310;
+        return new Jsr310(Instant.now(clock), LocalDateTime.now(clock));
     }
 
     @GetMapping("v2")
     public Jsr310 getV2(@RequestParam Instant instant, @RequestParam LocalDateTime datetime) {
-        var jsr310 = new Jsr310();
-        jsr310.setInstant(instant);
-        jsr310.setLocalDateTime(datetime);
-        return jsr310;
+        return new Jsr310(instant, datetime);
     }
 
     @GetMapping("v3")
     public Jsr310 getV3(@RequestParam Instant instant, @RequestParam @DateTimeFormat(iso = DATE_TIME) LocalDateTime datetime) {
-        var jsr310 = new Jsr310();
-        jsr310.setInstant(instant);
-        jsr310.setLocalDateTime(datetime);
-        return jsr310;
+        return new Jsr310(instant, datetime);
     }
 
     /**
@@ -60,10 +51,7 @@ public class DateTimeController {
      */
     @GetMapping("v4")
     public Jsr310 getV4(@RequestParam Instant instant, @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss") LocalDateTime datetime) {
-        var jsr310 = new Jsr310();
-        jsr310.setInstant(instant);
-        jsr310.setLocalDateTime(datetime);
-        return jsr310;
+        return new Jsr310(instant, datetime);
     }
 
     @PostMapping
@@ -73,8 +61,8 @@ public class DateTimeController {
     }
 }
 
-@Data
+@Value
 class Jsr310 {
-    private Instant instant;
-    private LocalDateTime localDateTime;
+    Instant instant;
+    LocalDateTime localDateTime;
 }

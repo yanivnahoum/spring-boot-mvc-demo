@@ -17,6 +17,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+tasks.generateLombokConfig {
+    isEnabled = false
+}
+
 ext["rest-assured.version"] = "4.3.0"
 ext["groovy.version"] = "3.0.2" // upgrading from 2.x for rest-assured
 dependencies {
