@@ -8,31 +8,25 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.util.Random;
-
-import static com.google.common.util.concurrent.Uninterruptibles.sleepUninterruptibly;
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 @Aspect
 @Component
 @Slf4j
 @RequiredArgsConstructor
 public class RandomDelayAspect {
 
-    private final Random random;
-
-    public RandomDelayAspect() {
-        random = new Random();
-    }
+    private final Sleeper sleeper;
 
     @Pointcut("within(com.att.training.spring.boot.demo..*)")
-    private void inApp() {}
+    void inApp() {
+    }
 
     @Pointcut("@within(randomDelay) && !@annotation(RandomDelay)")
-    private void delayedClass(RandomDelay randomDelay) {}
+    void delayedClass(RandomDelay randomDelay) {
+    }
 
     @Pointcut("@annotation(randomDelay)")
-    private void delayedMethod(RandomDelay randomDelay) {}
+    void delayedMethod(RandomDelay randomDelay) {
+    }
 
     @Before("inApp() && delayedClass(randomDelay)")
     public void adviseMethodsOfAnnotatedClass(JoinPoint joinPoint, RandomDelay randomDelay) {
@@ -54,17 +48,15 @@ public class RandomDelayAspect {
         int diff = getDifference(randomDelay);
         if (diff <= 0) {
             String signature = joinPoint.getSignature().toShortString();
-            log.warn("#delayExecution - ignoring @RandomDelay since it has been passed invalid arguments: min must be equal to or greater than zero, and max must be greater than min. See {}", signature);
+            log.warn("#isValid - ignoring @RandomDelay since it has been passed invalid arguments: min must be equal " +
+                    "to or greater than zero, and max must be greater than min. See {}", signature);
             return false;
         }
         return true;
     }
 
     private void delayExecution(RandomDelay randomDelay) {
-        int diff = getDifference(randomDelay);
-        int delayMs = random.nextInt(diff) + randomDelay.min();
-        log.debug("#delayExecution - delaying execution by {}ms", delayMs);
-        sleepUninterruptibly(delayMs, MILLISECONDS);
+        sleeper.sleepRandom(randomDelay.min(), randomDelay.max());
     }
 
     private int getDifference(RandomDelay randomDelay) {
