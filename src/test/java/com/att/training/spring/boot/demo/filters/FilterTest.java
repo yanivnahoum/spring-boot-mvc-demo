@@ -65,7 +65,7 @@ class FilterTest {
     }
 }
 
-@SpringBootTest(classes = {HelloController.class, GreetingFilter.class})
+@SpringBootTest(classes = { HelloController.class, GreetingFilter.class })
 @AutoConfigureMockMvc
 class SpringBootFilterTest {
 
