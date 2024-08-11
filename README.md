@@ -10,8 +10,8 @@ This project demonstrates the following features:
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * spring-aop (see @RandomDelay)
+* Metrics
 * Integration tests MockMvc using Junit Jupiter 
-* Customizing Jackson
 
 ### Running the application:
 ```

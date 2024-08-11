@@ -26,8 +26,8 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @Slf4j
 public class ExceptionHandlers extends ResponseEntityExceptionHandler {
 
-    @ResponseStatus(NOT_FOUND)
     @ExceptionHandler
+    @ResponseStatus(NOT_FOUND)
     public ErrorDto handleUserNotFound(UserNotFoundException ex) {
         log.error("#handleUserNotFound - ", ex);
         String message = "User not found: " + ex.getMessage();
