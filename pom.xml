@@ -12,7 +12,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RC1</version>
+        <version>2.1.0.RELEASE</version>
     </parent>
 
     <properties>
@@ -93,14 +93,6 @@
             <optional>true</optional>
         </dependency>
     </dependencies>
-
-    <repositories>
-        <repository>
-            <id>repository.spring.milestone</id>
-            <name>Spring Milestone Repository</name>
-            <url>http://repo.spring.io/milestone</url>
-        </repository>
-    </repositories>
 
     <build>
         <plugins>
