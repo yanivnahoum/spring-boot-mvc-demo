@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -41,6 +42,11 @@ class AppConfig {
         loggingFilter.setIncludePayload(true);
         loggingFilter.setMaxPayloadLength(200);
         return loggingFilter;
+    }
+
+    @Bean
+    Clock clock() {
+        return Clock.systemUTC();
     }
 
 
@@ -74,8 +80,7 @@ class AppConfig {
     CommandLineRunner asyncRunner(TaskExecutor executor) {
         return args -> {
             List<CompletableFuture<String>> futures = IntStream.range(1, 10)
-                                                               .boxed()
-                                                               .map((Integer i) -> asyncTask(i, executor))
+                                                               .mapToObj(i -> asyncTask(i, executor))
                                                                .collect(toList());
 
             merge(futures).thenAccept(results -> log.info("Got the following results: {}", results));

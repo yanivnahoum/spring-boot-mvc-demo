@@ -5,7 +5,8 @@ This project demonstrates the following features:
 * HTTP endpoints (Controllers)
 * Exception handlers
 * Bean Validation 2.0
-* Binding POJOs to configuration 
+* Binding POJOs to configuration
+* Binding POJOs to  external files (*.yaml) - see ExternalUserConfiguration 
 * Serialization / deserialization of immutable POJOs
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
