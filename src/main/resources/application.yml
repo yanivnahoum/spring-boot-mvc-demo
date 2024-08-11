@@ -1,8 +1,8 @@
 app:
   users:
-  - { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
-  - { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
-  - { id: 3, first-name: Larry, last-name: Bird, age: 53 }
+    - { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
+    - { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
+    - { id: 3, first-name: Larry, last-name: Bird, age: 53 }
 
 server:
   port: 8090
@@ -17,9 +17,12 @@ management:
           - info
           - health
           - metrics
+#      cors:
+#        allowed-origins: "*"
   endpoint:
     health:
       show-details: always
+
 
   metrics:
     export:
@@ -36,8 +39,8 @@ management:
 
 info:
   app:
-#    encoding: @project.build.sourceEncoding@
+    #    encoding: @project.build.sourceEncoding@
     encoding: UTF-8
     java:
-#      source: @java.version@
+      #      source: @java.version@
       source: 1.0.0
