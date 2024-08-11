@@ -82,7 +82,7 @@ public class AsyncConfig {
     }
 
     private static <T> CompletableFuture<List<T>> merge(List<CompletableFuture<T>> futures) {
-        CompletableFuture<Void> all = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+        CompletableFuture<Void> all = CompletableFuture.allOf(futures.toArray(new CompletableFuture<?>[0]));
         return all.thenApply(ignore -> futures.stream()
                 .map(CompletableFuture::join)
                 .collect(toList()));

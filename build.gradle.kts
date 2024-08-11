@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.4.5"
+    id("org.springframework.boot") version "2.5.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "5.3.3.3"
 }
@@ -12,8 +12,6 @@ repositories {
     mavenCentral()
 }
 
-extra["rest-assured.version"] = "4.3.3"
-extra["groovy.version"] = "3.0.7" // upgrading from 2.x for rest-assured
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -33,7 +31,10 @@ dependencies {
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(11)
+        with(options) {
+            release.set(11)
+            compilerArgs.add("-Xlint:all,-processing,-auxiliaryclass")
+        }
     }
 
     generateLombokConfig {

@@ -103,6 +103,7 @@ class SomePojo {
 }
 
 class LocalDateTimeToUtcSerializer extends StdSerializer<LocalDateTime> {
+    private static final long serialVersionUID = 1L;
 
     LocalDateTimeToUtcSerializer() {
         this(LocalDateTime.class);
@@ -122,6 +123,7 @@ class LocalDateTimeToUtcSerializer extends StdSerializer<LocalDateTime> {
 }
 
 class LocalDateTimeFromUtcDeserializer extends LocalDateTimeDeserializer {
+    private static final long serialVersionUID = 1L;
 
     LocalDateTimeFromUtcDeserializer() {
         super(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
