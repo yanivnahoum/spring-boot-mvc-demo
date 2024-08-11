@@ -22,7 +22,6 @@ public class YamlPropertySourceFactory implements PropertySourceFactory {
     private Properties loadYamlProperties(EncodedResource resource) {
         var factory = new YamlPropertiesFactoryBean();
         factory.setResources(resource.getResource());
-        factory.afterPropertiesSet();
         return factory.getObject();
     }
 
