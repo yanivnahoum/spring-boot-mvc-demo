@@ -1,17 +1,20 @@
-FROM eclipse-temurin:11-jre-alpine as builder
+FROM eclipse-temurin:17-jre as builder
 WORKDIR application
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} application.jar
+COPY target/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
-FROM eclipse-temurin:11-jre-alpine
-RUN apk add --no-cache jattach
+FROM eclipse-temurin:17-jre
+RUN apt-get update \
+    && apt-get install -y \
+    jattach \
+    && rm -rf /var/lib/apt/lists/*
 
 ARG USER_NAME=demouser
 ARG UID=1000
 ARG GROUP_NAME=demogroup
-RUN addgroup -g 1001 -S $GROUP_NAME \
-    && adduser -u $UID -S $USER_NAME -G $GROUP_NAME
+ARG GID=1001
+RUN groupadd --gid $GID $GROUP_NAME && \
+    useradd --uid $UID --gid $GID $USER_NAME
 USER $UID
 WORKDIR application
 
