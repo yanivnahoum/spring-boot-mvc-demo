@@ -1,20 +1,24 @@
-# A Spring Boot 2 demo app 
+# A Spring Boot 2.x demo app 
 
 This project demonstrates the following features:
 * Spring DI
 * [Singleton vs Prototype `@Scope`](src/test/java/com/att/training/spring/boot/demo/scopes/MySingletonTest.java)
 * HTTP endpoints (Controllers)
-* HTTP [Async](src/main/java/com/att/training/spring/boot/demo/user/AsyncUserController.java) controller
-* [Testing Async controllers](src/test/java/com/att/training/spring/boot/demo/AsyncControllerTest.java)
 * Exception handlers
 * Bean Validation 2.0
 * Binding POJOs to configuration
-* [Binding POJOs to  external files (*.yaml)](src/main/java/com/att/training/spring/boot/demo/user/ExternalUserConfiguration.java) 
-* Serialization / deserialization of immutable POJOs
-* [Deserialization POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/JacksonTest.java)
-* [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
+* [Binding POJOs to external files (*.yaml)](src/main/java/com/att/training/spring/boot/demo/user/ExternalUserConfiguration.java) 
+* Spring Async - usage and configuration
+  * [Configuring multiple thread-pools](src/main/java/com/att/training/spring/boot/demo/AsyncConfig.java) & [using `@Async`](src/main/java/com/att/training/spring/boot/demo/AsyncRunner.java)
+  * HTTP [Async controller](src/main/java/com/att/training/spring/boot/demo/user/AsyncUserController.java)
+  * [Testing Async controllers](src/test/java/com/att/training/spring/boot/demo/AsyncControllerTest.java)
+* Serialization / deserialization with Jackson
+  * Immutable POJOs (see lombok.config for handling POJOs with **single** constructor parameter)
+  * [Deserialization POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/JacksonTest.java)
+  * [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/AppConfig.java)
+* [Lombok copyable annotations]() (see lombok.config)
 * [spring-aop](src/main/java/com/att/training/spring/boot/demo/RandomDelayAspect.java)
 * Swagger2 using [springfox](https://springfox.github.io/springfox/docs/current/#springfox-spring-mvc-and-spring-boot) ([swagger url](http://localhost:8090/demo/swagger-ui/))
 * spring-actuator
