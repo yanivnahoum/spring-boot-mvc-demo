@@ -25,6 +25,8 @@ management:
       graphite:
         host: 192.168.99.100
         step: 5s
+        # Run graphite and update ip/port before enabling
+        enabled: false
 
 info:
   app:
