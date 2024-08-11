@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.6.3"
+    id("org.springframework.boot") version "2.6.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    id("io.freefair.lombok") version "6.3.0"
+    id("io.freefair.lombok") version "6.4.1"
 }
 
 group = "com.att.training.spring.boot"
@@ -18,7 +18,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
-    implementation("org.springdoc:springdoc-openapi-ui:1.6.4")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.6")
 
     implementation("com.google.guava:guava:31.0.1-jre")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
