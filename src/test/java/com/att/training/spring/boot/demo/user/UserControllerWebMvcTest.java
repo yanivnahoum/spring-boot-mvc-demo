@@ -65,7 +65,11 @@ class UserControllerWebMvcTest {
     void givenUserInBody_whenPUT_shouldReturn200OK() throws Exception {
         mockMvc.perform(put("/users")
                 .contentType(APPLICATION_JSON)
-                .content("{\"id\":1,\"firstName\":\"Michael\",\"lastName\":\"Jordan\",\"age\":50}"))
+                .content(singleToDoubleQuotes("{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}")))
                 .andExpect(status().isNoContent());
+    }
+
+    private static String singleToDoubleQuotes(String json) {
+        return json.replace("'", "\"");
     }
 }
