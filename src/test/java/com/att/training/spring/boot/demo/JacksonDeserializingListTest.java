@@ -19,7 +19,7 @@ import static com.att.training.spring.boot.demo.utils.JsonUtils.singleToDoubleQu
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
-class JacksonTest {
+class JacksonDeserializingListTest {
 
     @Autowired private ObjectMapper mapper;
 
