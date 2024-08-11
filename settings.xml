@@ -6,7 +6,7 @@
             <id>http-proxy</id>
             <active>true</active>
             <protocol>http</protocol>
-            <host>one.proxy.att.com</host>
+            <host>emea-chain.proxy.att.com</host>
             <port>8080</port>
             <nonProxyHosts>mavencentral.it.att.com</nonProxyHosts>
         </proxy>
@@ -15,7 +15,7 @@
             <id>https-proxy</id>
             <active>true</active>
             <protocol>https</protocol>
-            <host>one.proxy.att.com</host>
+            <host>emea-chain.proxy.att.com</host>
             <port>8080</port>
             <nonProxyHosts>mavencentral.it.att.com</nonProxyHosts>
         </proxy>
