@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
@@ -87,7 +87,7 @@ class SpringBootServerFilterTest {
     private TestRestTemplate restTemplate;
 
     @Test
-    void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
+    void greetingFilter_shouldAddGreetingInRequestAttribute() {
         ResponseEntity<String> response = restTemplate.getForEntity(HelloController.GREET_PATH, String.class);
         assertThat(response.getStatusCodeValue()).isEqualTo(HttpStatus.OK.value());
         assertThat(response.getBody()).isEqualTo(GreetingFilter.GREETING_VALUE);
