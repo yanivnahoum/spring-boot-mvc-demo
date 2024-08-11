@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.5.2"
+    id("org.springframework.boot") version "2.5.3"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     id("io.freefair.lombok") version "5.3.3.3"
 }
@@ -35,6 +35,10 @@ tasks {
             release.set(11)
             compilerArgs.add("-Xlint:all,-processing,-auxiliaryclass")
         }
+    }
+
+    jar {
+        enabled = false
     }
 
     generateLombokConfig {
