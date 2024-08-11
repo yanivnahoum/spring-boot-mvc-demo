@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,108 +38,109 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class StandaloneMockMvcFilterTest {
-
-    private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new HelloController())
-            .addFilter(new GreetingFilter())
-            .build();
-
-    @Test
-    void greetingFilter_shouldAddGreetingInRequestAttribute_withStandaloneMockMvc() throws Exception {
-        mockMvc.perform(get(HelloController.GREET_PATH))
-                .andExpect(status().isOk())
-                .andExpect(content().string(GreetingFilter.GREETING_VALUE));
-    }
-}
-
-@WebMvcTest(HelloController.class)
 class FilterTest {
+    @Nested
+    class StandaloneMockMvcFilterTest {
+        private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(new HelloController())
+                .addFilter(new GreetingFilter())
+                .build();
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
-        mockMvc.perform(get(HelloController.GREET_PATH))
-                .andExpect(status().isOk())
-                .andExpect(content().string(GreetingFilter.GREETING_VALUE));
-    }
-}
-
-@SpringBootTest(classes = { HelloController.class, GreetingFilter.class })
-@AutoConfigureMockMvc
-class SpringBootFilterTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Test
-    void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
-        mockMvc.perform(get(HelloController.GREET_PATH))
-                .andExpect(status().isOk())
-                .andExpect(content().string(GreetingFilter.GREETING_VALUE));
-    }
-}
-
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-class SpringBootServerFilterTest {
-
-    @Autowired
-    private TestRestTemplate restTemplate;
-
-    @Test
-    void greetingFilter_shouldAddGreetingInRequestAttribute() {
-        ResponseEntity<String> response = restTemplate.getForEntity(HelloController.GREET_PATH, String.class);
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo(GreetingFilter.GREETING_VALUE);
-    }
-}
-
-@SpringBootTest(webEnvironment = RANDOM_PORT)
-@TestInstance(PER_CLASS)
-class SpringBootServerRestAssuredFilterTest {
-
-    @LocalServerPort
-    private int port;
-    @Value("${server.servlet.context-path}")
-    private String contextPath;
-
-    @BeforeAll
-    void init() {
-        RestAssured.basePath = contextPath;
-        RestAssured.port = port;
+        @Test
+        void greetingFilter_shouldAddGreetingInRequestAttribute_withStandaloneMockMvc() throws Exception {
+            mockMvc.perform(get(HelloController.GREET_PATH))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(GreetingFilter.GREETING_VALUE));
+        }
     }
 
-    @Test
-    void greetingFilter_shouldAddGreetingInRequestAttribute() {
-        given()
-                .when().get(HelloController.GREET_PATH)
-                .then().assertThat().statusCode(equalTo(200))
-                .and().assertThat().body(equalTo(GreetingFilter.GREETING_VALUE));
+    @Nested
+    @WebMvcTest(HelloController.class)
+    class WebMvcFilterTest {
+        @Autowired
+        private MockMvc mockMvc;
+
+        @Test
+        void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
+            mockMvc.perform(get(HelloController.GREET_PATH))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(GreetingFilter.GREETING_VALUE));
+        }
     }
-}
 
-@RestController
-class HelloController {
 
-    static final String GREET_PATH = "/greet";
+    @Nested
+    @SpringBootTest(classes = {HelloController.class, GreetingFilter.class})
+    @AutoConfigureMockMvc
+    class SpringBootFilterTest {
+        @Autowired
+        private MockMvc mockMvc;
 
-    @GetMapping(GREET_PATH)
-    public String greet(@RequestAttribute String greeting) {
-        return greeting;
+        @Test
+        void greetingFilter_shouldAddGreetingInRequestAttribute() throws Exception {
+            mockMvc.perform(get(HelloController.GREET_PATH))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(GreetingFilter.GREETING_VALUE));
+        }
     }
-}
 
-@Component
-class GreetingFilter extends OncePerRequestFilter {
+    @Nested
+    @SpringBootTest(webEnvironment = RANDOM_PORT)
+    class SpringBootServerFilterTest {
+        @Autowired
+        private TestRestTemplate restTemplate;
 
-    private static final String GREETING_KEY = "greeting";
-    static final String GREETING_VALUE = "Hello!";
+        @Test
+        void greetingFilter_shouldAddGreetingInRequestAttribute() {
+            ResponseEntity<String> response = restTemplate.getForEntity(HelloController.GREET_PATH, String.class);
+            assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+            assertThat(response.getBody()).isEqualTo(GreetingFilter.GREETING_VALUE);
+        }
+    }
 
-    @Override
-    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws IOException, ServletException {
-        request.setAttribute(GREETING_KEY, GREETING_VALUE);
-        filterChain.doFilter(request, response);
+    @Nested
+    @SpringBootTest(webEnvironment = RANDOM_PORT)
+    @TestInstance(PER_CLASS)
+    class SpringBootServerRestAssuredFilterTest {
+        @LocalServerPort
+        private int port;
+        @Value("${server.servlet.context-path}")
+        private String contextPath;
+
+        @BeforeAll
+        void init() {
+            RestAssured.basePath = contextPath;
+            RestAssured.port = port;
+        }
+
+        @Test
+        void greetingFilter_shouldAddGreetingInRequestAttribute() {
+            given()
+                    .when().get(HelloController.GREET_PATH)
+                    .then().assertThat().statusCode(equalTo(200))
+                    .and().assertThat().body(equalTo(GreetingFilter.GREETING_VALUE));
+        }
+    }
+
+    @RestController
+    static class HelloController {
+        static final String GREET_PATH = "/greet";
+
+        @GetMapping(GREET_PATH)
+        public String greet(@RequestAttribute String greeting) {
+            return greeting;
+        }
+    }
+
+    @Component
+    static class GreetingFilter extends OncePerRequestFilter {
+        private static final String GREETING_KEY = "greeting";
+        static final String GREETING_VALUE = "Hello!";
+
+        @Override
+        protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                        @NonNull FilterChain filterChain) throws IOException, ServletException {
+            request.setAttribute(GREETING_KEY, GREETING_VALUE);
+            filterChain.doFilter(request, response);
+        }
     }
 }

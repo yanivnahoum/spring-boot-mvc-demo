@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.format.number.NumberFormatAnnotationFormatterFactory;
 import org.springframework.format.support.DefaultFormattingConversionService;
@@ -17,7 +16,6 @@ import java.time.Clock;
 import java.time.format.DateTimeFormatter;
 
 @Configuration(proxyBeanMethods = false)
-@EnableAspectJAutoProxy
 @Slf4j
 public class AppConfig {
 

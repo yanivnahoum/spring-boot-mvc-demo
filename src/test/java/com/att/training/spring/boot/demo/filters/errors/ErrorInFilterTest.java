@@ -37,7 +37,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 @Import({
         SpringBootServerThrowingFilterTest.ThrowingFilter.class,
@@ -47,7 +46,6 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 })
 class SpringBootServerThrowingFilterTest {
-
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -66,7 +64,6 @@ class SpringBootServerThrowingFilterTest {
     @TestComponent
     @RestController
     static class DefaultController {
-
         static final String REQUEST_PATH = "/simple";
         static final String REQUEST_RESULT = "Success";
 
@@ -81,7 +78,6 @@ class SpringBootServerThrowingFilterTest {
     @Controller
     @Slf4j
     static class DefaultErrorController implements ErrorController {
-
         @RequestMapping("/error")
         public void error(HttpServletRequest request) throws Throwable {
             log.info("#error - rethrowing the exception...");
@@ -90,14 +86,12 @@ class SpringBootServerThrowingFilterTest {
                 throw ex;
             }
         }
-
     }
 
     @TestComponent
     @RestControllerAdvice
     @Slf4j
     static class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
-
         @ResponseStatus(BAD_REQUEST)
         @ExceptionHandler
         ErrorDto handleSomeSpecificException(SomeSpecificException ex) {
@@ -112,7 +106,6 @@ class SpringBootServerThrowingFilterTest {
             ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
             return new ResponseEntity<>(errorDto, statusCode);
         }
-
     }
 
     @TestComponent
@@ -126,12 +119,9 @@ class SpringBootServerThrowingFilterTest {
             log.info("#doFilterInternal - throwing from filter...");
             throw new SomeSpecificException(ERROR_MESSAGE);
         }
-
-
     }
 
     static class SomeSpecificException extends RuntimeException {
-
         SomeSpecificException(String message) {
             super(message);
         }
