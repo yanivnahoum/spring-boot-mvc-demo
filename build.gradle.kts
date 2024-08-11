@@ -1,7 +1,7 @@
 plugins {
     java
-    id("org.springframework.boot") version "2.2.4.RELEASE"
-    id("io.spring.dependency-management") version "1.0.8.RELEASE"
+    id("org.springframework.boot") version "2.2.5.RELEASE"
+    id("io.spring.dependency-management") version "1.0.9.RELEASE"
     id("io.freefair.lombok") version "4.1.6"
 }
 
@@ -13,7 +13,8 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
-ext["rest-assured.version"] = "4.2.0"
+ext["rest-assured.version"] = "4.3.0"
+ext["groovy.version"] = "3.0.2" // upgrading from 2.x for rest-assured
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -24,7 +25,7 @@ dependencies {
     implementation("io.springfox:springfox-swagger-ui:$swaggerVersion")
 
     implementation("com.google.guava:guava:28.2-jre")
-    implementation("org.jetbrains:annotations:17.0.0")
+    implementation("org.jetbrains:annotations:19.0.0")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 
