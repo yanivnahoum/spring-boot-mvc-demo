@@ -5,8 +5,7 @@ COPY ${JAR_FILE} application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
 FROM adoptopenjdk/openjdk11:alpine-jre
-#FROM adoptopenjdk/openjdk11:jre-11.0.10_9-alpine
-#
+
 #RUN apk add --no-cache jattach
 
 WORKDIR application

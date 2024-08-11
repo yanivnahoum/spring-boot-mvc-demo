@@ -1,8 +1,8 @@
 app:
   users:
-    - { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
-    - { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
-    - { id: 3, first-name: Larry, last-name: Bird, age: 53 }
+  - { id: 1, first-name: Michael, last-name: Jordan, age: 50 }
+  - { id: 2, first-name: Erwin, last-name: Johnson, age: 55 }
+  - { id: 3, first-name: Larry, last-name: Bird, age: 53 }
   http-service:
     url: https://some-domain.com:8080
 #    connect-timeout: 5s
@@ -20,7 +20,8 @@ server:
 
 spring:
   config:
-    import: "${app.config.dir:classpath:}external.yml"
+    import:
+    - "${app.config.dir:classpath:}external.yml"
   lifecycle:
     timeout-per-shutdown-phase: 30s
 
@@ -29,11 +30,11 @@ management:
     web:
       exposure:
         include:
-          - info
-          - health
-          - metrics
-#      cors:
-#        allowed-origins: "*"
+        - info
+        - health
+        - metrics
+  #      cors:
+  #        allowed-origins: "*"
   endpoint:
     health:
       show-details: always

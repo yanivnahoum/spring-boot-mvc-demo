@@ -2,6 +2,7 @@ package com.att.training.spring.boot.demo.config;
 
 import com.att.training.spring.boot.demo.user.UserProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,11 @@ public class AppConfig {
     @Bean
     CommandLineRunner configurationPrinter(UserProperties userConfiguration) {
         return args -> log.info("#configurationPrinter - {}", userConfiguration);
+    }
+
+    @Bean
+    CommandLineRunner secretPrinter(@Value("${db.user:inline-user}") String dbUser, @Value("${db.password:inline-password}") String dbPassword) {
+        return args -> log.info("#Secrets: db.user={}, db.password={}", dbUser, dbPassword);
     }
 
     @Bean
