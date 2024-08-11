@@ -22,6 +22,12 @@ management:
   endpoint:
     health:
       show-details: always
+      probes:
+        enabled: true
+      group:
+        readiness:
+          # This would typically include external resources critical to the app like db
+          include: readinessState,info
 
 
   metrics:
