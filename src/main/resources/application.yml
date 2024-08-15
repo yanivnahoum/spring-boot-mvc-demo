@@ -27,10 +27,11 @@ spring:
     - "${app.config.dir:classpath:}external.yml"
   lifecycle:
     timeout-per-shutdown-phase: 30s
+  jackson:
+    default-property-inclusion: non_null
   output:
     ansi:
       enabled: always
-
 management:
   server:
     port: 8091
@@ -76,3 +77,5 @@ info:
     java:
       #      source: @java.version@
       source: 1.0.0
+
+
