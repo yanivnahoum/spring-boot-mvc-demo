@@ -1,5 +1,5 @@
 FROM eclipse-temurin:21-jre AS builder
-WORKDIR application
+WORKDIR /application
 COPY target/*.jar application.jar
 RUN java -Djarmode=layertools -jar application.jar extract
 
@@ -22,11 +22,11 @@ ARG GID=1001
 RUN groupadd --gid "$GID" "$GROUP_NAME" && \
     useradd --uid "$UID" --gid "$GID" "$USER_NAME"
 USER $USER_NAME
-WORKDIR application
+WORKDIR /application
 
-COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/dependencies/ ./
-COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/spring-boot-loader/ ./
-COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/snapshot-dependencies/ ./
-COPY --from=builder --chown=$USER_NAME:$GROUP_NAME application/application/ ./
+COPY --from=builder /application/dependencies/ ./
+COPY --from=builder /application/spring-boot-loader/ ./
+COPY --from=builder /application/snapshot-dependencies/ ./
+COPY --from=builder /application/application/ ./
 
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
