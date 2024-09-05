@@ -8,9 +8,10 @@ RUN apk upgrade --no-cache \
   && apk add --no-cache jattach
 
 ARG USER_NAME=demouser
-ARG UID=1000
+ARG UID=1001
 ARG GROUP_NAME=demogroup
-RUN addgroup -g 1001 -S "$GROUP_NAME" \
+ARG GID=1001
+RUN addgroup -g "$GID" -S "$GROUP_NAME" \
     && adduser -u "$UID" -S "$USER_NAME" -G "$GROUP_NAME"
 USER $USER_NAME
 WORKDIR application

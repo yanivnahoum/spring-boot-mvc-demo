@@ -16,7 +16,7 @@ RUN apt-get update \
       && find /var/cache/apt -type f -print0 | xargs -0 rm -f
 
 ARG USER_NAME=demouser
-ARG UID=1000
+ARG UID=1001
 ARG GROUP_NAME=demogroup
 ARG GID=1001
 RUN groupadd --gid "$GID" "$GROUP_NAME" && \
