@@ -1,11 +1,11 @@
 FROM eclipse-temurin:21-jre-alpine AS builder
 WORKDIR /application
 COPY target/*.jar application.jar
-RUN java -Djarmode=layertools -jar application.jar extract
+RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
 FROM eclipse-temurin:21-jre-alpine
 RUN apk upgrade --no-cache \
-  && apk add --no-cache jattach
+    && apk add --no-cache jattach
 
 ARG USER_NAME=demouser
 ARG UID=1001
@@ -16,9 +16,9 @@ RUN addgroup -g "$GID" -S "$GROUP_NAME" \
 USER $USER_NAME
 WORKDIR /application
 
-COPY --from=builder /application/dependencies/ ./
-COPY --from=builder /application/spring-boot-loader/ ./
-COPY --from=builder /application/snapshot-dependencies/ ./
-COPY --from=builder /application/application/ ./
+COPY --from=builder /builder/extracted/dependencies/ ./
+COPY --from=builder /builder/extracted/spring-boot-loader/ ./
+COPY --from=builder /builder/extracted/snapshot-dependencies/ ./
+COPY --from=builder /builder/extracted/application/ ./
 
 ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
