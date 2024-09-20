@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.3.2"
+    id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
-    id("io.freefair.lombok") version "8.6"
+    id("io.freefair.lombok") version "8.10"
 }
 
 group = "com.att.training.spring.boot"
@@ -19,7 +19,7 @@ configurations {
 }
 
 dependencies {
-    val hazelcast = "5.1.0"
+    val hazelcast = "5.2.0"
     val datasourceProxy = "1.10"
     val datasourceAssert = "1.0"
     val hypersistence = "3.8.2"
