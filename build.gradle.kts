@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.3.2"
+    id("org.springframework.boot") version "3.3.4"
     id("io.spring.dependency-management") version "1.1.6"
-    id("io.freefair.lombok") version "8.7.1"
+    id("io.freefair.lombok") version "8.10"
 }
 
 group = "com.att.training.spring.boot"
@@ -19,7 +19,7 @@ configurations {
 }
 
 dependencies {
-    val guavaVersion = "33.2.1-jre"
+    val guavaVersion = "33.3.0-jre"
     val springdocVersion = "2.6.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
