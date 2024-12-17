@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.5</version>
+        <version>3.4.0</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -18,7 +18,8 @@
     <properties>
         <java.version>21</java.version>
         <guava.version>33.3.1-jre</guava.version>
-        <springdoc.version>2.6.0</springdoc.version>
+        <springdoc.version>2.7.0</springdoc.version>
+        <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
     </properties>
 
     <dependencies>
@@ -99,6 +100,7 @@
                 <configuration>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
+                        <compilerArg>-proc:full</compilerArg>
                         <compilerArg>-Xlint:all,-processing,-auxiliaryclass</compilerArg>
                     </compilerArgs>
                 </configuration>
@@ -115,6 +117,22 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!--
+                                Sets a property pointing to the artifact file for each project dependency.
+                                Used for setting the javaagent property for Mockito in the argLine above.
+                            -->
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

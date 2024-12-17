@@ -16,7 +16,6 @@ server:
   error:
     whitelabel:
       enabled: false
-  shutdown: graceful
   tomcat:
     mbeanregistry:
       enabled: true
@@ -47,7 +46,6 @@ management:
     #        allowed-origins: "*"
   endpoint:
     health:
-      show-details: always
       probes:
         # This is useful for exposing the liveness group on the server port, since we exposed the actuator endpoints
         #  on the management port (via management.server.port). It's as if we set:

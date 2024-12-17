@@ -3,10 +3,10 @@ package com.att.training.spring.boot.demo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.mockito.Mockito.verify;
@@ -21,7 +21,7 @@ class RandomDelayAspectTest {
 
     @Autowired
     private TargetClass targetClass;
-    @MockBean
+    @MockitoBean
     private Sleeper sleeper;
 
     @Test
