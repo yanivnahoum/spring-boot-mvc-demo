@@ -44,8 +44,8 @@ public class DatasourceProxyBeanPostProcessor implements BeanPostProcessor {
         beanRegistry.registerSingleton("proxyTestDataSource", proxyTestDataSource);
     }
 
+    @Getter
     public static class ProxyDataSourceInterceptor implements MethodInterceptor {
-        @Getter
         private final ProxyTestDataSource dataSource;
 
         public ProxyDataSourceInterceptor(DataSource dataSource) {

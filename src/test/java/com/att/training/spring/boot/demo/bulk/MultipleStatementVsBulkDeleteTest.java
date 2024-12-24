@@ -128,7 +128,6 @@ interface UserRepository extends JpaRepository<User, Long> {
 }
 
 @Entity
-
 @Table
 @Getter
 @NoArgsConstructor

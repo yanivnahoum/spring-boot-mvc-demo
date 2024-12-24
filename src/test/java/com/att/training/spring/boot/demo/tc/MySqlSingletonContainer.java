@@ -8,9 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.containers.MySQLContainer;
 
@@ -29,17 +28,11 @@ public abstract class MySqlSingletonContainer {
             "--collation-server=latin1_general_ci",
             "--log-bin-trust-function-creators=true"
     };
+    @ServiceConnection
     private static final MySQLContainer<?> mySqlContainer = createAndStartDb();
     @Autowired protected EntityManager entityManager;
     @Autowired protected TransactionTemplate transactionTemplate;
     @Autowired protected ProxyTestDataSource testDataSource;
-
-    @DynamicPropertySource
-    static void mySqlProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl);
-        registry.add("spring.datasource.username", mySqlContainer::getUsername);
-        registry.add("spring.datasource.password", mySqlContainer::getPassword);
-    }
 
     @SuppressWarnings("resource")
     private static MySQLContainer<?> createAndStartDb() {
