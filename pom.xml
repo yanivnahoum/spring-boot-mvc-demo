@@ -15,7 +15,15 @@
 
     <properties>
         <java.version>21</java.version>
-        <argLine>-javaagent:${org.mockito:mockito-core:jar}</argLine>
+        <argLine>
+            -javaagent:${org.mockito:mockito-core:jar}
+            --add-exports java.base/jdk.internal.ref=ALL-UNNAMED
+            --add-opens java.base/java.lang=ALL-UNNAMED
+            --add-opens java.base/java.nio=ALL-UNNAMED
+            --add-opens java.base/sun.nio.ch=ALL-UNNAMED
+            --add-opens java.management/sun.management=ALL-UNNAMED
+            --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
+        </argLine>
         <hypersistence.version>3.9.0</hypersistence.version>
         <hazelcast-hibernate53.version>5.2.0</hazelcast-hibernate53.version>
         <datasource-proxy.version>1.10</datasource-proxy.version>
@@ -103,21 +111,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <argLine>
-                        --add-exports java.base/jdk.internal.ref=ALL-UNNAMED
-                        --add-opens java.base/java.lang=ALL-UNNAMED
-                        --add-opens java.base/java.nio=ALL-UNNAMED
-                        --add-opens java.base/sun.nio.ch=ALL-UNNAMED
-                        --add-opens java.management/sun.management=ALL-UNNAMED
-                        --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
-                    </argLine>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
