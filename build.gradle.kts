@@ -8,6 +8,12 @@ plugins {
 group = "com.att.training.spring.boot"
 version = "0.0.1-SNAPSHOT"
 
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -35,16 +41,13 @@ dependencies {
     runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
     testImplementation("net.ttddyy:datasource-proxy:$datasourceProxy")
     testImplementation("net.ttddyy:datasource-assert:$datasourceAssert")
     testImplementation("org.testcontainers:mysql")
 }
 
 tasks {
-    withType<JavaCompile>().configureEach {
-        options.release = 21
-    }
-
     test {
         useJUnitPlatform()
         testLogging {
