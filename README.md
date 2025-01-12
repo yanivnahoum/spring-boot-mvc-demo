@@ -19,6 +19,7 @@ This project demonstrates the following features:
   * [Testing Async controllers](src/test/java/com/att/training/spring/boot/demo/AsyncControllerTest.java)
 * Serialization / deserialization with Jackson
   * Immutable POJOs (see lombok.config for handling POJOs with **single** constructor parameter)
+  * [Failing on deserialization of unknown properties](src/test/java/com/att/training/spring/boot/demo/serdes/UnknownPropertiesTest.java)
   * [Deserialization to POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializingListTest.java)
   * [Serialization / deserialization of BigDecimal](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonBigDecimalTest.java)
   * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializationWithInterfacesTest.java)
