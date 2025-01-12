@@ -28,7 +28,7 @@ This project demonstrates the following features:
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/config/AppConfig.java)
 * [Lombok copyable annotations](src/test/java/com/att/training/spring/boot/demo/LombokTest.java) (additionally, see [lombok.config](jetbrains://idea/navigate/reference?project=spring-boot-mvc-demo&path=lombok.config))
 * [spring-aop](src/main/java/com/att/training/spring/boot/demo/RandomDelayAspect.java)
-* Swagger2 using [springdoc](https://springdoc.org/) ([swagger url](http://localhost:8090/demo/swagger-ui.html/))
+* Swagger2 using [springdoc](https://springdoc.org/) ([swagger url](http://localhost:8090/demo/swagger-ui.html))
 * spring-actuator exposed on management port & k8s health probes on main port:
   * [Info](http://localhost:8091/demo/actuator/info)
   * [Health](http://localhost:8091/demo/actuator/env)
@@ -70,4 +70,3 @@ or just run the main in class [SpringMvcBootApplication](src/main/java/com/att/t
   * Click the Spring Boot Demo dashboard
   * Make some requests to [/demo/users/{id}](http://localhost:8090/demo/users/1) and [/demo/users](http://localhost:8090/demo/users) to see the response times.
 
- 
