@@ -1,12 +1,18 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.0"
-    id("io.spring.dependency-management") version "1.1.6"
-    id("io.freefair.lombok") version "8.11"
+    id("org.springframework.boot") version "3.4.2"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("io.freefair.lombok") version "8.12"
 }
 
 group = "com.att.training.spring.boot"
 version = "0.0.1-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -20,7 +26,7 @@ configurations {
 
 dependencies {
     val guavaVersion = "33.4.0-jre"
-    val springdocVersion = "2.7.0"
+    val springdocVersion = "2.8.4"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -39,7 +45,6 @@ dependencies {
 tasks {
     withType<JavaCompile>().configureEach {
         with(options) {
-            release = 21
             compilerArgs.add("-Xlint:all,-processing,-auxiliaryclass")
         }
     }
