@@ -5,14 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientResponseException;
 
 import java.io.IOException;
+import java.net.URI;
 
 import static com.google.common.base.MoreObjects.firstNonNull;
 
@@ -24,10 +26,10 @@ public class QuoteClientResponseErrorHandler extends DefaultResponseErrorHandler
     private final ObjectMapper objectMapper;
 
     @Override
-    protected void handleError(@NonNull ClientHttpResponse response, @NonNull HttpStatusCode statusCode) throws IOException {
+    public void handleError(@NonNull URI url, @NonNull HttpMethod method, @NonNull ClientHttpResponse response) throws IOException {
         try {
-            super.handleError(response, statusCode);
-        } catch (RestClientResponseException e) {
+            super.handleError(response);
+        } catch (HttpClientErrorException e) {
             QuoteError quoteError;
             try {
                 quoteError = objectMapper.readValue(e.getResponseBodyAsString(), QuoteError.class);
@@ -42,8 +44,7 @@ public class QuoteClientResponseErrorHandler extends DefaultResponseErrorHandler
 
 @Getter
 class QuoteClientException extends RestClientResponseException {
-
-    private final QuoteError quoteError;
+    private final transient QuoteError quoteError;
 
     public QuoteClientException(RestClientResponseException e, QuoteError quoteError) {
         super(firstNonNull(e.getMessage(), "N/A"), e.getStatusCode().value(), e.getStatusText(), e.getResponseHeaders(), e.getResponseBodyAsByteArray(), null);

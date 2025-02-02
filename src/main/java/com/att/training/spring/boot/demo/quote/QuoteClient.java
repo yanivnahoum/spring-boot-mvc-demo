@@ -15,8 +15,8 @@ public class QuoteClient {
     public QuoteClient(RestTemplateBuilder builder, QuoteClientResponseErrorHandler errorHandler, QuoteClientProperties properties) {
         this.restTemplate = builder
                 .rootUri(properties.baseUrl())
-                .setConnectTimeout(properties.connectTimeout())
-                .setReadTimeout(properties.readTimeout())
+                .connectTimeout(properties.connectTimeout())
+                .readTimeout(properties.readTimeout())
                 .defaultHeader(ACCEPT, APPLICATION_JSON_VALUE)
                 .errorHandler(errorHandler)
                 .build();

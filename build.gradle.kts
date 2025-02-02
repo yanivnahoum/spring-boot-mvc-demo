@@ -1,12 +1,18 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.3.5"
-    id("io.spring.dependency-management") version "1.1.6"
-    id("io.freefair.lombok") version "8.10.2"
+    id("org.springframework.boot") version "3.4.2"
+    id("io.spring.dependency-management") version "1.1.7"
+    id("io.freefair.lombok") version "8.12"
 }
 
 group = "com.att.training.spring.boot"
 version = "0.0.1-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
 
 repositories {
     mavenCentral()
@@ -19,31 +25,32 @@ configurations {
 }
 
 dependencies {
-    val guavaVersion = "33.3.1-jre"
-    val wireMockVersion = "3.9.2"
+    val guavaVersion = "33.4.0-jre"
+    val wireMockVersion = "3.11.0"
+    val mockwebserverVersion = "4.12.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("com.squareup.okhttp3:okhttp")
     implementation("com.google.guava:guava:$guavaVersion")
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    runtimeOnly("org.apache.httpcomponents.client5:httpclient5")
     runtimeOnly("com.mysql:mysql-connector-j")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:mysql")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.wiremock:wiremock-standalone:$wireMockVersion")
-    testImplementation("com.squareup.okhttp3:mockwebserver")
+    testImplementation("com.squareup.okhttp3:mockwebserver:$mockwebserverVersion")
     testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
         with(options) {
-            release = 21
             compilerArgs.add("-Xlint:all,-processing,-auxiliaryclass")
         }
     }
