@@ -1,5 +1,5 @@
 FROM eclipse-temurin:21-jre-alpine AS builder
-WORKDIR /application
+WORKDIR /builder
 COPY target/*.jar application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
