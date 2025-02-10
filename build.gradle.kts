@@ -28,7 +28,7 @@ dependencies {
     val hazelcast = "5.2.0"
     val datasourceProxy = "1.10"
     val datasourceAssert = "1.0"
-    val hypersistence = "3.9.0"
+    val hypersistence = "3.9.1"
 
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")

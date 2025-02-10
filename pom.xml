@@ -24,7 +24,7 @@
             --add-opens java.management/sun.management=ALL-UNNAMED
             --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED
         </argLine>
-        <hypersistence.version>3.9.0</hypersistence.version>
+        <hypersistence.version>3.9.1</hypersistence.version>
         <hazelcast-hibernate53.version>5.2.0</hazelcast-hibernate53.version>
         <datasource-proxy.version>1.10</datasource-proxy.version>
         <datasource-assert.version>1.0</datasource-assert.version>
