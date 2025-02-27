@@ -1,5 +1,6 @@
 package com.att.training.spring.boot.demo.user;
 
+import com.att.training.spring.boot.demo.api.User;
 import com.att.training.spring.boot.demo.errors.ExceptionHandlers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.BasicJsonTester;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +21,7 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.skyscreamer.jsonassert.JSONCompareMode.LENIENT;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.annotation.DirtiesContext.MethodMode.AFTER_METHOD;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,20 +48,50 @@ class UserControllerTest {
         @Test
         void givenId1_shouldReturn200OK_withMichaelAsJson() throws Exception {
             mockMvc.perform(get("/users/{id}", 1))
-                   .andDo(print())
-                   .andExpect(status().isOk())
-                   .andExpect(content().json("{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}"))
-                   .andExpect(jsonPath("$.firstName", is("Michael")));
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(APPLICATION_JSON))
+                    .andExpect(jsonPath("$.firstName", is("Michael")))
+                    .andExpect(content().json("""
+                            {
+                                "id": 1,
+                                "firstName": "Michael",
+                                "lastName": "Jordan",
+                                "age": 50
+                            }
+                            """));
+        }
+
+        @Test
+        void givenId1_shouldReturn200OK_withMichaelAsJsonWithMockMvcTester(@Autowired MockMvcTester mockMvc) {
+            var response = mockMvc.get()
+                    .uri("/users/{id}", 1);
+
+            assertThat(response).hasStatusOk()
+                    .hasContentType(APPLICATION_JSON)
+                    .bodyJson()
+//            .extractingPath("$.firstName").isEqualTo("Michael")
+                    .isStrictlyEqualTo("""
+                            {
+                                "id": 1,
+                                "firstName": "Michael",
+                                "lastName": "Jordan",
+                                "age": 50
+                            }
+                            """)
+                    .isStrictlyEqualTo("fixtures/michael.json")
+                    .convertTo(User.class)
+                    .satisfies(user -> assertThat(user.firstName()).isEqualTo("Michael"))
+                    .extracting(User::firstName).isEqualTo("Michael");
         }
 
         @Test
         void givenId1_shouldReturnMichaelAsJson() throws Exception {
             var actualJson = mockMvc.perform(get("/users/{id}", 1))
-                                    .andDo(print())
-                                    .andExpect(status().isOk())
-                                    .andReturn()
-                                    .getResponse()
-                                    .getContentAsString();
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andReturn()
+                    .getResponse()
+                    .getContentAsString();
 
             var expectedJson = "{'id':1,'firstName':'Michael','lastName':'Jordan','age':50}";
             JSONAssert.assertEquals(expectedJson, actualJson, LENIENT);
@@ -70,17 +103,17 @@ class UserControllerTest {
             int id = 4;
             String expectedJson = String.format("{ code: 5001, message = 'User not found: %d' }", id);
             mockMvc.perform(get("/users/{id}", id))
-                   .andDo(print())
-                   .andExpect(status().isNotFound())
-                   .andExpect(content().json(expectedJson));
+                    .andDo(print())
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().json(expectedJson));
         }
 
         @Test
         void whenUserServiceThrowsGenericException_shouldReturn500InternalServerError() throws Exception {
             UserService userService = mock(UserService.class);
             mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService))
-                                     .setControllerAdvice(new ExceptionHandlers())
-                                     .build();
+                    .setControllerAdvice(new ExceptionHandlers())
+                    .build();
 
             String errorMessage = "Thrown intentionally by mock!";
             int id = 2;
@@ -88,9 +121,9 @@ class UserControllerTest {
             String expectedJson = String.format("{ code: 9999, message = '%s' }", errorMessage);
 
             mockMvc.perform(get("/users/{id}", id))
-                   .andDo(print())
-                   .andExpect(status().isInternalServerError())
-                   .andExpect(content().json(expectedJson));
+                    .andDo(print())
+                    .andExpect(status().isInternalServerError())
+                    .andExpect(content().json(expectedJson));
         }
     }
 
@@ -101,9 +134,9 @@ class UserControllerTest {
         @Test
         void shouldReturn200OK_withAllUsers() throws Exception {
             mockMvc.perform(get("/users"))
-                   .andDo(print())
-                   .andExpect(status().isOk())
-                   .andExpect(jsonPath("$", hasSize(userConfiguration.getUsers().size())));
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$", hasSize(userConfiguration.getUsers().size())));
         }
     }
 
@@ -111,7 +144,7 @@ class UserControllerTest {
     @DirtiesContext(methodMode = AFTER_METHOD)
     void whenDeleteUser_givenId1_shouldReturn200Ok() throws Exception {
         mockMvc.perform(delete("/users/1"))
-               .andDo(print())
-               .andExpect(status().isOk());
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
