@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.3"
+    id("org.springframework.boot") version "3.4.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("io.freefair.lombok") version "8.13"
 }
@@ -25,7 +25,7 @@ configurations {
 }
 
 dependencies {
-    val guavaVersion = "33.4.0-jre"
+    val guavaVersion = "33.4.5-jre"
     val wireMockVersion = "3.12.1"
     val mockwebserverVersion = "4.12.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
