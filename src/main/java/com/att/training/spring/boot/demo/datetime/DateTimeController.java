@@ -45,11 +45,19 @@ public class DateTimeController {
     }
 
     /**
-     * @see AppConfig#conversionService() to configure a custom datetime pattern
+     * @see AppConfig#conversionService() Configuring a custom datetime pattern
      */
     @GetMapping("v4")
     public Jsr310 getV4(@RequestParam Instant instant, @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss") LocalDateTime datetime) {
         return new Jsr310(instant, datetime);
+    }
+
+    /**
+     * @see AppConfig#conversionService() to configure a custom datetime pattern
+     */
+    @GetMapping("v5")
+    public CustomJsr310 getV5(@RequestParam Instant instant, @RequestParam LocalDateTime datetime) {
+        return new CustomJsr310(instant, datetime);
     }
 
     @PostMapping
