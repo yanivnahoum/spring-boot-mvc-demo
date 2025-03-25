@@ -88,13 +88,10 @@ class DateTimeControllerTest {
     }
 
     @Test
-    void whenGetCustomJsr310WithQueryParamsInDefaultFormat_then200OkWithCorrectDeserializationUsingCustomFormat() throws Exception {
+    void whenGetCustomJsr310_then200OkWithCorrectDeserializationUsingCustomFormat() throws Exception {
         var expectedJson = "{'instant': '2000-01-01T00:00:00Z','localDateTime': '01-01-2000 00:00:00'}";
 
-        mockMvc.perform(get("/jsr310/v5")
-                        .param("instant", "2000-01-01T00:00:00Z")
-                        .param("datetime", "2000-01-01T00:00"))
-                .andDo(print())
+        mockMvc.perform(get("/jsr310/custom"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(expectedJson));
     }
