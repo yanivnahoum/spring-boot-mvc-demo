@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.4.2"
+    id("org.springframework.boot") version "3.4.3"
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.freefair.lombok") version "8.12"
+    id("io.freefair.lombok") version "8.13"
 }
 
 group = "com.att.training.spring.boot"
@@ -26,7 +26,7 @@ configurations {
 
 dependencies {
     val guavaVersion = "33.4.0-jre"
-    val wireMockVersion = "3.11.0"
+    val wireMockVersion = "3.12.1"
     val mockwebserverVersion = "4.12.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
