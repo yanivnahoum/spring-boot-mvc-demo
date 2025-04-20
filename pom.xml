@@ -21,7 +21,7 @@
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
             -Xshare:off
         </argLine>
-        <guava.version>33.4.5-jre</guava.version>
+        <guava.version>33.4.8-jre</guava.version>
         <springdoc.version>2.8.6</springdoc.version>
     </properties>
 
