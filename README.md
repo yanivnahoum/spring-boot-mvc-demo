@@ -5,7 +5,7 @@ This project demonstrates the following features:
 * [Singleton vs Prototype `@Scope`](src/test/java/com/att/training/spring/boot/demo/scopes/MySingletonTest.java)
 * HTTP endpoints (Controllers)
 * [Exception handlers](src/main/java/com/att/training/spring/boot/demo/errors/ExceptionHandlers.java)
-* Bean Validation 2.0
+* [Bean Validation 2.0](src/test/java/com/att/training/spring/boot/demo/user/BeanValidationTest.java)
 * Binding POJOs to configuration
 * [Binding POJOs to external files (*.yaml)](src/main/java/com/att/training/spring/boot/demo/user/ExternalUserProperties.java) 
 * [Binding Immutable POJOs to configuration](src/main/java/com/att/training/spring/boot/demo/user/HttpServiceProperties.java) 

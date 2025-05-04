@@ -4,7 +4,6 @@ import com.att.training.spring.boot.demo.api.User;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,14 +19,12 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 
 @RestController
 @RequestMapping("users")
-@Validated
 @RequiredArgsConstructor
 public class UserController {
-
     private final UserService userService;
 
     @GetMapping("{id}")
-    public User fetch(@PathVariable @Positive long id) {
+    public User fetch(@Positive @PathVariable long id) {
         return userService.fetch(id);
     }
 
@@ -43,7 +40,7 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable @Positive long id) {
+    public void delete(@Positive @PathVariable long id) {
         userService.delete(id);
     }
 }
