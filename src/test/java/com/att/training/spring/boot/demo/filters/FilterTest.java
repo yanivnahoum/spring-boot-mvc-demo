@@ -15,12 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +57,7 @@ class FilterTest {
 
     @Nested
     @WebMvcTest(HelloController.class)
+    @Import(GreetingFilter.class)
     class WebMvcFilterTest {
         @Autowired
         private MockMvc mockMvc;
@@ -86,6 +88,7 @@ class FilterTest {
 
     @Nested
     @SpringBootTest(webEnvironment = RANDOM_PORT)
+    @Import(GreetingFilter.class)
     class SpringBootServerFilterTest {
         @Autowired
         private TestRestTemplate restTemplate;
@@ -136,7 +139,7 @@ class FilterTest {
         }
     }
 
-    @Component
+    @TestComponent
     static class GreetingFilter extends OncePerRequestFilter {
         private static final String GREETING_KEY = "greeting";
         static final String GREETING_VALUE = "Hello!";
