@@ -27,7 +27,7 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
   jackson:
-    default-property-inclusion: non_null
+    default-property-inclusion: non-null
   output:
     ansi:
       enabled: always
@@ -47,19 +47,17 @@ management:
   endpoint:
     health:
       probes:
+        # probes.enabled is only needed if you'd like to check this locally. On k8s, it is enabled by default
+        enabled: true
         # This is useful for exposing the liveness group on the server port, since we exposed the actuator endpoints
         #  on the management port (via management.server.port). It's as if we set:
         #  management.endpoint.health.group.liveness.additional-path="server:livez"
         #  For the readiness group, see below.
         add-additional-paths: true
-        # probes.enabled is only needed if you'd like to check this locally. On k8s, it is enabled by default
-        enabled: true
       group:
         readiness:
           # This would typically include external resources critical to the app like db: readinessState, db
           include: readinessState
-          # This is no longer needed since 2.7.3 (default additional path wasn't created when group was explicitly defined
-          # additional-path: server:/readyz
   graphite:
     metrics:
       export:

@@ -9,7 +9,7 @@ import java.util.Arrays;
 @Component
 @Slf4j
 class AsyncRunner1 {
-    // Takes the default Executor named "taskExecutor"
+    // Takes the default Executor or an executor named "taskExecutor"
     @Async
     void runAsync(String[] args) {
         log.info("#runAsync1 - running with args: {}", Arrays.toString(args));
@@ -20,7 +20,7 @@ class AsyncRunner1 {
 @Slf4j
 class AsyncRunner2 {
     // We can choose a different thread-pool
-    @Async("ioTaskExecutor")
+    @Async("cpuTaskExecutor")
     void runAsync(String[] args) {
         log.info("#runAsync2 - running with args: {}", Arrays.toString(args));
     }
