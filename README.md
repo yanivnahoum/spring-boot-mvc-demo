@@ -22,6 +22,7 @@ This project demonstrates the following features:
   * [Failing on deserialization of unknown properties](src/test/java/com/att/training/spring/boot/demo/serdes/UnknownPropertiesTest.java)
   * [Deserialization to POJOs so that collections are never null](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializingListTest.java)
   * [Serialization / deserialization of BigDecimal](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonBigDecimalTest.java)
+  * [Deserialization of null or missing properties (and partial updates)](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonNullOrMissingProperties.java)
   * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializationWithInterfacesTest.java)
   * [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
   * [Custom serializer / deserializer of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeCustomSerDesTest.java)
