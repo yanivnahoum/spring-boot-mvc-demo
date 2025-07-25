@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.5.3"
+    id("org.springframework.boot") version "3.5.4"
     id("io.spring.dependency-management") version "1.1.7"
     id("io.freefair.lombok") version "8.14"
 }
@@ -24,6 +24,9 @@ configurations {
     }
 }
 
+// Overriding vulnerable dependency 3.17.0
+extra["commons-lang3.version"] = "3.18.0"
+val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.4.8-jre"
     val springdocVersion = "2.8.9"
@@ -37,9 +40,11 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.rest-assured:rest-assured")
     testImplementation("com.fasterxml.jackson.module:jackson-module-mrbean")
+    mockitoAgent("org.mockito:mockito-core") { isTransitive = false }
 }
 
 tasks {
@@ -51,6 +56,7 @@ tasks {
 
     test {
         useJUnitPlatform()
+        jvmArgs("-javaagent:${mockitoAgent.asPath}")
         testLogging {
             events("passed", "skipped", "failed")
             showStandardStreams = true

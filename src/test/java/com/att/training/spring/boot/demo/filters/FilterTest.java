@@ -102,7 +102,7 @@ class FilterTest {
     }
 
     @Disabled("""
-            Throws an exception when running tests with maven only:
+            Throws the following exception:
             MissingMethod No signature of method: static io.restassured.internal.http.URIBuilder.encode() is applicable for argument types: (String, String)
             """)
     @Nested
