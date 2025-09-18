@@ -29,7 +29,7 @@ extra["commons-lang3.version"] = "3.18.0"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.4.8-jre"
-    val springdocVersion = "2.8.11"
+    val springdocVersion = "2.8.12"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aop")
