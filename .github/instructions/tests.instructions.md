@@ -210,6 +210,8 @@ class UserRegistrationTests {
         MvcTestResult testResult = mockMvcTester
                 .post()
                 .uri("/api/users")
+                .param("p1", "v1")
+                .param("p2", "v2") // example query params
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
                 .exchange();
