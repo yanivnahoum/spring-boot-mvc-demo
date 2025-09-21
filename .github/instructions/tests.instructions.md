@@ -68,11 +68,6 @@ JSON representation:
 Allowed assertion forms:
 
 - Direct AssertJ `assertThat(...)` / `assertThatThrownBy(...)` for plain units.
-- MockMvcTester fluent expectations (`exchange().expectStatus()...expectBody(...)`).
-- `bodyJson()` fluent AssertJ-style JSON assertions (`isStrictlyEqualTo`, `isLenientlyEqualTo`, `extractingPath`,
-  `convertTo`).
-  Disallowed: JUnit Jupiter assertion methods, Hamcrest matchers via legacy `andExpect`, `JSONAssert` (migrate to
-  `bodyJson()`).
 
 Example instantiation pattern:
 
@@ -177,40 +172,6 @@ class DivisionUtilsTest {
 }
 ```
 
-## Controller Slice Test Using MockMvcTester (No @InjectMocks) – Spring Boot Style (GET)
-
-```java
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean; // or @MockitoBean
-import org.springframework.test.web.servlet.assertj.MockMvcTester;
-
-import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.assertThat;
-
-@WebMvcTest(UserController.class)
-class UserControllerWebMvcSliceExampleTest {
-    @Autowired
-    MockMvcTester mvc;
-    @MockBean
-    UserService service;
-
-    @Test
-    void getUser_existingId_returns200AndBody() {
-        when(service.findUser("abc")).thenReturn(new User("abc", "Ann"));
-
-        mvc.get().uri("/users/{id}", "abc").exchange()
-                .expectStatus().isOk()
-                .expectHeader().contentTypeCompatibleWith("application/json")
-                .expectBody(User.class).satisfies(user -> {
-                    assertThat(user.firstName()).isEqualTo("Ann");
-                    assertThat(user.id()).isEqualTo("abc");
-                });
-    }
-}
-```
-
 ## Controller Slice Test Using MockMvcTester – POST with JSON Text Blocks
 
 ```java
@@ -228,17 +189,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @WebMvcTest(UserController.class)
 class UserRegistrationTests {
     @Autowired
-    MockMvcTester mockMvcTester;
-    @MockBean
-    UserService userService;
+    private MockMvcTester mockMvcTester;
+    @MockitoBean
+    private UserService userService;
 
     @Test
     void userRegistrationSuccessful() {
         String requestBody = """
                 {
-                  "email": "siva@gmail.com",
-                  "password": "secret",
-                  "name": "Siva"
+                  "firstName": "John",
+                  "lastName": "Doe",
+                  "email": "joh@gmail.com",
+                  "role": "ROLE_USER"
                 }
                 """;
 
@@ -257,107 +219,47 @@ class UserRegistrationTests {
                 .bodyJson()
                 .isLenientlyEqualTo("""
                         {
-                          "name": "Siva",
-                          "email": "siva@gmail.com",
+                          "firstName": "John",
+                          "lastName": "Doe",
+                          "email": "joh@gmail.com",
                           "role": "ROLE_USER"
                         }
                         """);
+
+        // JSON Fixture Comparison (ClassPathResource)
+        // Assume user-registration-response.json exists under src/test/resources/fixtures/
+        var expected = new ClassPathResource("fixtures/user-registration-response.json", UserRegistrationTests.class);
+        assertThat(testResult)
+                .hasStatusOk()
+                .bodyJson()
+                .isLenientlyEqualTo(expected);
+
+        // Single JSON path expression:
+        assertThat(testResult)
+                .hasStatusOk()
+                .bodyJson()
+                .extractingPath("$.firstName").isEqualTo("John");
+
+        // Multiple paths with custom assertions:
+        assertThat(testResult)
+                .hasStatusOk()
+                .bodyJson()
+                .hasPathSatisfying("$.firstName", path -> assertThat(path).isEqualTo("John"))
+                .hasPathSatisfying("$.lastName", path -> assertThat(path).isEqualTo("Doe"));
+
+        // Mapping JSON to a Record for Rich Assertions
+        assertThat(testResult)
+                .hasStatusOk()
+                .bodyJson()
+                .convertTo(RegistrationResponse.class)
+                .satisfies(response -> {
+                    assertThat(response.firstName()).isEqualTo("John");
+                    assertThat(response.lastName()).isEqualTo("Doe");
+                    assertThat(response.email()).isEqualTo("john@gmail.com");
+                    assertThat(response.role()).isEqualTo("ROLE_USER");
+                });
     }
 }
-```
-
-## JSON Fixture Comparison (ClassPathResource)
-
-```java
-import org.springframework.core.io.ClassPathResource;
-
-// Assume user-registration-response.json exists under src/test/resources
-var expected = new ClassPathResource("/user-registration-response.json", UserRegistrationTests.class);
-
-        assertThat(testResult)
-    .
-
-        hasStatusOk()
-    .
-
-        bodyJson()
-    .
-
-        isLenientlyEqualTo(expected);
-```
-
-## JSON Path Extraction
-
-```java
-// Single JSON path expression:
-assertThat(testResult)
-    .
-
-hasStatusOk()
-    .
-
-bodyJson()
-    .
-
-extractingPath("$.name").
-
-isEqualTo("Siva");
-
-// Multiple paths with custom assertions:
-assertThat(testResult)
-    .
-
-hasStatusOk()
-    .
-
-bodyJson()
-    .
-
-hasPathSatisfying("$.firstName",path ->
-
-assertThat(path).
-
-isEqualTo("Michael"))
-        .
-
-hasPathSatisfying("$.lastName",path ->
-
-assertThat(path).
-
-isEqualTo("Jordan"));
-```
-
-## Mapping JSON to a Record for Rich Assertions
-
-```java
-public record RegistrationResponse(String name, String email, String role) {}
-
-assertThat(testResult)
-    .
-
-hasStatusOk()
-    .
-
-bodyJson()
-    .
-
-convertTo(RegistrationResponse .class)
-    .
-
-satisfies(response ->{
-
-assertThat(response.name()).
-
-isEqualTo("Siva");
-
-assertThat(response.email()).
-
-isEqualTo("siva@gmail.com");
-
-assertThat(response.role()).
-
-isEqualTo("ROLE_USER");
-    });
 ```
 
 ### MockMvcTester JSON Assertion Guide
