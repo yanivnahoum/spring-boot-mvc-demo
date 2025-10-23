@@ -25,6 +25,15 @@ class JacksonDefaultValueTest {
         assertThat(somePojoWithDefault.value()).isEqualTo("default");
     }
 
+    @Test
+    void givenRecordWithDefault_thenNullFieldEqualsDefault() throws JsonProcessingException {
+        var json = """
+                { "value": null}
+                """;
+        var somePojoWithDefault = objectMapper.readValue(json, SomePojoWithDefault.class);
+        assertThat(somePojoWithDefault.value()).isEqualTo("default");
+    }
+
     record SomePojo(String value) {}
 
     record SomePojoWithDefault(String value) {
