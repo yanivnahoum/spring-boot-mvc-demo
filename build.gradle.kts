@@ -2,7 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.freefair.lombok") version "8.14.2"
+    id("io.freefair.lombok") version "9.0.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -25,10 +25,10 @@ configurations {
 }
 
 // Overriding vulnerable dependency 3.17.0
-extra["commons-lang3.version"] = "3.18.0"
+extra["commons-lang3.version"] = "3.19.0"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
-    val guavaVersion = "33.4.8-jre"
+    val guavaVersion = "33.5.0-jre"
     val springdocVersion = "2.8.13"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
