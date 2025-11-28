@@ -25,7 +25,6 @@ This project demonstrates the following features:
   * [Deserialization of null or missing properties (and partial updates)](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonNullOrMissingProperties.java)
   * [Deserialization to interface/abstract types](src/test/java/com/att/training/spring/boot/demo/serdes/JacksonDeserializationWithInterfacesTest.java)
   * [Serialization / deserialization of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeControllerTest.java)
-  * [Custom serializer / deserializer of jsr310 types (java.time) in @Controller](src/test/java/com/att/training/spring/boot/demo/datetime/DateTimeCustomSerDesTest.java)
 * [CommandLineRunner](src/main/java/com/att/training/spring/boot/demo/config/AppConfig.java)
 * Enabling the built-in [request logging filter](src/main/java/com/att/training/spring/boot/demo/config/AppConfig.java)
 * [Lombok copyable annotations](src/test/java/com/att/training/spring/boot/demo/LombokTest.java) (additionally, see [lombok.config](jetbrains://idea/navigate/reference?project=spring-boot-mvc-demo&path=lombok.config))

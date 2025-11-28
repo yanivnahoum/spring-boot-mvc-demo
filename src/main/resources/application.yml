@@ -13,9 +13,6 @@ server:
   port: 8090
   servlet:
     context-path: /demo
-  error:
-    whitelabel:
-      enabled: false
   tomcat:
     mbeanregistry:
       enabled: true
@@ -31,6 +28,10 @@ spring:
   output:
     ansi:
       enabled: always
+  web:
+    error:
+      whitelabel:
+        enabled: false
 management:
   server:
     port: 8091

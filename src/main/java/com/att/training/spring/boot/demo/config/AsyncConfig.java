@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskDecorator;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.lang.NonNull;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
@@ -123,7 +122,7 @@ public class AsyncConfig {
         private final Thread.UncaughtExceptionHandler handler;
 
         @Override
-        public Thread newThread(@NonNull Runnable r) {
+        public Thread newThread(Runnable r) {
             var thread = backingThreadFactory.newThread(r);
             thread.setUncaughtExceptionHandler(handler);
             return thread;

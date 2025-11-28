@@ -4,10 +4,10 @@ import com.att.training.spring.boot.demo.api.ErrorDto;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -53,12 +53,12 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     private String toMessage(ConstraintViolation<?> constraintViolation) {
-        return String.format("Field '%s' %s", constraintViolation.getPropertyPath(), constraintViolation.getMessage());
+        return "Field '%s' %s".formatted(constraintViolation.getPropertyPath(), constraintViolation.getMessage());
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(@NonNull MethodArgumentNotValidException ex, @NonNull HttpHeaders headers,
-                                                                  @NonNull HttpStatusCode status, @NonNull WebRequest request) {
+    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
+                                                                            HttpStatusCode status, WebRequest request) {
         log.error("#handleMethodArgumentNotValid", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
@@ -74,12 +74,12 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     private String toMessage(FieldError error) {
-        return String.format("Field '%s.%s' %s", error.getObjectName(), error.getField(), error.getDefaultMessage());
+        return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 
     @Override
-    protected ResponseEntity<Object> handleHandlerMethodValidationException(@NonNull HandlerMethodValidationException ex, @NonNull HttpHeaders headers,
-                                                                            @NonNull HttpStatusCode status, @NonNull WebRequest request) {
+    protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex, HttpHeaders headers,
+                                                                            HttpStatusCode status, WebRequest request) {
         log.error("#handleHandlerMethodValidationException", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
@@ -101,10 +101,9 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
     }
 
-    @NonNull
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(@NonNull Exception ex, Object body, @NonNull HttpHeaders headers,
-                                                             @NonNull HttpStatusCode statusCode, @NonNull WebRequest request) {
+    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers,
+                                                             HttpStatusCode statusCode, WebRequest request) {
         log.error("#handleExceptionInternal", ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.GENERIC, ex.getMessage());
         return new ResponseEntity<>(errorDto, statusCode);

@@ -1,16 +1,14 @@
 package com.att.training.spring.boot.demo.serdes;
 
-import com.fasterxml.jackson.core.JsonPointer;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonPointer;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 import java.util.stream.Stream;
 
@@ -19,21 +17,19 @@ import static org.junit.jupiter.params.provider.Arguments.argumentSet;
 
 class JacksonTreeTest {
     private static final JsonPointer PERSON_NAME_FIELD_POINTER = JsonPointer.compile("/person/name");
-    private final ObjectMapper objectMapper = JsonMapper.builder()
-            .addModule(new ParameterNamesModule())
-            .build();
+    private final JsonMapper jsonMapper = new JsonMapper();
 
     @Test
-    void putAllProperties() throws JsonProcessingException {
+    void putAllProperties() throws JacksonException {
         var currentJson = """
                 {"x": "100", "propertyToUpdate": { "a": "1", "b": "2" }}
                 """;
-        ObjectNode currentNode = asObjectNode(objectMapper.readTree(currentJson));
+        ObjectNode currentNode = asObjectNode(jsonMapper.readTree(currentJson));
         ObjectNode currentNodeCopy = currentNode.deepCopy();
         var newJson = """
                 {"c": "3"}
                 """;
-        ObjectNode newNode = asObjectNode(objectMapper.readTree(newJson));
+        ObjectNode newNode = asObjectNode(jsonMapper.readTree(newJson));
 
         ObjectNode targetNode = asObjectNode(currentNode.path("propertyToUpdate"));
         targetNode.setAll(newNode);
@@ -46,9 +42,9 @@ class JacksonTreeTest {
 
     @ParameterizedTest
     @MethodSource("nameFieldCases")
-    void nameFieldIsFetchedCorrectly(String json, String expected) throws JsonProcessingException {
-        JsonNode root = objectMapper.readTree(json);
-        String actual = root.path("name").asText("default");
+    void nameFieldIsFetchedCorrectly(String json, String expected) throws JacksonException {
+        JsonNode root = jsonMapper.readTree(json);
+        String actual = root.path("name").asString("default");
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -62,16 +58,16 @@ class JacksonTreeTest {
                         """, ""),
                 argumentSet("null field", """
                         {"name": null}
-                        """, "default"),
+                        """, ""),
                 argumentSet("missing field", "{}", "default")
         );
     }
 
     @ParameterizedTest
     @MethodSource("nestedNameFieldCases")
-    void nestedNameFieldIsFetchedCorrectly(String json, String expected) throws JsonProcessingException {
-        JsonNode root = objectMapper.readTree(json);
-        String actual = root.at(PERSON_NAME_FIELD_POINTER).asText("default");
+    void nestedNameFieldIsFetchedCorrectly(String json, String expected) throws JacksonException {
+        JsonNode root = jsonMapper.readTree(json);
+        String actual = root.at(PERSON_NAME_FIELD_POINTER).asString("default");
         assertThat(actual).isEqualTo(expected);
     }
 
@@ -84,22 +80,22 @@ class JacksonTreeTest {
                           }
                         }
                         """, "value"),
-                argumentSet("empty string field", """
+                argumentSet("nested empty string field", """
                         {
                           "person": {
                             "name": ""
                           }
                         }
                         """, ""),
-                argumentSet("null field", """
-                        { "person": null }
-                        """, "default"),
                 argumentSet("nested null field", """
                         {
                           "person": {
                             "name": null
                           }
                         }
+                        """, ""),
+                argumentSet("null field", """
+                        { "person": null }
                         """, "default"),
                 argumentSet("missing field", "{}", "default"),
                 argumentSet("nested missing field", """
@@ -109,8 +105,8 @@ class JacksonTreeTest {
     }
 
     private ObjectNode asObjectNode(JsonNode jsonNode) {
-        if (jsonNode instanceof ObjectNode) {
-            return (ObjectNode) jsonNode;
+        if (jsonNode instanceof ObjectNode node) {
+            return node;
         }
         throw new IllegalArgumentException("Not an ObjectNode");
     }

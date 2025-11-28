@@ -4,24 +4,20 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.beans.ConstructorProperties;
 
 class JacksonPolymorphismTest {
-    // In Spring Boot, the auto-configured ObjectMapper is similar to the one below:
-    private final ObjectMapper mapper = JsonMapper.builder()
+    private final JsonMapper mapper = JsonMapper.builder()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .addModule(new ParameterNamesModule())
             .build();
 
     @Nested
@@ -34,7 +30,7 @@ class JacksonPolymorphismTest {
         record M2(String m2) implements Message {}
 
         @Test
-        void write() throws JsonProcessingException {
+        void write() throws JacksonException {
             var m1 = new M1("I'm m1");
             var m2 = new M2("I'm m2");
             System.out.println(mapper.writeValueAsString(m1));
@@ -42,7 +38,7 @@ class JacksonPolymorphismTest {
         }
 
         @Test
-        void read() throws JsonProcessingException {
+        void read() throws JacksonException {
             var m1Json = """
                     {
                         "@class": "com.att.training.spring.boot.demo.serdes.JacksonPolymorphismTest$ClassTestWithRecords$M1",
@@ -85,7 +81,7 @@ class JacksonPolymorphismTest {
         @ToString(callSuper = true)
         static class M2 extends Message {
             // Here's another way to solve the single property c'tor issue.
-            // It assumes we registered the ParameterNamesModule (as in Spring Boot's auto-configured ObjectMapper):
+            // It assumes we registered the ParameterNamesModule (as in Spring Boot's autoconfigured jsonMapper):
             @JsonCreator
             public M2(String message) {
                 super(message);
@@ -93,7 +89,7 @@ class JacksonPolymorphismTest {
         }
 
         @Test
-        void write() throws JsonProcessingException {
+        void write() throws JacksonException {
             var m1 = new M1("I'm m1");
             var m2 = new M2("I'm m2");
             System.out.println(mapper.writeValueAsString(m1));
@@ -101,7 +97,7 @@ class JacksonPolymorphismTest {
         }
 
         @Test
-        void read() throws JsonProcessingException {
+        void read() throws JacksonException {
             var m1Json = """
                     {
                         "@class": "com.att.training.spring.boot.demo.serdes.JacksonPolymorphismTest$ClassTest$M1",
@@ -134,7 +130,7 @@ class JacksonPolymorphismTest {
         record N2(String n2) implements Notification {}
 
         @Test
-        void write() throws JsonProcessingException {
+        void write() throws JacksonException {
             var n1 = new N1("I'm n1");
             var n2 = new N2("I'm n2");
             System.out.println(mapper.writeValueAsString(n1));
@@ -142,7 +138,7 @@ class JacksonPolymorphismTest {
         }
 
         @Test
-        void read() throws JsonProcessingException {
+        void read() throws JacksonException {
             var n1Json = """
                     { "@type": "one", "n1": "I'm n1" }
                     """;

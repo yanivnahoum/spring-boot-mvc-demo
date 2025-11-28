@@ -1,14 +1,14 @@
 package com.att.training.spring.boot.demo.serdes;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Value;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Map;
 
@@ -20,14 +20,15 @@ import static org.assertj.core.api.InstanceOfAssertFactories.MAP;
 class JacksonDeserializationOfDynamicObjectsTest {
     private static final String SIMPLE_JSON = "{ 'name': 'John', 'data': { 'k1': 'v1', 'k2': 'v2' } }";
     private static final String NESTED_JSON = "{ 'name': 'John', 'data': { 'k1': { 'k2': 'v2' } } }";
-    @Autowired private ObjectMapper mapper;
+    @Autowired
+    private JsonMapper mapper;
 
     @Nested
     @DisplayName("Deserialize json to generic Map<String, Object>")
     class MapTest {
 
         @Test
-        void simpleMapValueIsDeserializedCorrectly() throws JsonProcessingException {
+        void simpleMapValueIsDeserializedCorrectly() throws JacksonException {
             var somePojoWithMap = mapper.readValue(singleToDoubleQuotes(SIMPLE_JSON), SomePojoWithMap.class);
 
             assertThat(somePojoWithMap.getName()).isEqualTo("John");
@@ -37,7 +38,7 @@ class JacksonDeserializationOfDynamicObjectsTest {
         }
 
         @Test
-        void nestedMapValueIsDeserializedCorrectly() throws JsonProcessingException {
+        void nestedMapValueIsDeserializedCorrectly() throws JacksonException {
             var somePojoWithMap = mapper.readValue(singleToDoubleQuotes(NESTED_JSON), SomePojoWithMap.class);
 
             assertThat(somePojoWithMap.getName()).isEqualTo("John");
@@ -53,28 +54,28 @@ class JacksonDeserializationOfDynamicObjectsTest {
     class JsonNodeTest {
 
         @Test
-        void simpleJsonNodeValueIsDeserializedCorrectly() throws JsonProcessingException {
+        void simpleJsonNodeValueIsDeserializedCorrectly() throws JacksonException {
             var somePojoWithJsonNode = mapper.readValue(singleToDoubleQuotes(SIMPLE_JSON), SomePojoWithJsonNode.class);
 
             assertThat(somePojoWithJsonNode.getName()).isEqualTo("John");
-            assertThat(somePojoWithJsonNode.getData().get("k1").asText()).isEqualTo("v1");
+            assertThat(somePojoWithJsonNode.getData().get("k1").asString()).isEqualTo("v1");
             var simpleValue = somePojoWithJsonNode.getData()
-                    .get("k2").asText();
+                    .get("k2").asString();
             assertThat(simpleValue).isEqualTo("v2");
         }
 
         @Test
-        void nestedJsonNodeValueIsDeserializedCorrectly() throws JsonProcessingException {
+        void nestedJsonNodeValueIsDeserializedCorrectly() throws JacksonException {
             var somePojoWithJsonNode = mapper.readValue(singleToDoubleQuotes(NESTED_JSON), SomePojoWithJsonNode.class);
 
             assertThat(somePojoWithJsonNode.getName()).isEqualTo("John");
             var nestedValue = somePojoWithJsonNode.getData()
                     .get("k1")
-                    .get("k2").asText();
+                    .get("k2").asString();
             assertThat(nestedValue).isEqualTo("v2");
 
             var pathValue = somePojoWithJsonNode.getData()
-                    .at("/k1/k2").asText();
+                    .at("/k1/k2").asString();
             assertThat(pathValue).isEqualTo("v2");
         }
     }

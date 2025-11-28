@@ -1,9 +1,6 @@
 package com.att.training.spring.boot.demo.serdes;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import lombok.Data;
 import lombok.Value;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -11,10 +8,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.exc.InvalidFormatException;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.beans.ConstructorProperties;
 import java.util.stream.Stream;
@@ -33,20 +33,19 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
     @TestConfiguration
     static class TestConfig {
         @Bean
-        Jackson2ObjectMapperBuilderCustomizer customizer() {
-            return builder -> builder.postConfigurer(mapper ->
-                    // Needed for mutable POJOs. Can also be done via empty c'tor like in records.
-                    mapper.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(SKIP)));
-
+        JsonMapperBuilderCustomizer customizer() {
+            return builder -> builder.changeDefaultNullHandling(handler ->
+                    handler.withOverrides(JsonSetter.Value.forValueNulls(SKIP))
+            );
         }
     }
 
     @Autowired
-    private ObjectMapper mapper;
+    private JsonMapper mapper;
 
     @ParameterizedTest
     @ValueSource(classes = {SomeMutablePojo.class, SomeImmutablePojo.class})
-    void knownEnumValueIsDeserializedCorrectly(Class<? extends StatusProvider> klass) throws JsonProcessingException {
+    void knownEnumValueIsDeserializedCorrectly(Class<? extends StatusProvider> klass) throws JacksonException {
         var somePojo = mapper.readValue(singleToDoubleQuotes("{ 'status': 'ACTIVE' }"), klass);
         assertThat(somePojo.getStatus()).isEqualTo(Status.ACTIVE);
     }
@@ -60,14 +59,14 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
 
     @ParameterizedTest
     @MethodSource("classSource")
-    void nullEnumValueIsDeserializedCorrectly(Class<? extends StatusProvider> klass) throws JsonProcessingException {
+    void nullEnumValueIsDeserializedCorrectly(Class<? extends StatusProvider> klass) throws JacksonException {
         var somePojo = mapper.readValue(singleToDoubleQuotes("{ 'status': null }"), klass);
         assertThat(somePojo.getStatus()).isEqualTo(NONE);
     }
 
     @ParameterizedTest
     @MethodSource("classSource")
-    void missingEnumValueIsDeserializedCorrectly(Class<? extends StatusProvider> klass) throws JsonProcessingException {
+    void missingEnumValueIsDeserializedCorrectly(Class<? extends StatusProvider> klass) throws JacksonException {
         var somePojo = mapper.readValue("{}", klass);
         assertThat(somePojo.getStatus()).isEqualTo(NONE);
     }
@@ -101,7 +100,7 @@ class JacksonDeserializationOfEnumsWithoutNullsTest {
     static class SomeImmutablePojo implements StatusProvider {
         Status status;
 
-        // Required by Jackson for deserialization of single param constructors.
+        // Required by Jackson2 for deserialization of single param constructors.
         // We usually provide this with Lombok (when we let it generate the constructor)
         @ConstructorProperties("status")
         public SomeImmutablePojo(Status status) {

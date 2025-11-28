@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.5.8"
+    id("org.springframework.boot") version "4.0.0"
     id("io.spring.dependency-management") version "1.1.7"
     id("io.freefair.lombok") version "9.1.0"
 }
@@ -24,15 +24,13 @@ configurations {
     }
 }
 
-// Overriding vulnerable dependency 3.17.0
-extra["commons-lang3.version"] = "3.20.0"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.5.0-jre"
-    val springdocVersion = "2.8.13"
+    val springdocVersion = "3.0.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-aspectj")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
@@ -41,9 +39,8 @@ dependencies {
     runtimeOnly("io.micrometer:micrometer-registry-graphite")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.rest-assured:rest-assured")
-    testImplementation("com.fasterxml.jackson.module:jackson-module-mrbean")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
+    testImplementation("tools.jackson.module:jackson-module-mrbean")
     mockitoAgent("org.mockito:mockito-core") { isTransitive = false }
 }
 

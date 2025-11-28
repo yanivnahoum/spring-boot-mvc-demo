@@ -2,15 +2,15 @@ package com.att.training.spring.boot.demo.serdes;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
 import com.fasterxml.jackson.annotation.Nulls;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
-import lombok.Value;
+import lombok.Setter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,124 +20,128 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @JsonTest
 class JacksonDeserializingListTest {
-    @Autowired private ObjectMapper mapper;
+    @Autowired
+    private JsonMapper mapper;
 
     @Nested
-    @DisplayName("When deserializing to a SimpleDto")
-    class SimpleDtoLists {
+    @DisplayName("When deserializing to a record DTO")
+    class RecordDtoLists {
 
         @Test
-        void givenJsonListWithValues_shouldDeserializeToListWithValues() throws JsonProcessingException {
+        void givenJsonListWithValues_shouldDeserializeToListWithValues() throws JacksonException {
             String json = singleToDoubleQuotes("{'values': ['a','b','c']}");
 
             SomeDto deserializedDto = mapper.readValue(json, SomeDto.class);
 
-            assertThat(deserializedDto.getValues()).containsExactly("a", "b", "c");
+            assertThat(deserializedDto.values()).containsExactly("a", "b", "c");
         }
 
         @Test
-        void givenNullJsonList_shouldDeserializeToNullList() throws JsonProcessingException {
+        void givenNullJsonList_shouldDeserializeToNullList() throws JacksonException {
             String json = singleToDoubleQuotes("{'values': null}");
 
             SomeDto deserializedDto = mapper.readValue(json, SomeDto.class);
 
-            assertThat(deserializedDto.getValues()).isNull();
+            assertThat(deserializedDto.values()).isNull();
         }
 
         @Test
-        void givenEmptyJsonList_shouldDeserializeToEmptyList() throws JsonProcessingException {
+        void givenEmptyJsonList_shouldDeserializeToEmptyList() throws JacksonException {
             String json = singleToDoubleQuotes("{'values': []}");
 
             SomeDto deserializedDto = mapper.readValue(json, SomeDto.class);
 
-            assertThat(deserializedDto.getValues()).isEmpty();
+            assertThat(deserializedDto.values()).isEmpty();
         }
 
         @Test
-        void givenNullJsonList_shouldDeserializeToEmptyList() throws JsonProcessingException {
-            var modifiedMapper = mapper.copy();
-            modifiedMapper.configOverride(List.class)
-                    .setSetterInfo(JsonSetter.Value.forValueNulls(Nulls.AS_EMPTY));
+        void givenNullJsonList_shouldDeserializeToEmptyList() throws JacksonException {
+            JsonMapper modifiedMapper = mapper.rebuild()
+                    .withConfigOverride(List.class, config ->
+                            config.setNullHandling(JsonSetter.Value.forValueNulls(Nulls.AS_EMPTY)))
+                    .build();
 
             String json = singleToDoubleQuotes("{'values': null}");
             SomeDto deserializedDto = modifiedMapper.readValue(json, SomeDto.class);
 
-            assertThat(deserializedDto.getValues()).isEmpty();
+            assertThat(deserializedDto.values()).isEmpty();
         }
 
         @Test
-        void givenMissingJsonList_shouldDeserializeToEmptyList() throws JsonProcessingException {
-            var modifiedMapper = mapper.copy();
-            modifiedMapper.configOverride(List.class)
-                    .setSetterInfo(JsonSetter.Value.forValueNulls(Nulls.AS_EMPTY));
+        void givenMissingJsonList_shouldDeserializeToEmptyList() throws JacksonException {
+            JsonMapper modifiedMapper = mapper.rebuild()
+                    .withConfigOverride(List.class, config ->
+                            config.setNullHandling(JsonSetter.Value.forValueNulls(Nulls.AS_EMPTY)))
+                    .build();
 
             SomeDto deserializedDto = modifiedMapper.readValue("{}", SomeDto.class);
 
-            assertThat(deserializedDto.getValues()).isEmpty();
+            assertThat(deserializedDto.values()).isEmpty();
         }
     }
 
     @Nested
-    @DisplayName("When deserializing to a FinalDto")
-    class FinalDtoLists {
+    @DisplayName("When deserializing to a MutableDto")
+    class MutableDtoLists {
 
         @Test
-        void givenJsonListWithValues_shouldDeserializeToListWithValues() throws JsonProcessingException {
+        void givenJsonListWithValues_shouldDeserializeToListWithValues() throws JacksonException {
             String json = singleToDoubleQuotes("{'values': ['a','b','c']}");
 
-            FinalDto deserializedDto = mapper.readValue(json, FinalDto.class);
+            MutableDto deserializedDto = mapper.readValue(json, MutableDto.class);
 
             assertThat(deserializedDto.getValues()).containsExactly("a", "b", "c");
         }
 
         @Test
-        void givenNullJsonList_shouldDeserializeToNullList() throws JsonProcessingException {
+        void givenNullJsonList_shouldDeserializeToNullList() throws JacksonException {
             String json = singleToDoubleQuotes("{'values': null}");
 
-            FinalDto deserializedDto = mapper.readValue(json, FinalDto.class);
+            MutableDto deserializedDto = mapper.readValue(json, MutableDto.class);
 
             assertThat(deserializedDto.getValues()).isNull();
         }
 
         @Test
-        void givenEmptyJsonList_shouldDeserializeToEmptyList() throws JsonProcessingException {
+        void givenEmptyJsonList_shouldDeserializeToEmptyList() throws JacksonException {
             String json = singleToDoubleQuotes("{'values': []}");
 
-            FinalDto deserializedDto = mapper.readValue(json, FinalDto.class);
+            MutableDto deserializedDto = mapper.readValue(json, MutableDto.class);
 
             assertThat(deserializedDto.getValues()).isEmpty();
         }
 
         @Test
-        void givenNullJsonList_shouldDeserializeToEmptyList() throws JsonProcessingException {
-            var modifiedMapper = mapper.copy();
-            modifiedMapper.configOverride(List.class)
-                    .setSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP));
+        void givenNullJsonList_shouldDeserializeToEmptyList() throws JacksonException {
+            JsonMapper modifiedMapper = mapper.rebuild()
+                    .withConfigOverride(List.class, config ->
+                            config.setNullHandling(JsonSetter.Value.forValueNulls(Nulls.SKIP)))
+                    .build();
 
             String json = singleToDoubleQuotes("{'values': null}");
-            FinalDto deserializedDto = modifiedMapper.readValue(json, FinalDto.class);
+            MutableDto deserializedDto = modifiedMapper.readValue(json, MutableDto.class);
 
             assertThat(deserializedDto.getValues()).isEmpty();
         }
 
         @Test
-        void givenMissingJsonList_shouldDeserializeToEmptyList() throws JsonProcessingException {
-            var modifiedMapper = mapper.copy();
-            modifiedMapper.configOverride(List.class)
-                    .setSetterInfo(JsonSetter.Value.forValueNulls(Nulls.SKIP));
+        void givenMissingJsonList_shouldDeserializeToEmptyList() throws JacksonException {
+            JsonMapper modifiedMapper = mapper.rebuild()
+                    .withConfigOverride(List.class, config ->
+                            config.setNullHandling(JsonSetter.Value.forValueNulls(Nulls.SKIP)))
+                    .build();
 
-            FinalDto deserializedDto = modifiedMapper.readValue("{}", FinalDto.class);
+            MutableDto deserializedDto = modifiedMapper.readValue("{}", MutableDto.class);
 
             assertThat(deserializedDto.getValues()).isEmpty();
         }
     }
-    @Value
-    static class SomeDto {
-        List<String> values;
-    }
+
+    record SomeDto(List<String> values) {}
 
     @Getter
-    static class FinalDto {
-        private final List<String> values = new ArrayList<>();
+    @Setter
+    static class MutableDto {
+        private List<String> values = new ArrayList<>();
     }
 }

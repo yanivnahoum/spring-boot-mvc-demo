@@ -1,15 +1,14 @@
 package com.att.training.spring.boot.demo.serdes;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,19 +16,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @JsonTest
 class JacksonNullOrMissingPropertiesTest {
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper jsonMapper;
 
     @Nested
     class UsingOptionalFields {
         @Test
-        void givenExistingOrNullOrMissingJsonFields_thenOptionalFieldsShouldBeSetToValueOrEmptyOrLeftNull() throws JsonProcessingException {
+        void givenExistingOrNullOrMissingJsonFields_thenOptionalFieldsShouldBeSetToValueOrEmptyOrLeftNull() throws JacksonException {
             var json = """
                     {
                         "valueField": "hello",
                         "nullField": null
                     }
                     """;
-            SomePojo somePojo = objectMapper.readValue(json, SomePojo.class);
+            SomePojo somePojo = jsonMapper.readValue(json, SomePojo.class);
             assertThat(somePojo.getValueField()).hasValue("hello");
             // nullField is specified, but has a null value. It will be deserialized to an empty Optional
             assertThat(somePojo.getNullField()).isEmpty();
@@ -37,6 +36,7 @@ class JacksonNullOrMissingPropertiesTest {
             assertThat(somePojo.getMissingField()).isNull();
         }
 
+        @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
         @Data
         private static class SomePojo {
             private Optional<String> valueField;
@@ -48,7 +48,7 @@ class JacksonNullOrMissingPropertiesTest {
     @Nested
     class UsingJsonNode {
         @Test
-        void updatingPojoUsingReaderForUpdating() throws IOException {
+        void updatingPojoUsingReaderForUpdating() {
             var somePojo = new SomePojo();
             somePojo.setValueField("goodbye");
             somePojo.setNullField("to-be-removed");
@@ -60,8 +60,8 @@ class JacksonNullOrMissingPropertiesTest {
                     }
                     """;
 
-            JsonNode jsonNode = objectMapper.readTree(json);
-            SomePojo updatedPojo = objectMapper.readerForUpdating(somePojo)
+            JsonNode jsonNode = jsonMapper.readTree(json);
+            SomePojo updatedPojo = jsonMapper.readerForUpdating(somePojo)
                     .readValue(jsonNode);
             // valueField is specified, and so will be updated
             assertThat(updatedPojo.getValueField()).isEqualTo("hello");

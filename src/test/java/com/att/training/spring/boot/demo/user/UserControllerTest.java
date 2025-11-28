@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.json.BasicJsonTester;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
@@ -101,7 +101,7 @@ class UserControllerTest {
         @Test
         void givenMissingId_shouldReturn404NotFound() throws Exception {
             int id = 4;
-            String expectedJson = String.format("{ code: 5001, message = 'User not found: %d' }", id);
+            String expectedJson = "{ code: 5001, message = 'User not found: %d' }".formatted(id);
             mockMvc.perform(get("/users/{id}", id))
                     .andDo(print())
                     .andExpect(status().isNotFound())
@@ -118,7 +118,7 @@ class UserControllerTest {
             String errorMessage = "Thrown intentionally by mock!";
             int id = 2;
             when(userService.fetch(id)).thenThrow(new IllegalArgumentException(errorMessage));
-            String expectedJson = String.format("{ code: 9999, message = '%s' }", errorMessage);
+            String expectedJson = "{ code: 9999, message = '%s' }".formatted(errorMessage);
 
             mockMvc.perform(get("/users/{id}", id))
                     .andDo(print())

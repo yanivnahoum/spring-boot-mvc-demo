@@ -41,7 +41,7 @@ filtering patterns.)
 - Test classes end with `Test` (observed): e.g., `UserControllerTest`, `RandomDelayAspectTest`.
 - All tests placed under mirrored package path relative to source for discoverability.
 - Utility/support classes (e.g., `JsonUtils`) live in test tree; keep them in a `utils` or `support` subpackage.
-- Keep pure unit tests fast and side-effect free; avoid starting full Spring context unless verifying integration (
+- Keep pure unit tests fast and side effect free; avoid starting full Spring context unless verifying integration (
   controllers, configuration binding, AOP, filters, serialization specifics).
 
 # Test Style & Conventions
@@ -177,7 +177,7 @@ class DivisionUtilsTest {
 ```java
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
