@@ -48,8 +48,6 @@ management:
   endpoint:
     health:
       probes:
-        # probes.enabled is only needed if you'd like to check this locally. On k8s, it is enabled by default
-        enabled: true
         # This is useful for exposing the liveness group on the server port, since we exposed the actuator endpoints
         #  on the management port (via management.server.port). It's as if we set:
         #  management.endpoint.health.group.liveness.additional-path="server:livez"
