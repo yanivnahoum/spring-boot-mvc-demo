@@ -132,7 +132,7 @@ class SpringBootServerThrowingFilterTest {
  */
 @SpringBootApplication
 class SpringApp {
-    void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(SpringApp.class, args);
     }
 }
