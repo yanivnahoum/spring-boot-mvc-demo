@@ -36,6 +36,11 @@ buildNumber.properties
 .idea/
 out/
 
+# VS Code
+#------------------------------------------------------------
+.vscode
+
+
 # Backup and intermediate files (incl. created by editors)
 #------------------------------------------------------------
 *.orig

@@ -5,11 +5,13 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.method.ParameterValidationResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.joining;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -56,9 +60,11 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return "Field '%s' %s".formatted(constraintViolation.getPropertyPath(), constraintViolation.getMessage());
     }
 
+    // This is the exception thrown when the validation annotations are on the fields of a bean,
+    // and the controller method parameter is annotated with @Valid
     @Override
     protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
-                                                                            HttpStatusCode status, WebRequest request) {
+                                                                                     HttpStatusCode status, WebRequest request) {
         log.error("#handleMethodArgumentNotValid", ex);
         String message = buildMessage(ex);
         ErrorDto errorDto = new ErrorDto(ErrorCode.VALIDATION, message);
@@ -77,6 +83,8 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
         return "Field '%s.%s' %s".formatted(error.getObjectName(), error.getField(), error.getDefaultMessage());
     }
 
+    // This is the exception thrown when the validation annotations are on the controller
+    // method parameter itself - when it's annotated with a constraint such as @NotEmpty, @Min, etc.
     @Override
     protected ResponseEntity<Object> handleHandlerMethodValidationException(HandlerMethodValidationException ex, HttpHeaders headers,
                                                                             HttpStatusCode status, WebRequest request) {
@@ -87,11 +95,21 @@ public class ExceptionHandlers extends ResponseEntityExceptionHandler {
     }
 
     private String buildMessage(HandlerMethodValidationException ex) {
-        var allErrors = ex.getBeanResults();
-        return allErrors.stream()
-                .flatMap(error -> error.getFieldErrors().stream())
-                .map(this::toMessage)
-                .collect(joining(", "));
+        return ex.getParameterValidationResults().stream()
+                .flatMap(this::allParameterValidationErrors)
+                .collect(joining());
+    }
+
+    private Stream<String> allParameterValidationErrors(ParameterValidationResult result) {
+        return result.getResolvableErrors().stream()
+                .map(error -> toMessage(result, error));
+    }
+
+    private String toMessage(ParameterValidationResult result, MessageSourceResolvable error) {
+        if (error instanceof FieldError fieldError) {
+            return toMessage(fieldError);
+        }
+        return "Parameter '%s' %s".formatted(result.getMethodParameter().getParameterName(), error.getDefaultMessage());
     }
 
     @ExceptionHandler
