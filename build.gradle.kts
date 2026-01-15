@@ -1,8 +1,8 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.5.8"
+    id("org.springframework.boot") version "3.5.9"
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.freefair.lombok") version "9.1.0"
+    id("io.freefair.lombok") version "9.2.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -29,7 +29,7 @@ extra["commons-lang3.version"] = "3.20.0"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.5.0-jre"
-    val springdocVersion = "2.8.13"
+    val springdocVersion = "2.8.15"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aop")
