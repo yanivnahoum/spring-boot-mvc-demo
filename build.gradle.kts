@@ -1,6 +1,6 @@
 plugins {
     java
-    id("org.springframework.boot") version "4.0.0"
+    id("org.springframework.boot") version "4.0.2"
     id("io.spring.dependency-management") version "1.1.7"
     id("io.freefair.lombok") version "9.1.0"
 }
@@ -10,7 +10,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -27,7 +27,7 @@ configurations {
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.5.0-jre"
-    val springdocVersion = "3.0.0"
+    val springdocVersion = "3.0.1"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aspectj")

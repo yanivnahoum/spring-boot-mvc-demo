@@ -6,13 +6,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.1</version>
+        <version>4.0.2</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
     <artifactId>spring-boot-mvc-demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
+    <packaging>jar</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -22,7 +23,7 @@
             -Xshare:off
         </argLine>
         <guava.version>33.5.0-jre</guava.version>
-        <springdoc.version>3.0.0</springdoc.version>
+        <springdoc.version>3.0.1</springdoc.version>
     </properties>
 
     <dependencies>
