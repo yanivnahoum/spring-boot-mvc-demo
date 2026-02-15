@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.cfg.EnumFeature;
 import tools.jackson.databind.exc.MismatchedInputException;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -28,6 +29,8 @@ class Jackson2VsJackson3ConfigTest {
             .enable(MapperFeature.ALLOW_FINAL_FIELDS_AS_MUTATORS)
             .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
             .disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY)
+            .disable(EnumFeature.WRITE_ENUMS_USING_TO_STRING)
+            .disable(EnumFeature.READ_ENUMS_USING_TO_STRING)
             .build();
 
     @Nested
@@ -239,8 +242,7 @@ class Jackson2VsJackson3ConfigTest {
 
         enum Status {
             ACTIVE,
-            INACTIVE,
-            PENDING;
+            INACTIVE;
 
             @Override
             public String toString() {
@@ -248,27 +250,24 @@ class Jackson2VsJackson3ConfigTest {
             }
         }
 
-        record StatusHolder(Status status) {
-        }
+        record StatusHolder(Status status) {}
 
         @Test
         void jackson2_usesEnumName() {
             var holder = new StatusHolder(Status.ACTIVE);
 
             // Jackson 2 default: WRITE_ENUMS_USING_TO_STRING = false
-            // Should use Enum.name() for serialization
+            // Uses Enum.name() for serialization
             var json = jackson2Mapper.writeValueAsString(holder);
 
-            // Note: In Jackson 3 API, enum handling has changed
-            // Even with attempted Jackson 2 configuration, it uses toString()
             assertThat(json).isEqualTo("""
-                    {"status":"active"}\
+                    {"status":"ACTIVE"}\
                     """);
 
             // Jackson 2 default: READ_ENUMS_USING_TO_STRING = false
-            // Uses toString() matching for deserialization
+            // Uses enum.name() matching for deserialization
             var result = jackson2Mapper.readValue("""
-                    {"status":"inactive"}\
+                    {"status":"INACTIVE"}\
                     """, StatusHolder.class);
 
             assertThat(result.status()).isEqualTo(Status.INACTIVE);
@@ -276,23 +275,23 @@ class Jackson2VsJackson3ConfigTest {
 
         @Test
         void jackson3_usesToString() {
-            var holder = new StatusHolder(Status.PENDING);
+            var holder = new StatusHolder(Status.ACTIVE);
 
             // Jackson 3 default: WRITE_ENUMS_USING_TO_STRING = true
             // Uses Enum.toString() for serialization
             var json = jackson3Mapper.writeValueAsString(holder);
 
             assertThat(json).isEqualTo("""
-                    {"status":"pending"}\
+                    {"status":"active"}\
                     """);
 
             // Jackson 3 default: READ_ENUMS_USING_TO_STRING = true
             // Uses toString() matching for deserialization
             var result = jackson3Mapper.readValue("""
-                    {"status":"active"}\
+                    {"status":"inactive"}\
                     """, StatusHolder.class);
 
-            assertThat(result.status()).isEqualTo(Status.ACTIVE);
+            assertThat(result.status()).isEqualTo(Status.INACTIVE);
         }
     }
 }
