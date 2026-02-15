@@ -1,6 +1,8 @@
 package com.att.training.spring.boot.demo.serdes;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -292,6 +294,34 @@ class Jackson2VsJackson3ConfigTest {
                     """, StatusHolder.class);
 
             assertThat(result.status()).isEqualTo(Status.INACTIVE);
+        }
+
+        @Test
+        void jackson3_stillUsesJsonValue() {
+            @RequiredArgsConstructor
+            @Getter
+            enum COLOR {
+                RED("rosso"),
+                GREEN("verde"),
+                BLUE("blu");
+
+                @JsonValue
+                private final String value;
+            }
+            record ColorHolder(COLOR color) {}
+            var holder = new ColorHolder(COLOR.RED);
+
+            var json = jackson3Mapper.writeValueAsString(holder);
+
+            assertThat(json).isEqualTo("""
+                    {"color":"rosso"}\
+                    """);
+
+            var result = jackson3Mapper.readValue("""
+                    {"color":"verde"}\
+                    """, ColorHolder.class);
+
+            assertThat(result.color()).isEqualTo(COLOR.GREEN);
         }
     }
 }
