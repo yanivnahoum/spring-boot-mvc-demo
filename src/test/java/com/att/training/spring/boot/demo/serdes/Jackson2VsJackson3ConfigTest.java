@@ -111,21 +111,36 @@ class Jackson2VsJackson3ConfigTest {
 
         @Getter
         @Setter
-        static class NewCollectionHolder {
+        static class MutableCollectionHolder {
             private List<String> items;
         }
 
         @Test
-        void jackson3_doesNotUseGettersAsSettersAlternative() {
+        void jackson3_doesNotUseGettersAsSettersAlternative1() {
             var json = """
                     {
                         "items": ["apple", "banana"]
                     }
                     """;
 
-            NewCollectionHolder result = jackson3Mapper.readValue(json, NewCollectionHolder.class);
+            MutableCollectionHolder result = jackson3Mapper.readValue(json, MutableCollectionHolder.class);
 
             assertThat(result.getItems()).containsExactly("apple", "banana");
+        }
+
+        record ImmutableCollectionHolder(List<String> items) {}
+
+        @Test
+        void jackson3_doesNotUseGettersAsSettersAlternative2() {
+            var json = """
+                    {
+                        "items": ["apple", "banana"]
+                    }
+                    """;
+
+            ImmutableCollectionHolder result = jackson3Mapper.readValue(json, ImmutableCollectionHolder.class);
+
+            assertThat(result.items()).containsExactly("apple", "banana");
         }
     }
 
@@ -178,15 +193,12 @@ class Jackson2VsJackson3ConfigTest {
     @Nested
     class AllowFinalFieldsAsMutators {
 
+        @Getter
         static class FinalFieldContainer {
-            private final List<String> items;
+            private final String name;
 
-            FinalFieldContainer() {
-                this.items = new ArrayList<>();
-            }
-
-            public List<String> getItems() {
-                return items;
+            public FinalFieldContainer() {
+                this.name = "default";
             }
         }
 
@@ -194,7 +206,7 @@ class Jackson2VsJackson3ConfigTest {
         void jackson2_allowsFinalFieldsAsMutators() {
             var json = """
                     {
-                        "items": ["apple", "banana"]
+                        "name": "Alice"
                     }
                     """;
 
@@ -202,14 +214,14 @@ class Jackson2VsJackson3ConfigTest {
             // Final fields can be mutated through their getters
             var result = jackson2Mapper.readValue(json, FinalFieldContainer.class);
 
-            assertThat(result.getItems()).containsExactly("apple", "banana");
+            assertThat(result.getName()).isEqualTo("Alice");
         }
 
         @Test
         void jackson3_doesNotAllowFinalFieldsAsMutators() {
             var json = """
                     {
-                        "items": ["apple", "banana"]
+                        "name": "Alice"
                     }
                     """;
 
@@ -218,7 +230,7 @@ class Jackson2VsJackson3ConfigTest {
             var result = jackson3Mapper.readValue(json, FinalFieldContainer.class);
 
             // The final field is not populated - the items list remains empty
-            assertThat(result.getItems()).isEmpty();
+            assertThat(result.getName()).isEqualTo("default");
         }
     }
 
