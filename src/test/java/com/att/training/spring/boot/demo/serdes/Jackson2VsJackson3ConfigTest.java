@@ -38,10 +38,11 @@ class Jackson2VsJackson3ConfigTest {
     @Nested
     class FailOnNullForPrimitives {
 
-        record PrimitiveFields(int count, long value, boolean flag) {}
+        record PrimitiveFields(int count, double value, boolean flag) {}
 
         @Test
         void jackson2_allowsNullForPrimitives() {
+            new PrimitiveFields(0, 0d, false);
             var json = """
                     {
                         "count": null,
