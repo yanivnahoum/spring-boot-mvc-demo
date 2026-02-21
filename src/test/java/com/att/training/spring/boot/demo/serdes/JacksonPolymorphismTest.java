@@ -1,6 +1,5 @@
 package com.att.training.spring.boot.demo.serdes;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeName;
@@ -9,19 +8,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import tools.jackson.core.JacksonException;
-import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
-import java.beans.ConstructorProperties;
-
 class JacksonPolymorphismTest {
-    private final JsonMapper mapper = JsonMapper.builder()
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .build();
+    private static final JsonMapper mapper = new JsonMapper();
 
     @Nested
-    class ClassTestWithRecords {
+    class RecordTest {
         @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
         interface Message {}
 
@@ -30,7 +23,7 @@ class JacksonPolymorphismTest {
         record M2(String m2) implements Message {}
 
         @Test
-        void write() throws JacksonException {
+        void write() {
             var m1 = new M1("I'm m1");
             var m2 = new M2("I'm m2");
             System.out.println(mapper.writeValueAsString(m1));
@@ -38,16 +31,16 @@ class JacksonPolymorphismTest {
         }
 
         @Test
-        void read() throws JacksonException {
+        void read() {
             var m1Json = """
                     {
-                        "@class": "com.att.training.spring.boot.demo.serdes.JacksonPolymorphismTest$ClassTestWithRecords$M1",
+                        "@class": "com.att.training.spring.boot.demo.serdes.JacksonPolymorphismTest$RecordTest$M1",
                          "m1": "I'm m1"
                     }
                     """;
             var m2Json = """
                     {
-                        "@class": "com.att.training.spring.boot.demo.serdes.JacksonPolymorphismTest$ClassTestWithRecords$M2",
+                        "@class": "com.att.training.spring.boot.demo.serdes.JacksonPolymorphismTest$RecordTest$M2",
                          "m2": "I'm m2"
                     }
                     """;
@@ -62,17 +55,12 @@ class JacksonPolymorphismTest {
         @RequiredArgsConstructor
         @Getter
         @ToString
-        static abstract class Message {
+        abstract static class Message {
             private final String message;
         }
 
         @ToString(callSuper = true)
         static class M1 extends Message {
-            // We have an issue with single property c'tors.
-            // Here's one way to solve it.
-            // We configured lombok to add the @ConstructorProperties annotation, but since we
-            // have a base class, we can't use lombok to generate the c'tor.
-            @ConstructorProperties("message")
             public M1(String message) {
                 super(message);
             }
@@ -80,16 +68,13 @@ class JacksonPolymorphismTest {
 
         @ToString(callSuper = true)
         static class M2 extends Message {
-            // Here's another way to solve the single property c'tor issue.
-            // It assumes we registered the ParameterNamesModule (as in Spring Boot's autoconfigured jsonMapper):
-            @JsonCreator
             public M2(String message) {
                 super(message);
             }
         }
 
         @Test
-        void write() throws JacksonException {
+        void write() {
             var m1 = new M1("I'm m1");
             var m2 = new M2("I'm m2");
             System.out.println(mapper.writeValueAsString(m1));
@@ -97,7 +82,7 @@ class JacksonPolymorphismTest {
         }
 
         @Test
-        void read() throws JacksonException {
+        void read() {
             var m1Json = """
                     {
                         "@class": "com.att.training.spring.boot.demo.serdes.JacksonPolymorphismTest$ClassTest$M1",
@@ -130,7 +115,7 @@ class JacksonPolymorphismTest {
         record N2(String n2) implements Notification {}
 
         @Test
-        void write() throws JacksonException {
+        void write() {
             var n1 = new N1("I'm n1");
             var n2 = new N2("I'm n2");
             System.out.println(mapper.writeValueAsString(n1));
@@ -138,7 +123,39 @@ class JacksonPolymorphismTest {
         }
 
         @Test
-        void read() throws JacksonException {
+        void read() {
+            var n1Json = """
+                    { "@type": "one", "n1": "I'm n1" }
+                    """;
+            var n2Json = """
+                    { "@type": "two", "n2": "I'm n2" }
+                    """;
+            System.out.println(mapper.readValue(n1Json, Notification.class));
+            System.out.println(mapper.readValue(n2Json, Notification.class));
+        }
+    }
+
+    @Nested
+    class NameWithSealedClassesTest {
+        @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+        sealed interface Notification {}
+
+        @JsonTypeName("one")
+        record N1(String n1) implements Notification {}
+
+        @JsonTypeName("two")
+        record N2(String n2) implements Notification {}
+
+        @Test
+        void write() {
+            var n1 = new N1("I'm n1");
+            var n2 = new N2("I'm n2");
+            System.out.println(mapper.writeValueAsString(n1));
+            System.out.println(mapper.writeValueAsString(n2));
+        }
+
+        @Test
+        void read() {
             var n1Json = """
                     { "@type": "one", "n1": "I'm n1" }
                     """;
