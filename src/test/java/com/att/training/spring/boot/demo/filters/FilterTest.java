@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
-import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -78,7 +77,6 @@ class FilterTest {
 
     @Nested
     @SpringBootTest(webEnvironment = RANDOM_PORT)
-    @AutoConfigureTestRestTemplate
     @AutoConfigureRestTestClient
     @Import(GreetingFilter.class)
     class SpringBootServerFilterTest {
