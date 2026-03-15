@@ -2,7 +2,6 @@ package com.att.training.spring.boot.demo.serdes;
 
 import lombok.Builder;
 import lombok.extern.jackson.Jacksonized;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,6 @@ class JacksonDefaultValueTest {
 
     @Nested
     class RecordWithLombokBuilder {
-        @Disabled("Waiting until https://github.com/projectlombok/lombok/issues/3950 is resolved")
         @Test
         void givenBuilderRecordWithDefault_thenMissingFieldEqualsDefault() throws JacksonException {
             var someLombokBuilderPojo = jsonMapper.readValue(EMPTY_JSON, SomeLombokBuilderPojo.class);

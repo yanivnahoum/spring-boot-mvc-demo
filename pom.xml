@@ -24,6 +24,7 @@
         </argLine>
         <guava.version>33.5.0-jre</guava.version>
         <springdoc.version>3.0.2</springdoc.version>
+        <lombok.version>1.18.44</lombok.version>
     </properties>
 
     <dependencies>
