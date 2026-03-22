@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.3</version>
+        <version>4.0.4</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -24,7 +24,6 @@
         </argLine>
         <guava.version>33.5.0-jre</guava.version>
         <springdoc.version>3.0.2</springdoc.version>
-        <lombok.version>1.18.44</lombok.version>
     </properties>
 
     <dependencies>

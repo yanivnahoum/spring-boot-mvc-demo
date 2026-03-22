@@ -58,7 +58,7 @@ class JacksonTreeTest {
                         """, ""),
                 argumentSet("null field", """
                         {"name": null}
-                        """, ""),
+                        """, "default"),
                 argumentSet("missing field", "{}", "default")
         );
     }
@@ -93,7 +93,7 @@ class JacksonTreeTest {
                             "name": null
                           }
                         }
-                        """, ""),
+                        """, "default"),
                 argumentSet("null field", """
                         { "person": null }
                         """, "default"),
