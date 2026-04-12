@@ -23,8 +23,10 @@
         </argLine>
         <guava.version>33.5.0-jre</guava.version>
         <springdoc.version>2.8.16</springdoc.version>
-        <!-- Overriding vulnerable dependency 3.17.0 -->
+        <!-- Overriding vulnerable dependency 3.17.0 from Spring Boot 3.5.x -->
         <commons-lang3.version>3.20.0</commons-lang3.version>
+        <!-- Overriding vulnerable dependency 3.17.0 from Spring Boot 3.5.13 -->
+        <tomcat.version>10.1.54</tomcat.version>
     </properties>
 
     <dependencies>
