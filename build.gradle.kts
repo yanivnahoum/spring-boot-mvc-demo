@@ -2,7 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "4.0.5"
     id("io.spring.dependency-management") version "1.1.7"
-    id("io.freefair.lombok") version "9.2.0"
+    id("io.freefair.lombok") version "9.4.0"
 }
 
 group = "com.att.training.spring.boot"
@@ -22,10 +22,6 @@ configurations {
     compileOnly {
         extendsFrom(configurations.annotationProcessor.get())
     }
-}
-
-lombok {
-    version = "1.18.44"
 }
 
 // Overriding vulnerable dependency 11.0.20 from Spring Boot 4.0.5
