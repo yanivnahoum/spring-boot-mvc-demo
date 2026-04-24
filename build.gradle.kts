@@ -24,8 +24,6 @@ configurations {
     }
 }
 
-// Overriding vulnerable dependency 11.0.20 from Spring Boot 4.0.5
-extra["tomcat.version"] = "11.0.21"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.5.0-jre"

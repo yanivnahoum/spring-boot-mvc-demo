@@ -24,8 +24,6 @@
         </argLine>
         <guava.version>33.6.0-jre</guava.version>
         <springdoc.version>3.0.3</springdoc.version>
-        <!-- Overriding vulnerable dependency 11.0.20 from Spring Boot 4.0.5 -->
-        <tomcat.version>11.0.21</tomcat.version>
     </properties>
 
     <dependencies>
