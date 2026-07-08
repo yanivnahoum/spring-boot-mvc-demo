@@ -1,9 +1,9 @@
-FROM eclipse-temurin:21-jre-alpine AS builder
+FROM eclipse-temurin:25-jre-alpine AS builder
 WORKDIR /builder
 COPY target/*.jar application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
-FROM eclipse-temurin:21-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 RUN apk upgrade --no-cache \
     && apk add --no-cache jattach
 

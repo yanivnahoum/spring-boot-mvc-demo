@@ -1,9 +1,9 @@
-FROM eclipse-temurin:21-jre AS builder
+FROM eclipse-temurin:25-jre AS builder
 WORKDIR /builder
 COPY target/*.jar application.jar
 RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --destination extracted
 
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 
 RUN apt-get update \
     && apt-get -y dist-upgrade \
