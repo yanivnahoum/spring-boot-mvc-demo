@@ -5,7 +5,7 @@ RUN java -Djarmode=tools -jar application.jar extract --layers --launcher --dest
 
 FROM eclipse-temurin:25-jre-alpine
 RUN apk upgrade --no-cache \
-    && apk add --no-cache jattach
+    && apk add --no-cache curl jattach
 
 ARG USER_NAME=demouser
 ARG UID=1001
