@@ -7,7 +7,7 @@ FROM eclipse-temurin:25-jre
 
 RUN apt-get update \
     && apt-get -y dist-upgrade \
-    && apt-get install -y jattach \
+    && apt-get install -y --no-install-recommends curl jattach \
     && apt-get autoremove -y --purge \
     && apt-get -y clean \
     && apt-get -y autoclean \
