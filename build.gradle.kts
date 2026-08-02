@@ -24,12 +24,13 @@ configurations {
     }
 }
 
-// Overriding vulnerable dependency 3.17.0 from Spring Boot 3.5.x
+// Overriding vulnerable dependencies from Spring Boot 3.5.x
 extra["commons-lang3.version"] = "3.20.0"
+extra["jackson-bom.version"] = "2.21.5"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.6.0-jre"
-    val springdocVersion = "2.8.17"
+    val springdocVersion = "2.9.0"
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aop")

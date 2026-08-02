@@ -57,7 +57,9 @@ management:
       group:
         readiness:
           # This would typically include external resources critical to the app like db: readinessState, db
-          include: readinessState
+          include:
+          - readinessState
+
   graphite:
     metrics:
       export:
