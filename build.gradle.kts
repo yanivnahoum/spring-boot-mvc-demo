@@ -27,6 +27,7 @@ configurations {
 // Overriding vulnerable dependencies from Spring Boot 3.5.x
 extra["commons-lang3.version"] = "3.20.0"
 extra["jackson-bom.version"] = "2.21.5"
+extra["log4j2.version"] = "2.25.5"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.6.0-jre"
