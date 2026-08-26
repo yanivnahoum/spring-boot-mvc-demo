@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
     </parent>
 
     <groupId>com.att.training.spring.boot</groupId>
@@ -22,8 +22,8 @@
             -javaagent:${settings.localRepository}/org/mockito/mockito-core/${mockito.version}/mockito-core-${mockito.version}.jar
             -Xshare:off
         </argLine>
-        <guava.version>33.6.0-jre</guava.version>
-        <springdoc.version>3.0.3</springdoc.version>
+        <guava.version>33.7.1-jre</guava.version>
+        <springdoc.version>3.1.0</springdoc.version>
     </properties>
 
     <dependencies>
