@@ -24,6 +24,7 @@ configurations {
     }
 }
 
+extra["tomcat.version"] = "11.0.25"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.7.1-jre"
