@@ -23,7 +23,7 @@
             -Xshare:off
         </argLine>
         <guava.version>33.7.1-jre</guava.version>
-        <springdoc.version>3.1.0</springdoc.version>
+        <springdoc.version>3.1.1</springdoc.version>
         <!-- Overriding vulnerable version from Spring Boot 4.1.x -->
         <tomcat.version>11.0.25</tomcat.version>
     </properties>

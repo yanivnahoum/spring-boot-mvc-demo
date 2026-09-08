@@ -28,7 +28,7 @@ extra["tomcat.version"] = "11.0.25"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.7.1-jre"
-    val springdocVersion = "3.1.0"
+    val springdocVersion = "3.1.1"
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aspectj")
