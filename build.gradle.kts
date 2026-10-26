@@ -30,7 +30,7 @@ extra["jackson-bom.version"] = "3.1.8"
 val mockitoAgent = configurations.create("mockitoAgent")
 dependencies {
     val guavaVersion = "33.7.2-jre"
-    val springdocVersion = "3.1.1"
+    val springdocVersion = "3.2.0"
     implementation("org.springframework.boot:spring-boot-starter-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-aspectj")
